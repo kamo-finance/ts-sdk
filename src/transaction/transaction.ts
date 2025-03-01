@@ -1,8 +1,10 @@
 import { Transaction } from '@mysten/sui/transactions';
-import { createNewMarket } from '../kamo_generated/hasui_wrapper/wrapper/functions';
+import { createNewState } from '../kamo_generated/hasui_wrapper/wrapper/functions';
 import { createFromRawValue } from '../kamo_generated/legato-math/fixed-point64/functions';
 import { suiClient } from '../client/client';
 import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../kamo_generated/hasui_wrapper';
+import { PUBLISHED_AT as KAMO_PACKAGE } from '../kamo_generated/kamo';
+import { FACTORY } from './const';
 
 export interface AddLiquidityParams {
     amountPT: number;
@@ -13,12 +15,11 @@ export interface AddLiquidityParams {
 
 export interface RemoveLiquidityParams {
     amountLP: number;
-    stateId: string;
     sender: string;
     tx?: Transaction;
 }
 
-export interface NewMarketParams {
+export interface NewStateParams {
     expiry: bigint;
     scalarRoot: bigint;
     initialAnchor: bigint;
@@ -32,12 +33,19 @@ export interface MintParams {
     tx?: Transaction;
 }
 
+export interface BurnParams {
+    ptAmountBurned: bigint;
+    sender: string;
+    tx?: Transaction;
+}
+
 export abstract class KamoTransaction {
     abstract mint(params: MintParams): Promise<Transaction>;
+    abstract burn(params: BurnParams): Promise<Transaction>;
     abstract addLiquidity(params: AddLiquidityParams): Promise<Transaction>;
     abstract removeLiquidity(params: RemoveLiquidityParams): Promise<Transaction>;
 
-    static async NewMarket(params: NewMarketParams) {
+    static async NewState(params: NewStateParams) {
         const tx = new Transaction();
         const objects = await suiClient.getOwnedObjects({
             owner: params.owner,
@@ -49,7 +57,9 @@ export abstract class KamoTransaction {
         if (!treasuryCap || !treasuryCap.data) {
             throw new Error(`TreasuryCap not found`);
         }
-        createNewMarket(tx, {
+
+        createNewState(tx, {
+            factory: FACTORY,
             treasury: treasuryCap.data.objectId,
             expiry: params.expiry,
             scalarRoot: createFromRawValue(tx, params.scalarRoot),

@@ -6,15 +6,13 @@ export interface MintArgs { state: TransactionObjectInput; hasuiCoinIn: Transact
 
 export function mint( tx: Transaction, args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::mint`, arguments: [ obj(tx, args.state), obj(tx, args.hasuiCoinIn), obj(tx, args.staking), obj(tx, args.clock) ], }) }
 
-export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
-
 export interface AddLiquidityArgs { state: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; staking: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function addLiquidity( tx: Transaction, args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::add_liquidity`, arguments: [ obj(tx, args.state), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.staking), obj(tx, args.clock) ], }) }
 
-export interface CreateNewMarketArgs { treasury: TransactionObjectInput; expiry: bigint | TransactionArgument; scalarRoot: TransactionObjectInput; initialAnchor: TransactionObjectInput; lnFeeRateRoot: TransactionObjectInput; clock: TransactionObjectInput }
+export function claimFee( tx: Transaction, state: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::claim_fee`, arguments: [ obj(tx, state) ], }) }
 
-export function createNewMarket( tx: Transaction, args: CreateNewMarketArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::create_new_market`, arguments: [ obj(tx, args.treasury), pure(tx, args.expiry, `u64`), obj(tx, args.scalarRoot), obj(tx, args.initialAnchor), obj(tx, args.lnFeeRateRoot), obj(tx, args.clock) ], }) }
+export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
 
 export interface RemoveLiquidityArgs { state: TransactionObjectInput; lp: TransactionObjectInput }
 
@@ -39,3 +37,7 @@ export function redeemAfterMaturity( tx: Transaction, args: RedeemAfterMaturityA
 export interface RedeemBeforeMaturityArgs { state: TransactionObjectInput; ptCoinIn: TransactionObjectInput; yieldObject: TransactionObjectInput; staking: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function redeemBeforeMaturity( tx: Transaction, args: RedeemBeforeMaturityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::redeem_before_maturity`, arguments: [ obj(tx, args.state), obj(tx, args.ptCoinIn), obj(tx, args.yieldObject), obj(tx, args.staking), obj(tx, args.clock) ], }) }
+
+export interface CreateNewStateArgs { factory: TransactionObjectInput; treasury: TransactionObjectInput; expiry: bigint | TransactionArgument; scalarRoot: TransactionObjectInput; initialAnchor: TransactionObjectInput; lnFeeRateRoot: TransactionObjectInput; clock: TransactionObjectInput }
+
+export function createNewState( tx: Transaction, args: CreateNewStateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::create_new_state`, arguments: [ obj(tx, args.factory), obj(tx, args.treasury), pure(tx, args.expiry, `u64`), obj(tx, args.scalarRoot), obj(tx, args.initialAnchor), obj(tx, args.lnFeeRateRoot), obj(tx, args.clock) ], }) }

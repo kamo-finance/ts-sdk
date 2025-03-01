@@ -1,10 +1,11 @@
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
-import { AddLiquidityParams, KamoTransaction, MintParams, RemoveLiquidityParams } from "../transaction";
-import { addLiquidity, mint, removeLiquidity } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
+import { AddLiquidityParams, BurnParams, KamoTransaction, MintParams, RemoveLiquidityParams } from "../transaction";
+import { addLiquidity, mint, redeemBeforeMaturity, removeLiquidity } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { State } from "../../kamo_generated/hasui_wrapper/wrapper/structs";
 import { STATE_ADDRESS_MAP } from "../const";
 import { suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
+import { split } from "../../kamo_generated/kamo/yield-object/functions";
 
 const HAEDAL_STAKING = "0x47b224762220393057ebf4f70501b6e657c3e56684737568439a04f80849b2ca";
 
@@ -12,6 +13,9 @@ export class HasuiTransaction extends KamoTransaction {
     async mint(params: MintParams) {
         const tx = params.tx || new Transaction();
         const state = await State.fetch(suiClient, STATE_ADDRESS_MAP.get("HASUI")!);
+        if (Date.now() > state.market.expiry) {
+            throw new Error("Market expired");
+        }
         const sy = coinWithBalance({
             type: state.market.$typeArgs[1],
             balance: params.sy_amount_in
@@ -23,6 +27,43 @@ export class HasuiTransaction extends KamoTransaction {
             clock: tx.object.clock()
         });
         tx.transferObjects([pt, yield_object], params.sender);
+        return tx;
+    }
+
+    async burn(params: BurnParams) {
+        const tx = params.tx || new Transaction();
+        const state = await State.fetch(suiClient, STATE_ADDRESS_MAP.get("HASUI")!);
+        const pt = coinWithBalance({
+            type: state.market.$typeArgs[0],
+            balance: params.ptAmountBurned
+        });
+        const ownedObjects = await suiClient.getOwnedObjects({
+            owner: params.sender,
+            options: {
+                showType: true,
+            }
+        });
+        const yieldObjects = ownedObjects.data.filter((o) => o.data?.type === `${KAMO_PACKAGE}::yield_object::YieldObject<${state.market.$typeArgs[0]}, ${state.market.$typeArgs[1]}>`);
+        if (yieldObjects.length === 0 || !yieldObjects[0].data) {
+            throw new Error("YieldObject not found");
+        }
+        const splitedYieldObject = split(tx, 
+            [
+                state.market.$typeArgs[0],
+                state.market.$typeArgs[1]
+            ],
+            {
+            yieldObject: yieldObjects[0].data.objectId,
+            amount: params.ptAmountBurned
+        });
+        const sy = redeemBeforeMaturity(tx, {
+            state: STATE_ADDRESS_MAP.get("HASUI")!,
+            ptCoinIn: pt,
+            yieldObject: splitedYieldObject,
+            staking: HAEDAL_STAKING,
+            clock: tx.object.clock()
+        });
+        tx.transferObjects([sy], params.sender);
         return tx;
     }
 
@@ -53,7 +94,7 @@ export class HasuiTransaction extends KamoTransaction {
 
     async removeLiquidity(params: RemoveLiquidityParams) {
         const tx = params.tx || new Transaction();
-        const state = await State.fetch(suiClient, params.stateId);
+        const state = await State.fetch(suiClient, STATE_ADDRESS_MAP.get("HASUI")!);
         const lp = coinWithBalance({
             type: `${KAMO_PACKAGE}::amm::LP<${state.market.$typeArgs[0]}, ${state.market.$typeArgs[1]}>`,
             balance: params.amountLP
@@ -61,7 +102,7 @@ export class HasuiTransaction extends KamoTransaction {
         const [pt, sy] = removeLiquidity(
             tx,
             {
-                state: params.stateId,
+                state: STATE_ADDRESS_MAP.get("HASUI")!,
                 lp,
             }
         )

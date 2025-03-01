@@ -2,19 +2,15 @@ import {PUBLISHED_AT} from "..";
 import {obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export function init( tx: Transaction, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::init`, arguments: [ ], }) }
+export interface AddLiquidityArgs { market: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 
-export interface GetExchangeRateArgs { totalPt: bigint | TransactionArgument; totalAsset: bigint | TransactionArgument; rateScalar: TransactionObjectInput; rateAnchor: TransactionObjectInput; netPtToAccount: bigint | TransactionArgument }
+export function addLiquidity( tx: Transaction, typeArgs: [string, string], args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::add_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
 
-export function getExchangeRate( tx: Transaction, args: GetExchangeRateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_exchange_rate`, arguments: [ pure(tx, args.totalPt, `u64`), pure(tx, args.totalAsset, `u64`), obj(tx, args.rateScalar), obj(tx, args.rateAnchor), pure(tx, args.netPtToAccount, `u64`) ], }) }
+export interface CalcTradeSellPtArgs { market: TransactionObjectInput; preCompute: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtIn: bigint | TransactionArgument }
 
-export interface AddLiquidityArgs { state: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
+export function calcTradeSellPt( tx: Transaction, typeArgs: [string, string], args: CalcTradeSellPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::calc_trade_sell_pt`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.preCompute), obj(tx, args.exchangeRate), pure(tx, args.exactPtIn, `u64`) ], }) }
 
-export function addLiquidity( tx: Transaction, typeArgs: [string, string], args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::add_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
-
-export interface CalcTradeSellPtArgs { state: TransactionObjectInput; preCompute: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtIn: bigint | TransactionArgument }
-
-export function calcTradeSellPt( tx: Transaction, typeArgs: [string, string], args: CalcTradeSellPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::calc_trade_sell_pt`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.preCompute), obj(tx, args.exchangeRate), pure(tx, args.exactPtIn, `u64`) ], }) }
+export function claimFee( tx: Transaction, typeArgs: [string, string], market: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::claim_fee`, typeArguments: typeArgs, arguments: [ obj(tx, market) ], }) }
 
 export interface CreateNewMarketArgs { expiry: bigint | TransactionArgument; scalarRoot: TransactionObjectInput; initialAnchor: TransactionObjectInput; lnFeeRateRoot: TransactionObjectInput; clock: TransactionObjectInput }
 
@@ -24,9 +20,13 @@ export interface DivFixed64Args { a: TransactionObjectInput; b: TransactionObjec
 
 export function divFixed64( tx: Transaction, args: DivFixed64Args ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::div_fixed64`, arguments: [ obj(tx, args.a), obj(tx, args.b) ], }) }
 
-export interface ExecuteTradeCoreSellPtArgs { state: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
+export interface ExecuteTradeCoreSellPtArgs { market: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function executeTradeCoreSellPt( tx: Transaction, typeArgs: [string, string], args: ExecuteTradeCoreSellPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::execute_trade_core_sell_pt`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.exchangeRate), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }
+export function executeTradeCoreSellPt( tx: Transaction, typeArgs: [string, string], args: ExecuteTradeCoreSellPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::execute_trade_core_sell_pt`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.exchangeRate), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }
+
+export interface GetExchangeRateArgs { totalPt: bigint | TransactionArgument; totalAsset: bigint | TransactionArgument; rateScalar: TransactionObjectInput; rateAnchor: TransactionObjectInput; netPtToAccount: bigint | TransactionArgument }
+
+export function getExchangeRate( tx: Transaction, args: GetExchangeRateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_exchange_rate`, arguments: [ pure(tx, args.totalPt, `u64`), pure(tx, args.totalAsset, `u64`), obj(tx, args.rateScalar), obj(tx, args.rateAnchor), pure(tx, args.netPtToAccount, `u64`) ], }) }
 
 export interface GetExchangeRateFromImpliedRateArgs { lnImpliedRate: TransactionObjectInput; timeToExpiry: bigint | TransactionArgument }
 
@@ -42,13 +42,13 @@ export interface GetRateAnchorArgs { totalPt: bigint | TransactionArgument; last
 
 export function getRateAnchor( tx: Transaction, args: GetRateAnchorArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_rate_anchor`, arguments: [ pure(tx, args.totalPt, `u64`), obj(tx, args.lastLnImpliedRate), pure(tx, args.totalAsset, `u64`), obj(tx, args.rateScalar), pure(tx, args.timeToExpiry, `u64`) ], }) }
 
-export interface GetRateScalarArgs { state: TransactionObjectInput; timeToExpiry: bigint | TransactionArgument }
+export interface GetRateScalarArgs { market: TransactionObjectInput; timeToExpiry: bigint | TransactionArgument }
 
-export function getRateScalar( tx: Transaction, typeArgs: [string, string], args: GetRateScalarArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_rate_scalar`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), pure(tx, args.timeToExpiry, `u64`) ], }) }
+export function getRateScalar( tx: Transaction, typeArgs: [string, string], args: GetRateScalarArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_rate_scalar`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), pure(tx, args.timeToExpiry, `u64`) ], }) }
 
-export interface IsExpiredArgs { state: TransactionObjectInput; clock: TransactionObjectInput }
+export interface IsExpiredArgs { market: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function isExpired( tx: Transaction, typeArgs: [string, string], args: IsExpiredArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::is_expired`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.clock) ], }) }
+export function isExpired( tx: Transaction, typeArgs: [string, string], args: IsExpiredArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::is_expired`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.clock) ], }) }
 
 export interface MuldivFixed64Args { a: TransactionObjectInput; b: TransactionObjectInput; c: bigint | TransactionArgument }
 
@@ -58,30 +58,26 @@ export interface MuldivFixed64U128U128Args { a: TransactionObjectInput; b: bigin
 
 export function muldivFixed64U128U128( tx: Transaction, args: MuldivFixed64U128U128Args ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::muldiv_fixed64_u128_u128`, arguments: [ obj(tx, args.a), pure(tx, args.b, `u128`), pure(tx, args.c, `u128`) ], }) }
 
-export interface MulsqrtArgs { a: bigint | TransactionArgument; b: bigint | TransactionArgument }
+export interface PreComputeValueArgs { market: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function mulsqrt( tx: Transaction, args: MulsqrtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::mulsqrt`, arguments: [ pure(tx, args.a, `u64`), pure(tx, args.b, `u64`) ], }) }
+export function preComputeValue( tx: Transaction, typeArgs: [string, string], args: PreComputeValueArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::pre_compute_value`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
 
-export interface PreComputeValueArgs { state: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
+export interface RemoveLiquidityArgs { market: TransactionObjectInput; lpCoin: TransactionObjectInput }
 
-export function preComputeValue( tx: Transaction, typeArgs: [string, string], args: PreComputeValueArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::pre_compute_value`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
+export function removeLiquidity( tx: Transaction, typeArgs: [string, string], args: RemoveLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::remove_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.lpCoin) ], }) }
 
-export interface RemoveLiquidityArgs { state: TransactionObjectInput; lpCoin: TransactionObjectInput }
+export interface SetInitialLnImpliedRateArgs { market: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function removeLiquidity( tx: Transaction, typeArgs: [string, string], args: RemoveLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::remove_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.lpCoin) ], }) }
+export function setInitialLnImpliedRate( tx: Transaction, typeArgs: [string, string], args: SetInitialLnImpliedRateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::set_initial_ln_implied_rate`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
 
-export interface SetInitialLnImpliedRateArgs { state: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
+export interface SetNewMarketMarketTradeArgs { market: TransactionObjectInput; preCompute: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function setInitialLnImpliedRate( tx: Transaction, typeArgs: [string, string], args: SetInitialLnImpliedRateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::set_initial_ln_implied_rate`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
-
-export interface SetNewMarketStateTradeArgs { state: TransactionObjectInput; preCompute: TransactionObjectInput; exchangeRate: TransactionObjectInput; netSyToAccount: bigint | TransactionArgument; clock: TransactionObjectInput }
-
-export function setNewMarketStateTrade( tx: Transaction, typeArgs: [string, string], args: SetNewMarketStateTradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::set_new_market_state_trade`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.preCompute), obj(tx, args.exchangeRate), pure(tx, args.netSyToAccount, `u64`), obj(tx, args.clock) ], }) }
+export function setNewMarketMarketTrade( tx: Transaction, typeArgs: [string, string], args: SetNewMarketMarketTradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::set_new_market_market_trade`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.preCompute), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
 
 export interface SubDivFixed64Args { a: TransactionObjectInput; b: TransactionObjectInput; c: TransactionObjectInput }
 
 export function subDivFixed64( tx: Transaction, args: SubDivFixed64Args ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::sub_div_fixed64`, arguments: [ obj(tx, args.a), obj(tx, args.b), obj(tx, args.c) ], }) }
 
-export interface SwapExactPtForSyArgs { state: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
+export interface SwapExactPtForSyArgs { market: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function swapExactPtForSy( tx: Transaction, typeArgs: [string, string], args: SwapExactPtForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::swap_exact_pt_for_sy`, typeArguments: typeArgs, arguments: [ obj(tx, args.state), obj(tx, args.exchangeRate), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }
+export function swapExactPtForSy( tx: Transaction, typeArgs: [string, string], args: SwapExactPtForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::swap_exact_pt_for_sy`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.exchangeRate), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }

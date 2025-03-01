@@ -10,6 +10,10 @@ export interface CmpTypeNamesArgs { a: TransactionObjectInput; b: TransactionObj
 
 export function cmpTypeNames( tx: Transaction, args: CmpTypeNamesArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::utils::cmp_type_names`, arguments: [ obj(tx, args.a), obj(tx, args.b) ], }) }
 
+export interface MulsqrtU64Args { a: bigint | TransactionArgument; b: bigint | TransactionArgument }
+
+export function mulsqrtU64( tx: Transaction, args: MulsqrtU64Args ) { return tx.moveCall({ target: `${PUBLISHED_AT}::utils::mulsqrt_u64`, arguments: [ pure(tx, args.a, `u64`), pure(tx, args.b, `u64`) ], }) }
+
 export interface SyToAssetArgs { totalSy: bigint | TransactionArgument; exchangeRate: TransactionObjectInput }
 
 export function syToAsset( tx: Transaction, args: SyToAssetArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::utils::sy_to_asset`, arguments: [ pure(tx, args.totalSy, `u64`), obj(tx, args.exchangeRate) ], }) }
