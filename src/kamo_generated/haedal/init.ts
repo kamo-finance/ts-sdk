@@ -1,0 +1,35 @@
+import * as config from "./config/structs";
+import * as hasui from "./hasui/structs";
+import * as manage from "./manage/structs";
+import * as staking from "./staking/structs";
+import * as tableQueue from "./table-queue/structs";
+import * as vault from "./vault/structs";
+import {StructClassLoader} from "../_framework/loader";
+
+export function registerClasses(loader: StructClassLoader) { loader.register(vault.Vault);
+loader.register(tableQueue.TableQueue);
+loader.register(hasui.HASUI);
+loader.register(config.StakingConfig);
+loader.register(config.StakingConfigCreated);
+loader.register(config.StakingFeeConfigUpdated);
+loader.register(staking.VersionUpdated);
+loader.register(staking.EpochClaim);
+loader.register(staking.ExchangeRateUpdated);
+loader.register(staking.PoolInfo);
+loader.register(staking.PoolSystemUnstaked);
+loader.register(staking.RewardsFeeCollected);
+loader.register(staking.ServiceFeeCollected);
+loader.register(staking.Staking);
+loader.register(staking.SuiRewardsUpdated);
+loader.register(staking.SystemStaked);
+loader.register(staking.SystemUnstaked);
+loader.register(staking.UnstakeTicket);
+loader.register(staking.UserClaimed);
+loader.register(staking.UserInstantUnstaked);
+loader.register(staking.UserNormalUnstaked);
+loader.register(staking.UserSelectedStaking);
+loader.register(staking.UserStaked);
+loader.register(staking.ValidatorStakedInfo);
+loader.register(manage.AdminCap);
+loader.register(manage.OperatorCap);
+ }

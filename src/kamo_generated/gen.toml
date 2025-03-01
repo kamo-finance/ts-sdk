@@ -1,0 +1,7 @@
+[packages]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/mainnet", override = true }
+SuiSystem = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-system", rev = "framework/mainnet" }
+LegatoMath = {  git = "https://github.com/tamago-labs/legato-math.git", subdir = "packages/sui", rev = "main"  }
+hasui_wrapper = { local = "../../../core-contract/hasui_wrapper" }
+kamo = { local = "../../../core-contract/kamo" }
+haedal = { local = "../../../core-contract/haedal" }

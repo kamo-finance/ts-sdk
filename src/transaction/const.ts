@@ -1,11 +1,3 @@
-export const ADDRESS_MAP = {
-    "KAMO_PACKAGE": "0x401d55beb5c238551fd0b397d822bc5894547bfb656213ed505a6f77fa640b9f",
-    "HASUI_KAMO_PACKAGE": "0xa07ef28a0ebe76e7ff826ab344f28d8dfa5f355fdca7e2481f093cb19160582c"
-}
-
-export const FUNCTION_MAP = {
-    "ADD_LIQUIDITY": "",
-    "REMOVE_LIQUIDITY": "",
-    "SWAP_EXACT_PT_FOR_SY": "",
-    "SWAP_EXACT_SY_FOR_PT": "",
-}
+export const STATE_ADDRESS_MAP = new Map([
+  ["HASUI", "0xce9cdedbfeed80afff6ecd93e021a9990e1fcb078be3b46778da08ab14a8cfec"]
+])
