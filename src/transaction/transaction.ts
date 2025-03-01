@@ -33,7 +33,13 @@ export interface MintParams {
     tx?: Transaction;
 }
 
-export interface BurnParams {
+export interface RedeemBeforeMaturityParams {
+    ptAmountBurned: bigint;
+    sender: string;
+    tx?: Transaction;
+}
+
+export interface RedeemAfterMaturityParams {
     ptAmountBurned: bigint;
     sender: string;
     tx?: Transaction;
@@ -41,7 +47,8 @@ export interface BurnParams {
 
 export abstract class KamoTransaction {
     abstract mint(params: MintParams): Promise<Transaction>;
-    abstract burn(params: BurnParams): Promise<Transaction>;
+    abstract redeemBeforeMaturity(params: RedeemBeforeMaturityParams): Promise<Transaction>;
+    abstract redeemAfterMaturity(params: RedeemAfterMaturityParams): Promise<Transaction>;
     abstract addLiquidity(params: AddLiquidityParams): Promise<Transaction>;
     abstract removeLiquidity(params: RemoveLiquidityParams): Promise<Transaction>;
 

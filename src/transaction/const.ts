@@ -1,5 +1,5 @@
 export const STATE_ADDRESS_MAP = new Map([
-  ["HASUI", "0x140429c41ea9720c1ba406733b00bda1706c1ba614ce007ca86fffa8c4ba5e11"]
+  ["HASUI", "0x637535ab1e60c5c2da5865f8c2fea2d8d15032f1908f0a85af7011ae2864cc9a"]
 ])
 
-export const FACTORY = "0x17092f1251727cd76dced7f83b01962987ac1eddc777e8834fa736c8eea14f46";
+export const FACTORY = "0x7668e3ba8c84f51207031056d21f4a80ecb76f3fa47dc156d8187b9e33c64e0a";
