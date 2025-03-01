@@ -1,5 +1,6 @@
 export const ADDRESS_MAP = {
     "KAMO_PACKAGE": "0x401d55beb5c238551fd0b397d822bc5894547bfb656213ed505a6f77fa640b9f",
+    "HASUI_KAMO_PACKAGE": "0xa07ef28a0ebe76e7ff826ab344f28d8dfa5f355fdca7e2481f093cb19160582c"
 }
 
 export const FUNCTION_MAP = {
