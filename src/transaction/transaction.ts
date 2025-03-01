@@ -1,12 +1,12 @@
 import { Transaction } from '@mysten/sui/transactions';
-import { ADDRESS_MAP, FUNCTION_MAP } from './const';
+import { Market } from '../market/market';
 
-export class KamoTransaction {
-    static addLiquidity(): Transaction {
-        const tx = new Transaction();
-        tx.moveCall({
-            target: `${ADDRESS_MAP.KAMO_PACKAGE}::${FUNCTION_MAP.AddLiquidity}`,
-        });
-        return tx;
-    }
+export interface AddLiquidityParams {
+    amountPT: string;
+    amountSY: string;
+    market: Market;
+}
+
+export interface IKamoTransaction {
+    AddLiquidity: (params: AddLiquidityParams) => Transaction;
 }
