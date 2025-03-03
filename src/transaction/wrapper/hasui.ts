@@ -1,6 +1,6 @@
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
-import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams } from "../transaction";
-import { addLiquidity, mint, redeemAfterMaturity, redeemBeforeMaturity, removeLiquidity } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
+import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams, SwapPtForSyParams } from "../transaction";
+import { addLiquidity, mint, redeemAfterMaturity, redeemBeforeMaturity, removeLiquidity, swapExactPtForSy } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { State } from "../../kamo_generated/hasui_wrapper/wrapper/structs";
 import { STATE_ADDRESS_MAP } from "../const";
 import { suiClient } from "../../client/client";
@@ -96,7 +96,6 @@ export class HasuiTransaction extends KamoTransaction {
         });
         tx.transferObjects([sy], params.sender);
         return tx;
-
     }
 
     async addLiquidity(params: AddLiquidityParams) {
@@ -139,6 +138,23 @@ export class HasuiTransaction extends KamoTransaction {
             }
         )
         tx.transferObjects([pt, sy], params.sender);
+        return tx;
+    }
+
+    async swapPtForSy(params: SwapPtForSyParams) {
+        const tx = params.tx || new Transaction();
+        const state = await State.fetch(suiClient, STATE_ADDRESS_MAP.get("HASUI")!);
+        const pt = coinWithBalance({
+            type: state.market.$typeArgs[0],
+            balance: params.ptAmount
+        });
+        const sy = swapExactPtForSy(tx, {
+            state: STATE_ADDRESS_MAP.get("HASUI")!,
+            ptCoin: pt,
+            staking: HAEDAL_STAKING,
+            clock: tx.object.clock()
+        });
+        tx.transferObjects([sy], params.sender);
         return tx;
     }
 }

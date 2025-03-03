@@ -45,12 +45,19 @@ export interface RedeemAfterMaturityParams {
     tx?: Transaction;
 }
 
+export interface SwapPtForSyParams {
+    ptAmount: bigint;
+    sender: string;
+    tx?: Transaction;
+}
+
 export abstract class KamoTransaction {
     abstract mint(params: MintParams): Promise<Transaction>;
     abstract redeemBeforeMaturity(params: RedeemBeforeMaturityParams): Promise<Transaction>;
     abstract redeemAfterMaturity(params: RedeemAfterMaturityParams): Promise<Transaction>;
     abstract addLiquidity(params: AddLiquidityParams): Promise<Transaction>;
     abstract removeLiquidity(params: RemoveLiquidityParams): Promise<Transaction>;
+    abstract swapPtForSy(params: SwapPtForSyParams): Promise<Transaction>;
 
     static async NewState(params: NewStateParams) {
         const tx = new Transaction();
