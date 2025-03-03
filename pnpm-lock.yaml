@@ -11,6 +11,9 @@ importers:
       '@mysten/sui':
         specifier: ^1.21.2
         version: 1.21.2(typescript@5.8.2)
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       sui:
         specifier: link:@@mysten/sui
         version: link:@@mysten/sui
@@ -98,6 +101,10 @@ packages:
 
   bs58@6.0.0:
     resolution: {integrity: sha512-PD0wEnEYg6ijszw/u8s+iI3H17cTymlrwkKhDhPZq+Sokl3AU4htyBFTjAeNAlCCmg0f53g6ih3jATyCKftTfw==}
+
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   gql.tada@1.8.10:
     resolution: {integrity: sha512-FrvSxgz838FYVPgZHGOSgbpOjhR+yq44rCzww3oOPJYi0OvBJjAgCiP6LEokZIYND2fUTXzQAyLgcvgw1yNP5A==}
@@ -211,6 +218,8 @@ snapshots:
   bs58@6.0.0:
     dependencies:
       base-x: 5.0.0
+
+  dotenv@16.4.7: {}
 
   gql.tada@1.8.10(graphql@16.10.0)(typescript@5.8.2):
     dependencies:
