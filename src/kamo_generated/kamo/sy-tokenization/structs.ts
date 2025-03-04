@@ -4,7 +4,7 @@ import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructCl
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../_framework/util";
 import {Balance} from "../../sui/balance/structs";
 import {TreasuryCap} from "../../sui/coin/structs";
-import {UID} from "../../sui/object/structs";
+import {ID, UID} from "../../sui/object/structs";
 import {Table} from "../../sui/table/structs";
 import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
@@ -76,6 +76,76 @@ export class Factory implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<Factory> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Factory object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isFactory(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Factory object`); }
 
  return Factory.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== NewRegistryEvent =============================== */
+
+export function isNewRegistryEvent(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::sy_tokenization::NewRegistryEvent` + '<'); }
+
+export interface NewRegistryEventFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { registryId: ToField<ID> }
+
+export type NewRegistryEventReified<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> = Reified< NewRegistryEvent<PT, SY>, NewRegistryEventFields<PT, SY> >;
+
+export class NewRegistryEvent<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::sy_tokenization::NewRegistryEvent`; static readonly $numTypeParams = 2; static readonly $isPhantom = [true,true,] as const;
+
+ readonly $typeName = NewRegistryEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::sy_tokenization::NewRegistryEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; readonly $typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>]; readonly $isPhantom = NewRegistryEvent.$isPhantom;
+
+ readonly registryId: ToField<ID>
+
+ private constructor(typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>], fields: NewRegistryEventFields<PT, SY>, ) { this.$fullTypeName = composeSuiType( NewRegistryEvent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::sy_tokenization::NewRegistryEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; this.$typeArgs = typeArgs;
+
+ this.registryId = fields.registryId; }
+
+ static reified<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): NewRegistryEventReified<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return { typeName: NewRegistryEvent.$typeName, fullTypeName: composeSuiType( NewRegistryEvent.$typeName, ...[extractType(PT), extractType(SY)] ) as `${typeof PKG_V1}::sy_tokenization::NewRegistryEvent<${PhantomToTypeStr<ToPhantomTypeArgument<PT>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<SY>>}>`, typeArgs: [ extractType(PT), extractType(SY) ] as [PhantomToTypeStr<ToPhantomTypeArgument<PT>>, PhantomToTypeStr<ToPhantomTypeArgument<SY>>], isPhantom: NewRegistryEvent.$isPhantom, reifiedTypeArgs: [PT, SY], fromFields: (fields: Record<string, any>) => NewRegistryEvent.fromFields( [PT, SY], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NewRegistryEvent.fromFieldsWithTypes( [PT, SY], item, ), fromBcs: (data: Uint8Array) => NewRegistryEvent.fromBcs( [PT, SY], data, ), bcs: NewRegistryEvent.bcs, fromJSONField: (field: any) => NewRegistryEvent.fromJSONField( [PT, SY], field, ), fromJSON: (json: Record<string, any>) => NewRegistryEvent.fromJSON( [PT, SY], json, ), fromSuiParsedData: (content: SuiParsedData) => NewRegistryEvent.fromSuiParsedData( [PT, SY], content, ), fromSuiObjectData: (content: SuiObjectData) => NewRegistryEvent.fromSuiObjectData( [PT, SY], content, ), fetch: async (client: SuiClient, id: string) => NewRegistryEvent.fetch( client, [PT, SY], id, ), new: ( fields: NewRegistryEventFields<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>, ) => { return new NewRegistryEvent( [extractType(PT), extractType(SY)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return NewRegistryEvent.reified }
+
+ static phantom<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): PhantomReified<ToTypeStr<NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>>> { return phantom(NewRegistryEvent.reified( PT, SY )); } static get p() { return NewRegistryEvent.phantom }
+
+ static get bcs() { return bcs.struct("NewRegistryEvent", {
+
+ registry_id: ID.bcs
+
+}) };
+
+ static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return NewRegistryEvent.reified( typeArgs[0], typeArgs[1], ).new( { registryId: decodeFromFields(ID.reified(), fields.registry_id) } ) }
+
+ static fromFieldsWithTypes<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], item: FieldsWithTypes ): NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (!isNewRegistryEvent(item.type)) { throw new Error("not a NewRegistryEvent type");
+
+ } assertFieldsWithTypesArgsMatch(item, typeArgs);
+
+ return NewRegistryEvent.reified( typeArgs[0], typeArgs[1], ).new( { registryId: decodeFromFieldsWithTypes(ID.reified(), item.fields.registry_id) } ) }
+
+ static fromBcs<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: Uint8Array ): NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return NewRegistryEvent.fromFields( typeArgs, NewRegistryEvent.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ registryId: this.registryId,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return NewRegistryEvent.reified( typeArgs[0], typeArgs[1], ).new( { registryId: decodeFromJSONField(ID.reified(), field.registryId) } ) }
+
+ static fromJSON<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], json: Record<string, any> ): NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (json.$typeName !== NewRegistryEvent.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(NewRegistryEvent.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
+
+ return NewRegistryEvent.fromJSONField( typeArgs, json, ) }
+
+ static fromSuiParsedData<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], content: SuiParsedData ): NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isNewRegistryEvent(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a NewRegistryEvent object`); } return NewRegistryEvent.fromFieldsWithTypes( typeArgs, content ); }
+
+ static fromSuiObjectData<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: SuiObjectData ): NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isNewRegistryEvent(data.bcs.type)) { throw new Error(`object at is not a NewRegistryEvent object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 2) { throw new Error(`type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`); }; for (let i = 0; i < 2; i++) { const gotTypeArg = compressSuiType(gotTypeArgs[i]); const expectedTypeArg = compressSuiType(extractType(typeArgs[i])); if (gotTypeArg !== expectedTypeArg) { throw new Error(`type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); } };
+
+ return NewRegistryEvent.fromBcs( typeArgs, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return NewRegistryEvent.fromSuiParsedData( typeArgs, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArgs: [PT, SY], id: string ): Promise<NewRegistryEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching NewRegistryEvent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isNewRegistryEvent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a NewRegistryEvent object`); }
+
+ return NewRegistryEvent.fromSuiObjectData( typeArgs, res.data ); }
 
  }
 

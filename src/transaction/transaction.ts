@@ -3,7 +3,6 @@ import { createNewState } from '../kamo_generated/hasui_wrapper/wrapper/function
 import { createFromRawValue } from '../kamo_generated/legato-math/fixed-point64/functions';
 import { suiClient } from '../client/client';
 import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../kamo_generated/hasui_wrapper';
-import { PUBLISHED_AT as KAMO_PACKAGE } from '../kamo_generated/kamo';
 import { FACTORY } from './const';
 
 export interface AddLiquidityParams {
@@ -51,6 +50,19 @@ export interface SwapPtForSyParams {
     tx?: Transaction;
 }
 
+export interface SwapSyForPtParams {
+    syAmount: bigint;
+    sender: string;
+    tx?: Transaction;
+}
+
+export interface SwapSyForExactPtParams {
+    syAmount: bigint;
+    ptAmount: bigint;
+    sender: string;
+    tx?: Transaction;
+}
+
 export abstract class KamoTransaction {
     abstract mint(params: MintParams): Promise<Transaction>;
     abstract redeemBeforeMaturity(params: RedeemBeforeMaturityParams): Promise<Transaction>;
@@ -58,6 +70,9 @@ export abstract class KamoTransaction {
     abstract addLiquidity(params: AddLiquidityParams): Promise<Transaction>;
     abstract removeLiquidity(params: RemoveLiquidityParams): Promise<Transaction>;
     abstract swapPtForSy(params: SwapPtForSyParams): Promise<Transaction>;
+    abstract swapSyForPt(params: SwapSyForPtParams): Promise<Transaction>;
+    abstract swapSyForExactPt(params: SwapSyForExactPtParams): Promise<Transaction>;
+    abstract getCurrentExchangeRate(): Promise<bigint>;
 
     static async NewState(params: NewStateParams) {
         const tx = new Transaction();

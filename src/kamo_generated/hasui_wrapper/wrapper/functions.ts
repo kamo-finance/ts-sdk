@@ -16,8 +16,6 @@ export function addLiquidity( tx: Transaction, args: AddLiquidityArgs ) { return
 
 export function claimFee( tx: Transaction, state: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::claim_fee`, arguments: [ obj(tx, state) ], }) }
 
-export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
-
 export interface RemoveLiquidityArgs { state: TransactionObjectInput; lp: TransactionObjectInput }
 
 export function removeLiquidity( tx: Transaction, args: RemoveLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::remove_liquidity`, arguments: [ obj(tx, args.state), obj(tx, args.lp) ], }) }
@@ -25,6 +23,12 @@ export function removeLiquidity( tx: Transaction, args: RemoveLiquidityArgs ) { 
 export interface SwapExactPtForSyArgs { state: TransactionObjectInput; ptCoin: TransactionObjectInput; staking: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function swapExactPtForSy( tx: Transaction, args: SwapExactPtForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_exact_pt_for_sy`, arguments: [ obj(tx, args.state), obj(tx, args.ptCoin), obj(tx, args.staking), obj(tx, args.clock) ], }) }
+
+export interface SwapSyForExactPtArgs { state: TransactionObjectInput; syCoin: TransactionObjectInput; staking: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
+
+export function swapSyForExactPt( tx: Transaction, args: SwapSyForExactPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_sy_for_exact_pt`, arguments: [ obj(tx, args.state), obj(tx, args.syCoin), obj(tx, args.staking), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
+
+export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
 
 export interface MergeArgs { state: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; staking: TransactionObjectInput }
 

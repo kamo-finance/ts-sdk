@@ -2,13 +2,13 @@ import { STATE_ADDRESS_MAP } from "./const";
 import { KamoTransaction } from "./transaction";
 import { HasuiTransaction } from "./wrapper";
 
-export const newKamoTransaction = ({
-  market,
-  stateId,
-}: {
+export interface CreateNewKamoTransactionParams {
   market?: string;
   stateId?: string;
-}): KamoTransaction => {
+}
+
+export const newKamoTransaction = (params: CreateNewKamoTransactionParams): KamoTransaction => {
+  let { market, stateId } = params;
   if (!market && stateId) {
       STATE_ADDRESS_MAP.forEach((value, key) => {
           if (value === stateId) {

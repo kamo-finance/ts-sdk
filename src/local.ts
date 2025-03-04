@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { KamoTransaction, newKamoTransaction } from "./transaction";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { suiClient } from "./client/client";
+import { kamoClient, suiClient } from "./client/client";
 import { bcs } from "@mysten/sui/bcs";
 import dotenv from "dotenv";
 dotenv.config();
@@ -30,7 +30,7 @@ async function mint() {
     market: "HASUI",
   });
   const tx = await kamoTx.mint({
-    sy_amount_in: BigInt(2000),
+    sy_amount_in: BigInt(5000),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -88,8 +88,8 @@ async function addLiquidity() {
     market: "HASUI",
   });
   const tx = await kamoTx.addLiquidity({
-    amountPT: 2000,
-    amountSY: 2000,
+    amountPT: 1000,
+    amountSY: 1000,
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -143,7 +143,7 @@ async function swapPtForSy() {
     market: "HASUI",
   });
   const tx = await kamoTx.swapPtForSy({
-    ptAmount: BigInt(300),
+    ptAmount: BigInt(100),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -165,7 +165,53 @@ async function swapPtForSy() {
   }
 }
 
-swapPtForSy();
+async function swapSyForPt() {
+  const kamoTx = newKamoTransaction({
+    market: "HASUI",
+  });
+  const tx = await kamoTx.swapSyForPt({
+    syAmount: BigInt(81),
+    sender: kp.toSuiAddress(),
+  });
+  tx.setSender(kp.toSuiAddress());
+  tx.setGasBudget(100000000);
+  const builtTx = await tx.build({
+    client: suiClient,
+  });
+  const result = await suiClient.dryRunTransactionBlock({
+    transactionBlock: builtTx,
+  });
+  if (result.effects.status.status === "success") {
+    const digest = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer: kp,
+    });
+    console.log(digest);
+  } else {
+    console.log(result);
+  }
+}
+
+async function query() {
+  const exchangeRate = await newKamoTransaction({
+    market: "HASUI",
+  }).getCurrentExchangeRate();
+  console.log(exchangeRate);
+}
+
+query();
+
+// mint();
+
+// addLiquidity();
+
+// removeLiquidity();
+
+// swapPtForSy();
+
+// swapSyForPt();
+
+// newState();
 
 // async function burn() {
 //   const kamoTx = newKamoTransaction({
