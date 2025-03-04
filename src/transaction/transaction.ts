@@ -4,6 +4,8 @@ import { createFromRawValue } from '../kamo_generated/legato-math/fixed-point64/
 import { suiClient } from '../client/client';
 import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../kamo_generated/hasui_wrapper';
 import { FACTORY } from './const';
+import { FixedPoint64 } from '../kamo_generated/legato-math/fixed-point64/structs';
+import BigNumber from 'bignumber.js';
 
 export interface AddLiquidityParams {
     amountPT: number;
@@ -72,7 +74,7 @@ export abstract class KamoTransaction {
     abstract swapPtForSy(params: SwapPtForSyParams): Promise<Transaction>;
     abstract swapSyForPt(params: SwapSyForPtParams): Promise<Transaction>;
     abstract swapSyForExactPt(params: SwapSyForExactPtParams): Promise<Transaction>;
-    abstract getCurrentExchangeRate(): Promise<bigint>;
+    abstract getCurrentExchangeRate(): Promise<BigNumber>;
 
     static async NewState(params: NewStateParams) {
         const tx = new Transaction();

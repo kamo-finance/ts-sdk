@@ -7,6 +7,8 @@ import { kamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
 import { merge, split, swapSyForExactPt } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { binarySearchPtAmount } from "../utils";
+import { FixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
+import BigNumber from "bignumber.js";
 
 const HAEDAL_STAKING = "0x47b224762220393057ebf4f70501b6e657c3e56684737568439a04f80849b2ca";
 const DEFAULT_STATE_ID = STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!;
@@ -187,17 +189,13 @@ export class HasuiTransaction extends KamoTransaction {
     async getCurrentExchangeRate() {
         const tx = new Transaction();
         getExchangeRate(tx, HAEDAL_STAKING);
-        tx.setSender("0x0");
-        tx.setGasBudget(100);
-        const builtTx = await tx.build({
-            client: suiClient,
-        });
         const result = await suiClient.devInspectTransactionBlock({
-            transactionBlock: builtTx,
-            sender: "0x0"
+            transactionBlock: tx,
+            sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
         });
         const exchangeRate = result.results?.[0].returnValues?.[0]?.[0];
-        console.log(exchangeRate);
-        return BigInt(1);
+        const fixedPoint64 = FixedPoint64.fromBcs(Uint8Array.from(exchangeRate ?? []));
+        const val = (new BigNumber(fixedPoint64.value.toString())).div(BigNumber(BigNumber(2).exponentiatedBy(64)));
+        return val;
     }
 }

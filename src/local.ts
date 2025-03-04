@@ -23,6 +23,7 @@ async function currentTimestamp() {
   });
   const returnValues = result.results?.[0].returnValues?.[0]?.[0];
   const val = bcs.u64().parse(Uint8Array.from(returnValues ?? []));
+  console.log(val);
 }
 
 async function mint() {
@@ -88,8 +89,8 @@ async function addLiquidity() {
     market: "HASUI",
   });
   const tx = await kamoTx.addLiquidity({
-    amountPT: 1000,
-    amountSY: 1000,
+    amountPT: 2000,
+    amountSY: 2000,
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -170,7 +171,7 @@ async function swapSyForPt() {
     market: "HASUI",
   });
   const tx = await kamoTx.swapSyForPt({
-    syAmount: BigInt(81),
+    syAmount: BigInt(79),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -193,13 +194,15 @@ async function swapSyForPt() {
 }
 
 async function query() {
-  const exchangeRate = await newKamoTransaction({
+  const exchangRate = await newKamoTransaction({
     market: "HASUI",
   }).getCurrentExchangeRate();
-  console.log(exchangeRate);
+  console.log(exchangRate.toString());
 }
 
-query();
+// query();
+
+// currentTimestamp();
 
 // mint();
 
@@ -209,35 +212,6 @@ query();
 
 // swapPtForSy();
 
-// swapSyForPt();
+swapSyForPt();
 
 // newState();
-
-// async function burn() {
-//   const kamoTx = newKamoTransaction({
-//     market: "HASUI",
-//   });
-//   const tx = await kamoTx.burn({
-//     ptAmountBurned: BigInt(1000),
-//     sender: kp.toSuiAddress(),
-//   });
-//   tx.setSender(kp.toSuiAddress());
-//   tx.setGasBudget(100000000);
-//   const builtTx = await tx.build({
-//     client: suiClient,
-//   });
-//   const result = await suiClient.dryRunTransactionBlock({
-//     transactionBlock: builtTx,
-//   });
-//   if (result.effects.status.status === "success") {
-//     const digest = await suiClient.signAndExecuteTransaction({
-//       transaction: tx,
-//       signer: kp,
-//     });
-//     console.log(digest);
-//   } else {
-//     console.log(result);
-//   }
-// }
-
-// burn();
