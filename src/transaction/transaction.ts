@@ -1,12 +1,13 @@
 import { Transaction } from '@mysten/sui/transactions';
 import { createNewState } from '../kamo_generated/hasui_wrapper/wrapper/functions';
-import { createFromRawValue } from '../kamo_generated/legato-math/fixed-point64/functions';
+import { createFromRawValue, createFromU128 } from '../kamo_generated/legato-math/fixed-point64/functions';
 import { suiClient } from '../client/client';
 import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../kamo_generated/hasui_wrapper';
 import { FACTORY } from './const';
 import { FixedPoint64 } from '../kamo_generated/legato-math/fixed-point64/structs';
 import BigNumber from 'bignumber.js';
 import { compressSuiAddress, compressSuiType } from '../kamo_generated/_framework/util';
+import { exp } from '../kamo_generated/legato-math/math-fixed64/functions';
 
 export interface AddLiquidityParams {
     amountPT: number;
@@ -104,4 +105,16 @@ export abstract class KamoTransaction {
         });
         return tx;  
     }
+}
+
+export const expFixedPoint64 = async (rt: bigint) => {
+    const tx = new Transaction();
+    exp(tx, createFromU128(tx, rt));
+    const inspectResult = await suiClient.devInspectTransactionBlock({
+        transactionBlock: tx,
+        sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
+    });
+    const expResult = inspectResult.results?.[1].returnValues?.[0]?.[0];
+    const fixedPoint64 = FixedPoint64.fromBcs(Uint8Array.from(expResult ?? []));
+    return fixedPoint64;
 }

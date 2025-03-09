@@ -1,5 +1,5 @@
 import { Transaction } from "@mysten/sui/transactions";
-import { KamoTransaction, newKamoTransaction } from "./transaction";
+import { expFixedPoint64, KamoTransaction, newKamoTransaction } from "./transaction";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { kamoClient, suiClient } from "./client/client";
 import { bcs } from "@mysten/sui/bcs";
@@ -200,6 +200,13 @@ async function query() {
   console.log(exchangRate.toString());
 }
 
+async function main() {
+  const res = await expFixedPoint64(BigInt(1));
+  console.log(res.value);
+}
+
+main();
+
 // query();
 
 // currentTimestamp();
@@ -212,7 +219,7 @@ async function query() {
 
 // swapPtForSy();
 
-swapSyForPt();
+// swapSyForPt();
 
 // async function loop() {
 //   while (1) {
