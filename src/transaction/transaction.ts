@@ -6,6 +6,7 @@ import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../kamo_generated/hasu
 import { FACTORY } from './const';
 import { FixedPoint64 } from '../kamo_generated/legato-math/fixed-point64/structs';
 import BigNumber from 'bignumber.js';
+import { compressSuiAddress, compressSuiType } from '../kamo_generated/_framework/util';
 
 export interface AddLiquidityParams {
     amountPT: number;
@@ -82,9 +83,12 @@ export abstract class KamoTransaction {
             owner: params.owner,
             options: {
                 showType: true,
+            },
+            filter: {
+                StructType: `0x2::coin::TreasuryCap<${HASUI_WRAPPER_PACKAGE_ID}::PT::PT>`
             }
         });
-        const treasuryCap = objects.data.find((o) => o.data?.type === `0x2::coin::TreasuryCap<${HASUI_WRAPPER_PACKAGE_ID}::PT::PT>`);
+        const treasuryCap = objects.data[0];
         if (!treasuryCap || !treasuryCap.data) {
             throw new Error(`TreasuryCap not found`);
         }

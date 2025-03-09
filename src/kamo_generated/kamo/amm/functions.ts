@@ -2,6 +2,10 @@ import {PUBLISHED_AT} from "..";
 import {obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
+export interface AddDivFixed64Args { a: TransactionObjectInput; b: TransactionObjectInput; c: TransactionObjectInput }
+
+export function addDivFixed64( tx: Transaction, args: AddDivFixed64Args ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::add_div_fixed64`, arguments: [ obj(tx, args.a), obj(tx, args.b), obj(tx, args.c) ], }) }
+
 export interface AddLiquidityArgs { market: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function addLiquidity( tx: Transaction, typeArgs: [string, string], args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::add_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
@@ -32,9 +36,9 @@ export interface GetExchangeRateFromImpliedRateArgs { lnImpliedRate: Transaction
 
 export function getExchangeRateFromImpliedRate( tx: Transaction, args: GetExchangeRateFromImpliedRateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_exchange_rate_from_implied_rate`, arguments: [ obj(tx, args.lnImpliedRate), pure(tx, args.timeToExpiry, `u64`) ], }) }
 
-export interface GetExchangeRatePtToAssetArgs { totalPt: bigint | TransactionArgument; totalAsset: bigint | TransactionArgument; rateScalar: TransactionObjectInput; rateAnchor: TransactionObjectInput; ptAmount: bigint | TransactionArgument; sell: boolean | TransactionArgument }
+export interface GetExchangeRatePtToAssetArgs { totalPt: bigint | TransactionArgument; totalAsset: bigint | TransactionArgument; rateScalar: TransactionObjectInput; rateAnchor: TransactionObjectInput; ptAmount: bigint | TransactionArgument; sellPt: boolean | TransactionArgument }
 
-export function getExchangeRatePtToAsset( tx: Transaction, args: GetExchangeRatePtToAssetArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_exchange_rate_pt_to_asset`, arguments: [ pure(tx, args.totalPt, `u64`), pure(tx, args.totalAsset, `u64`), obj(tx, args.rateScalar), obj(tx, args.rateAnchor), pure(tx, args.ptAmount, `u64`), pure(tx, args.sell, `bool`) ], }) }
+export function getExchangeRatePtToAsset( tx: Transaction, args: GetExchangeRatePtToAssetArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_exchange_rate_pt_to_asset`, arguments: [ pure(tx, args.totalPt, `u64`), pure(tx, args.totalAsset, `u64`), obj(tx, args.rateScalar), obj(tx, args.rateAnchor), pure(tx, args.ptAmount, `u64`), pure(tx, args.sellPt, `bool`) ], }) }
 
 export interface GetLnImpliedRateArgs { totalPt: bigint | TransactionArgument; totalAsset: bigint | TransactionArgument; rateScalar: TransactionObjectInput; rateAnchor: TransactionObjectInput; timeToExpiry: bigint | TransactionArgument }
 

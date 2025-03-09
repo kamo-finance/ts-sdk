@@ -54,8 +54,8 @@ async function mint() {
 }
 
 async function newState() {
-  const expiry = BigInt(Date.now() + 1000 * 60 * 60 * 24);
-  const scalarRoot = BigInt("160903569857338934925");
+  const expiry = BigInt(Date.now() + 1000 * 60 * 60 * 24 * 365 * 2);
+  const scalarRoot = BigInt("321807139714677870000");
   const initialAnchor = BigInt("21916576633974318274");
   const lnFeeRateRoot = BigInt("183551206696995753");
   const tx = await KamoTransaction.NewState({
@@ -89,7 +89,7 @@ async function addLiquidity() {
     market: "HASUI",
   });
   const tx = await kamoTx.addLiquidity({
-    amountPT: 2000,
+    amountPT: 2097,
     amountSY: 2000,
     sender: kp.toSuiAddress(),
   });
@@ -144,7 +144,7 @@ async function swapPtForSy() {
     market: "HASUI",
   });
   const tx = await kamoTx.swapPtForSy({
-    ptAmount: BigInt(100),
+    ptAmount: BigInt(1000),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -171,7 +171,7 @@ async function swapSyForPt() {
     market: "HASUI",
   });
   const tx = await kamoTx.swapSyForPt({
-    syAmount: BigInt(79),
+    syAmount: BigInt(714),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -213,5 +213,15 @@ async function query() {
 // swapPtForSy();
 
 swapSyForPt();
+
+// async function loop() {
+//   while (1) {
+//     await swapPtForSy();
+
+//     await swapSyForPt();
+//   }
+// }
+
+// loop();
 
 // newState();
