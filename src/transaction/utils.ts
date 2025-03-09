@@ -1,11 +1,14 @@
 import { KamoTransaction } from "./transaction";
-import { suiClient } from "../client";
 import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "./const";
 import { SimulateSwapSyForExactPtParams, YieldMarket } from "../market/market";
 import { FixedPoint64 } from "../market/fixedpoint64";
+import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 
 // TODO: need to improve this function for better performance, now call dryRunTransactionBlock so it's slow
 export const binarySearchPtAmount = async (tx: KamoTransaction, syAmount: bigint): Promise<bigint> => {
+    const suiClient = new SuiClient({
+        url: getFullnodeUrl("mainnet"),
+    });
     let left = BigInt(0);
     let right = BigInt(1) << BigInt(64);
     while (right - left > 1) {  
@@ -34,7 +37,7 @@ export const binarySearchPtAmount = async (tx: KamoTransaction, syAmount: bigint
 
 export const improvedBinarySearchPtAmount = async (syAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
     const yieldMarket = await YieldMarket.GetFromState({
-        stateId: "0xd260180c8d60307ac8dd267fb3c134f9b79de502c50f2390a95ec0733a89e855",
+        stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!,
     });
     let left = BigInt(0);
     let right = yieldMarket.market.totalPt.value;
@@ -67,8 +70,6 @@ export const improvedBinarySearchPtAmount = async (syAmount: bigint, exchangeRat
         exchangeRate,
         now,
     });
-    console.log("netSyToMarket", netSyToMarket);
-    console.log("netSyFee", netSyFee);
     return left;
 }
 

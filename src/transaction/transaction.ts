@@ -10,6 +10,7 @@ import { compressSuiAddress, compressSuiType } from '../kamo_generated/_framewor
 import { exp } from '../kamo_generated/legato-math/math-fixed64/functions';
 import { ln, nthRoot } from '../kamo_generated/legato-math/legato-math/functions';
 import { FixedPoint64 } from '../market/fixedpoint64';
+import { getExchangeRatePtToAsset } from '../kamo_generated/kamo/amm/functions';
 
 export interface AddLiquidityParams {
     amountPT: number;
@@ -148,4 +149,30 @@ export const lnFixedPoint64 = async (x: bigint) => {
     return fixedPoint64;
 }
 
-export const getExchangeRatePtToAsset = async(params)
+interface ExchangeRatePtToAssetParams {
+    totalPt: bigint;
+    totalAsset: bigint;
+    rateScalar: FixedPoint64;
+    rateAnchor: FixedPoint64;
+    ptAmount: bigint;
+    sell: boolean;
+}
+
+export const exchangeRatePtToAsset = async (params: ExchangeRatePtToAssetParams) => {
+    const tx = new Transaction();
+    getExchangeRatePtToAsset(tx, {
+        totalPt: params.totalPt,
+        totalAsset: params.totalAsset,
+        rateScalar: createFromRawValue(tx, params.rateScalar.value),
+        rateAnchor: createFromRawValue(tx, params.rateAnchor.value),
+        ptAmount: params.ptAmount,
+        sellPt: params.sell,
+    });
+    const inspectResult = await suiClient.devInspectTransactionBlock({
+        transactionBlock: tx,
+        sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
+    });
+    const exchangeRateResult = inspectResult.results?.[1].returnValues?.[0]?.[0];
+    const exchangeRate = MoveFixedPoint64.fromBcs(Uint8Array.from(exchangeRateResult ?? []));
+    return exchangeRate;
+}

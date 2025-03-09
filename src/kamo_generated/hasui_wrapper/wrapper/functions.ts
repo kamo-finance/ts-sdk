@@ -10,6 +10,12 @@ export interface MintArgs { state: TransactionObjectInput; hasuiCoinIn: Transact
 
 export function mint( tx: Transaction, args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::mint`, arguments: [ obj(tx, args.state), obj(tx, args.hasuiCoinIn), obj(tx, args.staking), obj(tx, args.clock) ], }) }
 
+export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
+
+export interface MergeArgs { state: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; staking: TransactionObjectInput }
+
+export function merge( tx: Transaction, args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::merge`, arguments: [ obj(tx, args.state), obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.staking) ], }) }
+
 export interface AddLiquidityArgs { state: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; staking: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function addLiquidity( tx: Transaction, args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::add_liquidity`, arguments: [ obj(tx, args.state), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.staking), obj(tx, args.clock) ], }) }
@@ -27,12 +33,6 @@ export function swapExactPtForSy( tx: Transaction, args: SwapExactPtForSyArgs ) 
 export interface SwapSyForExactPtArgs { state: TransactionObjectInput; syCoin: TransactionObjectInput; staking: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
 
 export function swapSyForExactPt( tx: Transaction, args: SwapSyForExactPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_sy_for_exact_pt`, arguments: [ obj(tx, args.state), obj(tx, args.syCoin), obj(tx, args.staking), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
-
-export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
-
-export interface MergeArgs { state: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; staking: TransactionObjectInput }
-
-export function merge( tx: Transaction, args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::merge`, arguments: [ obj(tx, args.state), obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.staking) ], }) }
 
 export interface ClaimInterestArgs { state: TransactionObjectInput; yieldObject: TransactionObjectInput; clock: TransactionObjectInput }
 

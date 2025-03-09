@@ -207,8 +207,8 @@ async function main() {
   const exchangeRate = await kamoTx.getCurrentExchangeRate();
   const ptAmount = await improvedBinarySearchPtAmount(BigInt(1000), exchangeRate);
   console.log(ptAmount);
-  // const ptAmount2 = await binarySearchPtAmount(kamoTx, BigInt(1000));
-  // console.log(ptAmount2);
+  const ptAmount2 = await binarySearchPtAmount(kamoTx, BigInt(1000));
+  console.log(ptAmount2);
 }
 
 main();

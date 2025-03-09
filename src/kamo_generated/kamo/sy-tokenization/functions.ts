@@ -10,6 +10,8 @@ export interface MintArgs { registry: TransactionObjectInput; market: Transactio
 
 export function mint( tx: Transaction, typeArgs: [string, string], args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sy_tokenization::mint`, typeArguments: typeArgs, arguments: [ obj(tx, args.registry), obj(tx, args.market), obj(tx, args.syCoinIn), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
 
+export function init( tx: Transaction, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sy_tokenization::init`, arguments: [ ], }) }
+
 export interface MergeArgs { market: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; exchangeRate: TransactionObjectInput }
 
 export function merge( tx: Transaction, typeArgs: [string, string], args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sy_tokenization::merge`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.exchangeRate) ], }) }
@@ -25,8 +27,6 @@ export function createNewRegistry( tx: Transaction, typeArgs: [string, string], 
 export interface EarnInterestArgs { market: TransactionObjectInput; yieldObject: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function earnInterest( tx: Transaction, typeArgs: [string, string], args: EarnInterestArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sy_tokenization::earn_interest`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.yieldObject), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
-
-export function init( tx: Transaction, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sy_tokenization::init`, arguments: [ ], }) }
 
 export interface RedeemAfterMaturityArgs { registry: TransactionObjectInput; market: TransactionObjectInput; ptCoinIn: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 

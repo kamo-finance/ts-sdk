@@ -7,6 +7,7 @@ import { SwapSyForExactPtParams } from "../transaction";
 import { SUPPORTED_MARKETS } from "../transaction/const";
 import { mappingState } from "../transaction/utils";
 import { FixedPoint64 } from "./fixedpoint64";
+import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 
 export interface NewYieldMarketParams {
   stateId: string;
@@ -55,7 +56,10 @@ export class YieldMarket {
   static async GetFromState(params: NewYieldMarketParams): Promise<YieldMarket> {
     const type = mappingState(params.stateId);
     if (type === SUPPORTED_MARKETS.HASUI) {
-      const state = await State.fetch(suiClient, params.stateId);
+      const state = await State.fetch(new SuiClient(
+      {
+          url: getFullnodeUrl("mainnet"),
+      }), params.stateId);
       const yieldMarket = new YieldMarket();
       yieldMarket.market = state.market;
       return yieldMarket;
@@ -142,7 +146,6 @@ export class YieldMarket {
 
   executeSellSy(params: SimulateSwapSyForExactPtParams) {
     const preComputeValue = this.preComputeValue(params.exchangeRate, params.now);
-    console.log(preComputeValue);
     const {
         syAmount: netSyToMarket,
         syFee: netSyFee,

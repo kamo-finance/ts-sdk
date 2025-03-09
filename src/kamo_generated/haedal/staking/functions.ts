@@ -7,8 +7,6 @@ export interface ClaimArgs { staking: TransactionObjectInput; ticket: Transactio
 
 export function claim( tx: Transaction, args: ClaimArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::staking::claim`, arguments: [ obj(tx, args.staking), obj(tx, args.ticket) ], }) }
 
-export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::staking::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
-
 export interface ApproveClaimAndFeeArgs { staking: TransactionObjectInput; unstakedBal: TransactionObjectInput; epoch: bigint | TransactionArgument }
 
 export function approveClaimAndFee( tx: Transaction, args: ApproveClaimAndFeeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::staking::approve_claim_and_fee`, arguments: [ obj(tx, args.staking), obj(tx, args.unstakedBal), pure(tx, args.epoch, `u64`) ], }) }
@@ -62,6 +60,8 @@ export function getConfigMut( tx: Transaction, staking: TransactionObjectInput )
 export interface GetEpochClaimArgs { staking: TransactionObjectInput; epoch: bigint | TransactionArgument }
 
 export function getEpochClaim( tx: Transaction, args: GetEpochClaimArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::staking::get_epoch_claim`, arguments: [ obj(tx, args.staking), pure(tx, args.epoch, `u64`) ], }) }
+
+export function getExchangeRate( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::staking::get_exchange_rate`, arguments: [ obj(tx, staking) ], }) }
 
 export function getProtocolSuiVaultAmount( tx: Transaction, staking: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::staking::get_protocol_sui_vault_amount`, arguments: [ obj(tx, staking) ], }) }
 
