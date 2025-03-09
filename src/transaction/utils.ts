@@ -1,6 +1,8 @@
 import { KamoTransaction } from "./transaction";
 import { suiClient } from "../client";
 import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "./const";
+import { SimulateSwapSyForExactPtParams, YieldMarket } from "../market/market";
+import { FixedPoint64 } from "../market/fixedpoint64";
 
 // TODO: need to improve this function for better performance, now call dryRunTransactionBlock so it's slow
 export const binarySearchPtAmount = async (tx: KamoTransaction, syAmount: bigint): Promise<bigint> => {
@@ -27,6 +29,46 @@ export const binarySearchPtAmount = async (tx: KamoTransaction, syAmount: bigint
             right = mid;
         }
     }
+    return left;
+}
+
+export const improvedBinarySearchPtAmount = async (syAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
+    const yieldMarket = await YieldMarket.GetFromState({
+        stateId: "0xd260180c8d60307ac8dd267fb3c134f9b79de502c50f2390a95ec0733a89e855",
+    });
+    let left = BigInt(0);
+    let right = yieldMarket.market.totalPt.value;
+    const now = Date.now();
+    while (right - left > 1) {
+        const mid = (left + right) / BigInt(2);
+        try {
+            const {
+                netSyToMarket,
+                netSyFee
+            } = yieldMarket.executeSellSy({
+                ptAmount: mid,
+                exchangeRate,
+                now,
+            });
+            if (syAmount >= netSyToMarket + netSyFee) {
+                left = mid;
+            } else {
+                right = mid;
+            }
+        } catch (e) {
+            right = mid;
+        }
+    }
+    const {
+        netSyToMarket,
+        netSyFee
+    } = yieldMarket.executeSellSy({
+        ptAmount: left + BigInt(1),
+        exchangeRate,
+        now,
+    });
+    console.log("netSyToMarket", netSyToMarket);
+    console.log("netSyFee", netSyFee);
     return left;
 }
 

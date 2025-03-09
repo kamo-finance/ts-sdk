@@ -1,9 +1,10 @@
 import { Transaction } from "@mysten/sui/transactions";
-import { expFixedPoint64, KamoTransaction, newKamoTransaction } from "./transaction";
+import { expFixedPoint64, KamoTransaction, newKamoTransaction, nthRootFixedPoint64 } from "./transaction";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { kamoClient, suiClient } from "./client/client";
 import { bcs } from "@mysten/sui/bcs";
 import dotenv from "dotenv";
+import { binarySearchPtAmount, improvedBinarySearchPtAmount } from "./transaction/utils";
 dotenv.config();
 
 const pk = process.env.SUI_PRIVATE_KEY ?? "";
@@ -197,12 +198,17 @@ async function query() {
   const exchangRate = await newKamoTransaction({
     market: "HASUI",
   }).getCurrentExchangeRate();
-  console.log(exchangRate.toString());
 }
 
 async function main() {
-  const res = await expFixedPoint64(BigInt(1));
-  console.log(res.value);
+  const kamoTx = newKamoTransaction({
+    market: "HASUI",
+  });
+  const exchangeRate = await kamoTx.getCurrentExchangeRate();
+  const ptAmount = await improvedBinarySearchPtAmount(BigInt(1000), exchangeRate);
+  console.log(ptAmount);
+  // const ptAmount2 = await binarySearchPtAmount(kamoTx, BigInt(1000));
+  // console.log(ptAmount2);
 }
 
 main();

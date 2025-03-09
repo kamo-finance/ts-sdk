@@ -4,10 +4,12 @@ import { createFromRawValue, createFromU128 } from '../kamo_generated/legato-mat
 import { suiClient } from '../client/client';
 import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../kamo_generated/hasui_wrapper';
 import { FACTORY } from './const';
-import { FixedPoint64 } from '../kamo_generated/legato-math/fixed-point64/structs';
+import { FixedPoint64 as MoveFixedPoint64 } from '../kamo_generated/legato-math/fixed-point64/structs';
 import BigNumber from 'bignumber.js';
 import { compressSuiAddress, compressSuiType } from '../kamo_generated/_framework/util';
 import { exp } from '../kamo_generated/legato-math/math-fixed64/functions';
+import { ln, nthRoot } from '../kamo_generated/legato-math/legato-math/functions';
+import { FixedPoint64 } from '../market/fixedpoint64';
 
 export interface AddLiquidityParams {
     amountPT: number;
@@ -76,7 +78,7 @@ export abstract class KamoTransaction {
     abstract swapPtForSy(params: SwapPtForSyParams): Promise<Transaction>;
     abstract swapSyForPt(params: SwapSyForPtParams): Promise<Transaction>;
     abstract swapSyForExactPt(params: SwapSyForExactPtParams): Promise<Transaction>;
-    abstract getCurrentExchangeRate(): Promise<BigNumber>;
+    abstract getCurrentExchangeRate(): Promise<FixedPoint64>;
 
     static async NewState(params: NewStateParams) {
         const tx = new Transaction();
@@ -115,6 +117,35 @@ export const expFixedPoint64 = async (rt: bigint) => {
         sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
     });
     const expResult = inspectResult.results?.[1].returnValues?.[0]?.[0];
-    const fixedPoint64 = FixedPoint64.fromBcs(Uint8Array.from(expResult ?? []));
+    const fixedPoint64 = MoveFixedPoint64.fromBcs(Uint8Array.from(expResult ?? []));
     return fixedPoint64;
 }
+
+export const nthRootFixedPoint64 = async (value: bigint, n: bigint) => {
+    const tx = new Transaction();
+    nthRoot(tx, {
+        x: createFromU128(tx, value),
+        n,
+    });
+    const inspectResult = await suiClient.devInspectTransactionBlock({
+        transactionBlock: tx,
+        sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
+    });
+    const nthRootResult = inspectResult.results?.[1].returnValues?.[0]?.[0];
+    const nthRootValue = MoveFixedPoint64.fromBcs(Uint8Array.from(nthRootResult ?? []));
+    return nthRootValue;
+}
+
+export const lnFixedPoint64 = async (x: bigint) => {
+    const tx = new Transaction();
+    ln(tx, createFromU128(tx, x));
+    const inspectResult = await suiClient.devInspectTransactionBlock({
+        transactionBlock: tx,
+        sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
+    });
+    const lnResult = inspectResult.results?.[1].returnValues?.[0]?.[0];
+    const fixedPoint64 = MoveFixedPoint64.fromBcs(Uint8Array.from(lnResult ?? []));
+    return fixedPoint64;
+}
+
+export const getExchangeRatePtToAsset = async(params)
