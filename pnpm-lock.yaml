@@ -17,9 +17,6 @@ importers:
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
-      sui:
-        specifier: link:@@mysten/sui
-        version: link:@@mysten/sui
     devDependencies:
       '@types/node':
         specifier: ^22.13.7

@@ -79,7 +79,7 @@ export class YieldMarket {
 
   getRateAnchor(params: GetRateAnchorParams): FixedPoint64 {
     const exchangeRate = this.getExchangeRateFromImpliedRate(new FixedPoint64(this.market.lastLnImpliedRate.value), params.timeToExpiry);
-    const proportion = FixedPoint64.CreateFromRational(params.totalPt, params.totalAsset + params.totalAsset);
+    const proportion = FixedPoint64.CreateFromRational(params.totalPt, params.totalPt + params.totalAsset);
     const iProportion = FixedPoint64.CreateFromRational(proportion.value, FixedPoint64.CreateFromU128(BigInt(1)).value - proportion.value);
     const lnProportion = iProportion.ln();
     let rateAnchor;
