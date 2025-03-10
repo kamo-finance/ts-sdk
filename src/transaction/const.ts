@@ -1,3 +1,10 @@
+export enum SUPPORTED_MARKETS {
+  NONE = "NONE",
+  HASUI = "HASUI"
+}
+
 export const STATE_ADDRESS_MAP = new Map([
-  ["HASUI", "0xce9cdedbfeed80afff6ecd93e021a9990e1fcb078be3b46778da08ab14a8cfec"]
+  [SUPPORTED_MARKETS.HASUI, "0xcb8497afcb9f3afcdb094a1534d7e1aa1e933f3556964cbd7b30827ff3cc2778"]
 ])
+
+export const FACTORY = "0xe5baee65b0ae0f1fc03b7c10b245772030e294470ce79e003d72858c8e219a84";
