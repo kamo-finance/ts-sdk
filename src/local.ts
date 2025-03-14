@@ -5,6 +5,7 @@ import { kamoClient, suiClient } from "./client/client";
 import { bcs } from "@mysten/sui/bcs";
 import dotenv from "dotenv";
 import { binarySearchPtAmount, improvedBinarySearchPtAmount } from "./transaction/utils";
+import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "./const";
 dotenv.config();
 
 const pk = process.env.SUI_PRIVATE_KEY ?? "";
@@ -198,6 +199,13 @@ async function query() {
   const exchangRate = await newKamoTransaction({
     market: "HASUI",
   }).getCurrentExchangeRate();
+  console.log(exchangRate);
+
+  const yieldObjects = await kamoClient.getYieldObjects({
+    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!,
+    owner: kp.toSuiAddress(),
+  });
+  console.log(yieldObjects);
 }
 
 async function main() {
@@ -211,7 +219,35 @@ async function main() {
   console.log(ptAmount2);
 }
 
-main();
+async function swapYoForSy() {
+  const kamoTx = newKamoTransaction({
+    market: "HASUI",
+  });
+  console.log(await improvedBinarySearchPtAmount(BigInt(809), await kamoTx.getCurrentExchangeRate()));
+  const tx = await kamoTx.swapYoForSy({
+    yoAmount: BigInt(1000),
+    sender: kp.toSuiAddress(),
+  });
+  tx.setSender(kp.toSuiAddress());
+  tx.setGasBudget(100000000);
+  const builtTx = await tx.build({
+    client: suiClient,
+  });
+  const result = await suiClient.dryRunTransactionBlock({
+    transactionBlock: builtTx,
+  });
+  // if (result.effects.status.status === "success") {
+    const digest = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer: kp,
+    });
+    console.log(digest);
+  // } else {
+  //   console.log(result);
+  // }
+}
+
+// main();
 
 // query();
 
@@ -223,9 +259,11 @@ main();
 
 // removeLiquidity();
 
-// swapPtForSy();
+swapPtForSy();
 
 // swapSyForPt();
+
+// swapYoForSy();
 
 // async function loop() {
 //   while (1) {

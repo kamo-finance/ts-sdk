@@ -77,6 +77,10 @@ export interface SetCandidateValidatorGasPriceArgs { wrapper: TransactionObjectI
 
 export function setCandidateValidatorGasPrice( tx: Transaction, args: SetCandidateValidatorGasPriceArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sui_system::set_candidate_validator_gas_price`, arguments: [ obj(tx, args.wrapper), obj(tx, args.cap), pure(tx, args.newGasPrice, `u64`) ], }) }
 
+export interface StoreExecutionTimeEstimatesArgs { wrapper: TransactionObjectInput; estimatesBytes: Array<number | TransactionArgument> | TransactionArgument }
+
+export function storeExecutionTimeEstimates( tx: Transaction, args: StoreExecutionTimeEstimatesArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sui_system::store_execution_time_estimates`, arguments: [ obj(tx, args.wrapper), pure(tx, args.estimatesBytes, `vector<u8>`) ], }) }
+
 export interface UndoReportValidatorArgs { wrapper: TransactionObjectInput; cap: TransactionObjectInput; reporteeAddr: string | TransactionArgument }
 
 export function undoReportValidator( tx: Transaction, args: UndoReportValidatorArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sui_system::undo_report_validator`, arguments: [ obj(tx, args.wrapper), obj(tx, args.cap), pure(tx, args.reporteeAddr, `address`) ], }) }

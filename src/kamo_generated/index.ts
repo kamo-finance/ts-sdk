@@ -1,0 +1,1 @@
+export { PACKAGE_ID as AMM_PACKAGE_ID } from "./kamo";

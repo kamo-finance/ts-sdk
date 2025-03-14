@@ -20,7 +20,23 @@ export interface AddLiquidityArgs { state: TransactionObjectInput; ptCoin: Trans
 
 export function addLiquidity( tx: Transaction, args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::add_liquidity`, arguments: [ obj(tx, args.state), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.staking), obj(tx, args.clock) ], }) }
 
+export interface BorrowPtArgs { state: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
+
+export function borrowPt( tx: Transaction, args: BorrowPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::borrow_pt`, arguments: [ obj(tx, args.state), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
+
+export interface BorrowSyArgs { state: TransactionObjectInput; syAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
+
+export function borrowSy( tx: Transaction, args: BorrowSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::borrow_sy`, arguments: [ obj(tx, args.state), pure(tx, args.syAmount, `u64`), obj(tx, args.clock) ], }) }
+
 export function claimFee( tx: Transaction, state: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::claim_fee`, arguments: [ obj(tx, state) ], }) }
+
+export interface RefundPtArgs { state: TransactionObjectInput; hotPotato: TransactionObjectInput; ptCoin: TransactionObjectInput }
+
+export function refundPt( tx: Transaction, args: RefundPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::refund_pt`, arguments: [ obj(tx, args.state), obj(tx, args.hotPotato), obj(tx, args.ptCoin) ], }) }
+
+export interface RefundSyArgs { state: TransactionObjectInput; hotPotato: TransactionObjectInput; syCoin: TransactionObjectInput }
+
+export function refundSy( tx: Transaction, args: RefundSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::refund_sy`, arguments: [ obj(tx, args.state), obj(tx, args.hotPotato), obj(tx, args.syCoin) ], }) }
 
 export interface RemoveLiquidityArgs { state: TransactionObjectInput; lp: TransactionObjectInput }
 
@@ -30,9 +46,17 @@ export interface SwapExactPtForSyArgs { state: TransactionObjectInput; ptCoin: T
 
 export function swapExactPtForSy( tx: Transaction, args: SwapExactPtForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_exact_pt_for_sy`, arguments: [ obj(tx, args.state), obj(tx, args.ptCoin), obj(tx, args.staking), obj(tx, args.clock) ], }) }
 
+export interface SwapExactPtForSyWithHotPotatoArgs { state: TransactionObjectInput; hotPotato: TransactionObjectInput; ptCoin: TransactionObjectInput; staking: TransactionObjectInput; clock: TransactionObjectInput }
+
+export function swapExactPtForSyWithHotPotato( tx: Transaction, args: SwapExactPtForSyWithHotPotatoArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_exact_pt_for_sy_with_hot_potato`, arguments: [ obj(tx, args.state), obj(tx, args.hotPotato), obj(tx, args.ptCoin), obj(tx, args.staking), obj(tx, args.clock) ], }) }
+
 export interface SwapSyForExactPtArgs { state: TransactionObjectInput; syCoin: TransactionObjectInput; staking: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
 
 export function swapSyForExactPt( tx: Transaction, args: SwapSyForExactPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_sy_for_exact_pt`, arguments: [ obj(tx, args.state), obj(tx, args.syCoin), obj(tx, args.staking), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
+
+export interface SwapSyForExactPtWithHotPotatoArgs { state: TransactionObjectInput; hotPotato: TransactionObjectInput; syCoin: TransactionObjectInput; staking: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
+
+export function swapSyForExactPtWithHotPotato( tx: Transaction, args: SwapSyForExactPtWithHotPotatoArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_sy_for_exact_pt_with_hot_potato`, arguments: [ obj(tx, args.state), obj(tx, args.hotPotato), obj(tx, args.syCoin), obj(tx, args.staking), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
 
 export interface ClaimInterestArgs { state: TransactionObjectInput; yieldObject: TransactionObjectInput; clock: TransactionObjectInput }
 

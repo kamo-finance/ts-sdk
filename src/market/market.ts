@@ -4,7 +4,7 @@ import { PhantomTypeArgument } from "../kamo_generated/_framework/reified";
 import { State } from "../kamo_generated/hasui_wrapper/wrapper/structs";
 import { Market } from "../kamo_generated/kamo/amm/structs";
 import { SwapSyForExactPtParams } from "../transaction";
-import { SUPPORTED_MARKETS } from "../transaction/const";
+import { SUPPORTED_MARKETS } from "../const";
 import { mappingState } from "../transaction/utils";
 import { FixedPoint64 } from "./fixedpoint64";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
@@ -94,8 +94,8 @@ export class YieldMarket {
   preComputeValue(exchangeRate: FixedPoint64, now: number): PreComputeMarket {
     const timeToExpiry = this.market.expiry - BigInt(now);
     const rateScalar = this.getRateScalar(timeToExpiry);
-    const totalPt = this.market.totalPt.value;
-    const totalAsset = syToAsset(this.market.totalSy.value, exchangeRate);
+    const totalPt = this.market.totalPt;
+    const totalAsset = syToAsset(this.market.totalSy, exchangeRate);
     const rateAnchor = this.getRateAnchor({
         totalPt,
         totalAsset,
@@ -128,7 +128,7 @@ export class YieldMarket {
   calcTrade(preCompute: PreComputeMarket, exchangeRate: FixedPoint64, ptAmount: bigint, sell: boolean) {
     const preFeeExchangeRate = this.getExchangeRatePtToAsset({
         preCompute,
-        totalPt: this.market.totalPt.value,
+        totalPt: this.market.totalPt,
         ptAmount,
         sell
     });

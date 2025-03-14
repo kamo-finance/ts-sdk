@@ -1,14 +1,14 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
 import {Versioned} from "../../sui/versioned/structs";
-import {PKG_V18} from "../index";
+import {PKG_V19} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== ValidatorWrapper =============================== */
 
-export function isValidatorWrapper(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::validator_wrapper::ValidatorWrapper`; }
+export function isValidatorWrapper(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::validator_wrapper::ValidatorWrapper`; }
 
 export interface ValidatorWrapperFields { inner: ToField<Versioned> }
 
@@ -16,17 +16,17 @@ export type ValidatorWrapperReified = Reified< ValidatorWrapper, ValidatorWrappe
 
 export class ValidatorWrapper implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::validator_wrapper::ValidatorWrapper`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::validator_wrapper::ValidatorWrapper`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ValidatorWrapper.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::validator_wrapper::ValidatorWrapper`; readonly $typeArgs: []; readonly $isPhantom = ValidatorWrapper.$isPhantom;
+ readonly $typeName = ValidatorWrapper.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::validator_wrapper::ValidatorWrapper`; readonly $typeArgs: []; readonly $isPhantom = ValidatorWrapper.$isPhantom;
 
  readonly inner: ToField<Versioned>
 
- private constructor(typeArgs: [], fields: ValidatorWrapperFields, ) { this.$fullTypeName = composeSuiType( ValidatorWrapper.$typeName, ...typeArgs ) as `${typeof PKG_V18}::validator_wrapper::ValidatorWrapper`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorWrapperFields, ) { this.$fullTypeName = composeSuiType( ValidatorWrapper.$typeName, ...typeArgs ) as `${typeof PKG_V19}::validator_wrapper::ValidatorWrapper`; this.$typeArgs = typeArgs;
 
  this.inner = fields.inner; }
 
- static reified( ): ValidatorWrapperReified { return { typeName: ValidatorWrapper.$typeName, fullTypeName: composeSuiType( ValidatorWrapper.$typeName, ...[] ) as `${typeof PKG_V18}::validator_wrapper::ValidatorWrapper`, typeArgs: [ ] as [], isPhantom: ValidatorWrapper.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorWrapper.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorWrapper.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorWrapper.fromBcs( data, ), bcs: ValidatorWrapper.bcs, fromJSONField: (field: any) => ValidatorWrapper.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorWrapper.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorWrapper.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorWrapper.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorWrapper.fetch( client, id, ), new: ( fields: ValidatorWrapperFields, ) => { return new ValidatorWrapper( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorWrapperReified { return { typeName: ValidatorWrapper.$typeName, fullTypeName: composeSuiType( ValidatorWrapper.$typeName, ...[] ) as `${typeof PKG_V19}::validator_wrapper::ValidatorWrapper`, typeArgs: [ ] as [], isPhantom: ValidatorWrapper.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorWrapper.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorWrapper.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorWrapper.fromBcs( data, ), bcs: ValidatorWrapper.bcs, fromJSONField: (field: any) => ValidatorWrapper.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorWrapper.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorWrapper.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorWrapper.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorWrapper.fetch( client, id, ), new: ( fields: ValidatorWrapperFields, ) => { return new ValidatorWrapper( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ValidatorWrapper.reified() }
 

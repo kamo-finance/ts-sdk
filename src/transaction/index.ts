@@ -1,4 +1,4 @@
-import { STATE_ADDRESS_MAP } from "./const";
+import { STATE_ADDRESS_MAP } from "../const";
 import { KamoTransaction } from "./transaction";
 import { HasuiTransaction } from "./wrapper";
 
