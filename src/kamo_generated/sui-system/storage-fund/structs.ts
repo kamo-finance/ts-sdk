@@ -3,14 +3,14 @@ import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFiel
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
 import {Balance} from "../../sui/balance/structs";
 import {SUI} from "../../sui/sui/structs";
-import {PKG_V18} from "../index";
+import {PKG_V19} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== StorageFund =============================== */
 
-export function isStorageFund(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::storage_fund::StorageFund`; }
+export function isStorageFund(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::storage_fund::StorageFund`; }
 
 export interface StorageFundFields { totalObjectStorageRebates: ToField<Balance<ToPhantom<SUI>>>; nonRefundableBalance: ToField<Balance<ToPhantom<SUI>>> }
 
@@ -18,17 +18,17 @@ export type StorageFundReified = Reified< StorageFund, StorageFundFields >;
 
 export class StorageFund implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::storage_fund::StorageFund`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::storage_fund::StorageFund`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = StorageFund.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::storage_fund::StorageFund`; readonly $typeArgs: []; readonly $isPhantom = StorageFund.$isPhantom;
+ readonly $typeName = StorageFund.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::storage_fund::StorageFund`; readonly $typeArgs: []; readonly $isPhantom = StorageFund.$isPhantom;
 
  readonly totalObjectStorageRebates: ToField<Balance<ToPhantom<SUI>>>; readonly nonRefundableBalance: ToField<Balance<ToPhantom<SUI>>>
 
- private constructor(typeArgs: [], fields: StorageFundFields, ) { this.$fullTypeName = composeSuiType( StorageFund.$typeName, ...typeArgs ) as `${typeof PKG_V18}::storage_fund::StorageFund`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: StorageFundFields, ) { this.$fullTypeName = composeSuiType( StorageFund.$typeName, ...typeArgs ) as `${typeof PKG_V19}::storage_fund::StorageFund`; this.$typeArgs = typeArgs;
 
  this.totalObjectStorageRebates = fields.totalObjectStorageRebates;; this.nonRefundableBalance = fields.nonRefundableBalance; }
 
- static reified( ): StorageFundReified { return { typeName: StorageFund.$typeName, fullTypeName: composeSuiType( StorageFund.$typeName, ...[] ) as `${typeof PKG_V18}::storage_fund::StorageFund`, typeArgs: [ ] as [], isPhantom: StorageFund.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StorageFund.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StorageFund.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StorageFund.fromBcs( data, ), bcs: StorageFund.bcs, fromJSONField: (field: any) => StorageFund.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StorageFund.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StorageFund.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StorageFund.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StorageFund.fetch( client, id, ), new: ( fields: StorageFundFields, ) => { return new StorageFund( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): StorageFundReified { return { typeName: StorageFund.$typeName, fullTypeName: composeSuiType( StorageFund.$typeName, ...[] ) as `${typeof PKG_V19}::storage_fund::StorageFund`, typeArgs: [ ] as [], isPhantom: StorageFund.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StorageFund.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StorageFund.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StorageFund.fromBcs( data, ), bcs: StorageFund.bcs, fromJSONField: (field: any) => StorageFund.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StorageFund.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StorageFund.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StorageFund.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StorageFund.fetch( client, id, ), new: ( fields: StorageFundFields, ) => { return new StorageFund( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return StorageFund.reified() }
 

@@ -1,17 +1,16 @@
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 import { KamoTransaction } from "../transaction";
 import { State } from "../kamo_generated/hasui_wrapper/wrapper/structs";
-import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../transaction/const";
+import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../const";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../kamo_generated/kamo";
 import { isYieldObject, YieldObject } from "../kamo_generated/kamo/yield-object/structs";
 import { phantom } from "../kamo_generated/_framework/reified";
 import { compressSuiType } from "../kamo_generated/_framework/util";
-import { cp } from "fs";
 import { mappingState } from "../transaction/utils";
 
 export const suiClient = new SuiClient(
     {
-        url: getFullnodeUrl("mainnet"),
+        url: getFullnodeUrl("testnet"),
     }
 );
 
@@ -48,6 +47,9 @@ class KamoClient {
             owner: params.owner,
             options: {
                 showType: true,
+            },
+            filter: {
+                StructType: yieldObjectType,
             }
         }); 
         const yieldObjects = ownedObject.data.map((object) => object.data).filter((data) => data != null && data != undefined).filter((data) => data.type && compressSuiType(data.type) === yieldObjectType);

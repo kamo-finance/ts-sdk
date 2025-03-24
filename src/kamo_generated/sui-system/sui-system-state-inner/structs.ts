@@ -6,7 +6,7 @@ import {Balance} from "../../sui/balance/structs";
 import {SUI} from "../../sui/sui/structs";
 import {VecMap} from "../../sui/vec-map/structs";
 import {VecSet} from "../../sui/vec-set/structs";
-import {PKG_V18} from "../index";
+import {PKG_V19} from "../index";
 import {StakeSubsidy} from "../stake-subsidy/structs";
 import {StorageFund} from "../storage-fund/structs";
 import {ValidatorSet} from "../validator-set/structs";
@@ -16,7 +16,7 @@ import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 /* ============================== SuiSystemStateInner =============================== */
 
-export function isSuiSystemStateInner(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::sui_system_state_inner::SuiSystemStateInner`; }
+export function isSuiSystemStateInner(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::sui_system_state_inner::SuiSystemStateInner`; }
 
 export interface SuiSystemStateInnerFields { epoch: ToField<"u64">; protocolVersion: ToField<"u64">; systemStateVersion: ToField<"u64">; validators: ToField<ValidatorSet>; storageFund: ToField<StorageFund>; parameters: ToField<SystemParameters>; referenceGasPrice: ToField<"u64">; validatorReportRecords: ToField<VecMap<"address", VecSet<"address">>>; stakeSubsidy: ToField<StakeSubsidy>; safeMode: ToField<"bool">; safeModeStorageRewards: ToField<Balance<ToPhantom<SUI>>>; safeModeComputationRewards: ToField<Balance<ToPhantom<SUI>>>; safeModeStorageRebates: ToField<"u64">; safeModeNonRefundableStorageFee: ToField<"u64">; epochStartTimestampMs: ToField<"u64">; extraFields: ToField<Bag> }
 
@@ -24,17 +24,17 @@ export type SuiSystemStateInnerReified = Reified< SuiSystemStateInner, SuiSystem
 
 export class SuiSystemStateInner implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::sui_system_state_inner::SuiSystemStateInner`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::sui_system_state_inner::SuiSystemStateInner`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = SuiSystemStateInner.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::sui_system_state_inner::SuiSystemStateInner`; readonly $typeArgs: []; readonly $isPhantom = SuiSystemStateInner.$isPhantom;
+ readonly $typeName = SuiSystemStateInner.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::sui_system_state_inner::SuiSystemStateInner`; readonly $typeArgs: []; readonly $isPhantom = SuiSystemStateInner.$isPhantom;
 
  readonly epoch: ToField<"u64">; readonly protocolVersion: ToField<"u64">; readonly systemStateVersion: ToField<"u64">; readonly validators: ToField<ValidatorSet>; readonly storageFund: ToField<StorageFund>; readonly parameters: ToField<SystemParameters>; readonly referenceGasPrice: ToField<"u64">; readonly validatorReportRecords: ToField<VecMap<"address", VecSet<"address">>>; readonly stakeSubsidy: ToField<StakeSubsidy>; readonly safeMode: ToField<"bool">; readonly safeModeStorageRewards: ToField<Balance<ToPhantom<SUI>>>; readonly safeModeComputationRewards: ToField<Balance<ToPhantom<SUI>>>; readonly safeModeStorageRebates: ToField<"u64">; readonly safeModeNonRefundableStorageFee: ToField<"u64">; readonly epochStartTimestampMs: ToField<"u64">; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: SuiSystemStateInnerFields, ) { this.$fullTypeName = composeSuiType( SuiSystemStateInner.$typeName, ...typeArgs ) as `${typeof PKG_V18}::sui_system_state_inner::SuiSystemStateInner`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: SuiSystemStateInnerFields, ) { this.$fullTypeName = composeSuiType( SuiSystemStateInner.$typeName, ...typeArgs ) as `${typeof PKG_V19}::sui_system_state_inner::SuiSystemStateInner`; this.$typeArgs = typeArgs;
 
  this.epoch = fields.epoch;; this.protocolVersion = fields.protocolVersion;; this.systemStateVersion = fields.systemStateVersion;; this.validators = fields.validators;; this.storageFund = fields.storageFund;; this.parameters = fields.parameters;; this.referenceGasPrice = fields.referenceGasPrice;; this.validatorReportRecords = fields.validatorReportRecords;; this.stakeSubsidy = fields.stakeSubsidy;; this.safeMode = fields.safeMode;; this.safeModeStorageRewards = fields.safeModeStorageRewards;; this.safeModeComputationRewards = fields.safeModeComputationRewards;; this.safeModeStorageRebates = fields.safeModeStorageRebates;; this.safeModeNonRefundableStorageFee = fields.safeModeNonRefundableStorageFee;; this.epochStartTimestampMs = fields.epochStartTimestampMs;; this.extraFields = fields.extraFields; }
 
- static reified( ): SuiSystemStateInnerReified { return { typeName: SuiSystemStateInner.$typeName, fullTypeName: composeSuiType( SuiSystemStateInner.$typeName, ...[] ) as `${typeof PKG_V18}::sui_system_state_inner::SuiSystemStateInner`, typeArgs: [ ] as [], isPhantom: SuiSystemStateInner.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SuiSystemStateInner.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SuiSystemStateInner.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SuiSystemStateInner.fromBcs( data, ), bcs: SuiSystemStateInner.bcs, fromJSONField: (field: any) => SuiSystemStateInner.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SuiSystemStateInner.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SuiSystemStateInner.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SuiSystemStateInner.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SuiSystemStateInner.fetch( client, id, ), new: ( fields: SuiSystemStateInnerFields, ) => { return new SuiSystemStateInner( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): SuiSystemStateInnerReified { return { typeName: SuiSystemStateInner.$typeName, fullTypeName: composeSuiType( SuiSystemStateInner.$typeName, ...[] ) as `${typeof PKG_V19}::sui_system_state_inner::SuiSystemStateInner`, typeArgs: [ ] as [], isPhantom: SuiSystemStateInner.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SuiSystemStateInner.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SuiSystemStateInner.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SuiSystemStateInner.fromBcs( data, ), bcs: SuiSystemStateInner.bcs, fromJSONField: (field: any) => SuiSystemStateInner.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SuiSystemStateInner.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SuiSystemStateInner.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SuiSystemStateInner.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SuiSystemStateInner.fetch( client, id, ), new: ( fields: SuiSystemStateInnerFields, ) => { return new SuiSystemStateInner( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return SuiSystemStateInner.reified() }
 
@@ -84,7 +84,7 @@ export class SuiSystemStateInner implements StructClass { __StructClass = true a
 
 /* ============================== SuiSystemStateInnerV2 =============================== */
 
-export function isSuiSystemStateInnerV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::sui_system_state_inner::SuiSystemStateInnerV2`; }
+export function isSuiSystemStateInnerV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::sui_system_state_inner::SuiSystemStateInnerV2`; }
 
 export interface SuiSystemStateInnerV2Fields { epoch: ToField<"u64">; protocolVersion: ToField<"u64">; systemStateVersion: ToField<"u64">; validators: ToField<ValidatorSet>; storageFund: ToField<StorageFund>; parameters: ToField<SystemParametersV2>; referenceGasPrice: ToField<"u64">; validatorReportRecords: ToField<VecMap<"address", VecSet<"address">>>; stakeSubsidy: ToField<StakeSubsidy>; safeMode: ToField<"bool">; safeModeStorageRewards: ToField<Balance<ToPhantom<SUI>>>; safeModeComputationRewards: ToField<Balance<ToPhantom<SUI>>>; safeModeStorageRebates: ToField<"u64">; safeModeNonRefundableStorageFee: ToField<"u64">; epochStartTimestampMs: ToField<"u64">; extraFields: ToField<Bag> }
 
@@ -92,17 +92,17 @@ export type SuiSystemStateInnerV2Reified = Reified< SuiSystemStateInnerV2, SuiSy
 
 export class SuiSystemStateInnerV2 implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::sui_system_state_inner::SuiSystemStateInnerV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::sui_system_state_inner::SuiSystemStateInnerV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = SuiSystemStateInnerV2.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::sui_system_state_inner::SuiSystemStateInnerV2`; readonly $typeArgs: []; readonly $isPhantom = SuiSystemStateInnerV2.$isPhantom;
+ readonly $typeName = SuiSystemStateInnerV2.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::sui_system_state_inner::SuiSystemStateInnerV2`; readonly $typeArgs: []; readonly $isPhantom = SuiSystemStateInnerV2.$isPhantom;
 
  readonly epoch: ToField<"u64">; readonly protocolVersion: ToField<"u64">; readonly systemStateVersion: ToField<"u64">; readonly validators: ToField<ValidatorSet>; readonly storageFund: ToField<StorageFund>; readonly parameters: ToField<SystemParametersV2>; readonly referenceGasPrice: ToField<"u64">; readonly validatorReportRecords: ToField<VecMap<"address", VecSet<"address">>>; readonly stakeSubsidy: ToField<StakeSubsidy>; readonly safeMode: ToField<"bool">; readonly safeModeStorageRewards: ToField<Balance<ToPhantom<SUI>>>; readonly safeModeComputationRewards: ToField<Balance<ToPhantom<SUI>>>; readonly safeModeStorageRebates: ToField<"u64">; readonly safeModeNonRefundableStorageFee: ToField<"u64">; readonly epochStartTimestampMs: ToField<"u64">; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: SuiSystemStateInnerV2Fields, ) { this.$fullTypeName = composeSuiType( SuiSystemStateInnerV2.$typeName, ...typeArgs ) as `${typeof PKG_V18}::sui_system_state_inner::SuiSystemStateInnerV2`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: SuiSystemStateInnerV2Fields, ) { this.$fullTypeName = composeSuiType( SuiSystemStateInnerV2.$typeName, ...typeArgs ) as `${typeof PKG_V19}::sui_system_state_inner::SuiSystemStateInnerV2`; this.$typeArgs = typeArgs;
 
  this.epoch = fields.epoch;; this.protocolVersion = fields.protocolVersion;; this.systemStateVersion = fields.systemStateVersion;; this.validators = fields.validators;; this.storageFund = fields.storageFund;; this.parameters = fields.parameters;; this.referenceGasPrice = fields.referenceGasPrice;; this.validatorReportRecords = fields.validatorReportRecords;; this.stakeSubsidy = fields.stakeSubsidy;; this.safeMode = fields.safeMode;; this.safeModeStorageRewards = fields.safeModeStorageRewards;; this.safeModeComputationRewards = fields.safeModeComputationRewards;; this.safeModeStorageRebates = fields.safeModeStorageRebates;; this.safeModeNonRefundableStorageFee = fields.safeModeNonRefundableStorageFee;; this.epochStartTimestampMs = fields.epochStartTimestampMs;; this.extraFields = fields.extraFields; }
 
- static reified( ): SuiSystemStateInnerV2Reified { return { typeName: SuiSystemStateInnerV2.$typeName, fullTypeName: composeSuiType( SuiSystemStateInnerV2.$typeName, ...[] ) as `${typeof PKG_V18}::sui_system_state_inner::SuiSystemStateInnerV2`, typeArgs: [ ] as [], isPhantom: SuiSystemStateInnerV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SuiSystemStateInnerV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SuiSystemStateInnerV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SuiSystemStateInnerV2.fromBcs( data, ), bcs: SuiSystemStateInnerV2.bcs, fromJSONField: (field: any) => SuiSystemStateInnerV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SuiSystemStateInnerV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SuiSystemStateInnerV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SuiSystemStateInnerV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SuiSystemStateInnerV2.fetch( client, id, ), new: ( fields: SuiSystemStateInnerV2Fields, ) => { return new SuiSystemStateInnerV2( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): SuiSystemStateInnerV2Reified { return { typeName: SuiSystemStateInnerV2.$typeName, fullTypeName: composeSuiType( SuiSystemStateInnerV2.$typeName, ...[] ) as `${typeof PKG_V19}::sui_system_state_inner::SuiSystemStateInnerV2`, typeArgs: [ ] as [], isPhantom: SuiSystemStateInnerV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SuiSystemStateInnerV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SuiSystemStateInnerV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SuiSystemStateInnerV2.fromBcs( data, ), bcs: SuiSystemStateInnerV2.bcs, fromJSONField: (field: any) => SuiSystemStateInnerV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SuiSystemStateInnerV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SuiSystemStateInnerV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SuiSystemStateInnerV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SuiSystemStateInnerV2.fetch( client, id, ), new: ( fields: SuiSystemStateInnerV2Fields, ) => { return new SuiSystemStateInnerV2( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return SuiSystemStateInnerV2.reified() }
 
@@ -152,7 +152,7 @@ export class SuiSystemStateInnerV2 implements StructClass { __StructClass = true
 
 /* ============================== SystemEpochInfoEvent =============================== */
 
-export function isSystemEpochInfoEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::sui_system_state_inner::SystemEpochInfoEvent`; }
+export function isSystemEpochInfoEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::sui_system_state_inner::SystemEpochInfoEvent`; }
 
 export interface SystemEpochInfoEventFields { epoch: ToField<"u64">; protocolVersion: ToField<"u64">; referenceGasPrice: ToField<"u64">; totalStake: ToField<"u64">; storageFundReinvestment: ToField<"u64">; storageCharge: ToField<"u64">; storageRebate: ToField<"u64">; storageFundBalance: ToField<"u64">; stakeSubsidyAmount: ToField<"u64">; totalGasFees: ToField<"u64">; totalStakeRewardsDistributed: ToField<"u64">; leftoverStorageFundInflow: ToField<"u64"> }
 
@@ -160,17 +160,17 @@ export type SystemEpochInfoEventReified = Reified< SystemEpochInfoEvent, SystemE
 
 export class SystemEpochInfoEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::sui_system_state_inner::SystemEpochInfoEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::sui_system_state_inner::SystemEpochInfoEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = SystemEpochInfoEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::sui_system_state_inner::SystemEpochInfoEvent`; readonly $typeArgs: []; readonly $isPhantom = SystemEpochInfoEvent.$isPhantom;
+ readonly $typeName = SystemEpochInfoEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::sui_system_state_inner::SystemEpochInfoEvent`; readonly $typeArgs: []; readonly $isPhantom = SystemEpochInfoEvent.$isPhantom;
 
  readonly epoch: ToField<"u64">; readonly protocolVersion: ToField<"u64">; readonly referenceGasPrice: ToField<"u64">; readonly totalStake: ToField<"u64">; readonly storageFundReinvestment: ToField<"u64">; readonly storageCharge: ToField<"u64">; readonly storageRebate: ToField<"u64">; readonly storageFundBalance: ToField<"u64">; readonly stakeSubsidyAmount: ToField<"u64">; readonly totalGasFees: ToField<"u64">; readonly totalStakeRewardsDistributed: ToField<"u64">; readonly leftoverStorageFundInflow: ToField<"u64">
 
- private constructor(typeArgs: [], fields: SystemEpochInfoEventFields, ) { this.$fullTypeName = composeSuiType( SystemEpochInfoEvent.$typeName, ...typeArgs ) as `${typeof PKG_V18}::sui_system_state_inner::SystemEpochInfoEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: SystemEpochInfoEventFields, ) { this.$fullTypeName = composeSuiType( SystemEpochInfoEvent.$typeName, ...typeArgs ) as `${typeof PKG_V19}::sui_system_state_inner::SystemEpochInfoEvent`; this.$typeArgs = typeArgs;
 
  this.epoch = fields.epoch;; this.protocolVersion = fields.protocolVersion;; this.referenceGasPrice = fields.referenceGasPrice;; this.totalStake = fields.totalStake;; this.storageFundReinvestment = fields.storageFundReinvestment;; this.storageCharge = fields.storageCharge;; this.storageRebate = fields.storageRebate;; this.storageFundBalance = fields.storageFundBalance;; this.stakeSubsidyAmount = fields.stakeSubsidyAmount;; this.totalGasFees = fields.totalGasFees;; this.totalStakeRewardsDistributed = fields.totalStakeRewardsDistributed;; this.leftoverStorageFundInflow = fields.leftoverStorageFundInflow; }
 
- static reified( ): SystemEpochInfoEventReified { return { typeName: SystemEpochInfoEvent.$typeName, fullTypeName: composeSuiType( SystemEpochInfoEvent.$typeName, ...[] ) as `${typeof PKG_V18}::sui_system_state_inner::SystemEpochInfoEvent`, typeArgs: [ ] as [], isPhantom: SystemEpochInfoEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SystemEpochInfoEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SystemEpochInfoEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SystemEpochInfoEvent.fromBcs( data, ), bcs: SystemEpochInfoEvent.bcs, fromJSONField: (field: any) => SystemEpochInfoEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SystemEpochInfoEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SystemEpochInfoEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SystemEpochInfoEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SystemEpochInfoEvent.fetch( client, id, ), new: ( fields: SystemEpochInfoEventFields, ) => { return new SystemEpochInfoEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): SystemEpochInfoEventReified { return { typeName: SystemEpochInfoEvent.$typeName, fullTypeName: composeSuiType( SystemEpochInfoEvent.$typeName, ...[] ) as `${typeof PKG_V19}::sui_system_state_inner::SystemEpochInfoEvent`, typeArgs: [ ] as [], isPhantom: SystemEpochInfoEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SystemEpochInfoEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SystemEpochInfoEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SystemEpochInfoEvent.fromBcs( data, ), bcs: SystemEpochInfoEvent.bcs, fromJSONField: (field: any) => SystemEpochInfoEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SystemEpochInfoEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SystemEpochInfoEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SystemEpochInfoEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SystemEpochInfoEvent.fetch( client, id, ), new: ( fields: SystemEpochInfoEventFields, ) => { return new SystemEpochInfoEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return SystemEpochInfoEvent.reified() }
 
@@ -220,7 +220,7 @@ export class SystemEpochInfoEvent implements StructClass { __StructClass = true 
 
 /* ============================== SystemParameters =============================== */
 
-export function isSystemParameters(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::sui_system_state_inner::SystemParameters`; }
+export function isSystemParameters(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::sui_system_state_inner::SystemParameters`; }
 
 export interface SystemParametersFields { epochDurationMs: ToField<"u64">; stakeSubsidyStartEpoch: ToField<"u64">; maxValidatorCount: ToField<"u64">; minValidatorJoiningStake: ToField<"u64">; validatorLowStakeThreshold: ToField<"u64">; validatorVeryLowStakeThreshold: ToField<"u64">; validatorLowStakeGracePeriod: ToField<"u64">; extraFields: ToField<Bag> }
 
@@ -228,17 +228,17 @@ export type SystemParametersReified = Reified< SystemParameters, SystemParameter
 
 export class SystemParameters implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::sui_system_state_inner::SystemParameters`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::sui_system_state_inner::SystemParameters`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = SystemParameters.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::sui_system_state_inner::SystemParameters`; readonly $typeArgs: []; readonly $isPhantom = SystemParameters.$isPhantom;
+ readonly $typeName = SystemParameters.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::sui_system_state_inner::SystemParameters`; readonly $typeArgs: []; readonly $isPhantom = SystemParameters.$isPhantom;
 
  readonly epochDurationMs: ToField<"u64">; readonly stakeSubsidyStartEpoch: ToField<"u64">; readonly maxValidatorCount: ToField<"u64">; readonly minValidatorJoiningStake: ToField<"u64">; readonly validatorLowStakeThreshold: ToField<"u64">; readonly validatorVeryLowStakeThreshold: ToField<"u64">; readonly validatorLowStakeGracePeriod: ToField<"u64">; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: SystemParametersFields, ) { this.$fullTypeName = composeSuiType( SystemParameters.$typeName, ...typeArgs ) as `${typeof PKG_V18}::sui_system_state_inner::SystemParameters`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: SystemParametersFields, ) { this.$fullTypeName = composeSuiType( SystemParameters.$typeName, ...typeArgs ) as `${typeof PKG_V19}::sui_system_state_inner::SystemParameters`; this.$typeArgs = typeArgs;
 
  this.epochDurationMs = fields.epochDurationMs;; this.stakeSubsidyStartEpoch = fields.stakeSubsidyStartEpoch;; this.maxValidatorCount = fields.maxValidatorCount;; this.minValidatorJoiningStake = fields.minValidatorJoiningStake;; this.validatorLowStakeThreshold = fields.validatorLowStakeThreshold;; this.validatorVeryLowStakeThreshold = fields.validatorVeryLowStakeThreshold;; this.validatorLowStakeGracePeriod = fields.validatorLowStakeGracePeriod;; this.extraFields = fields.extraFields; }
 
- static reified( ): SystemParametersReified { return { typeName: SystemParameters.$typeName, fullTypeName: composeSuiType( SystemParameters.$typeName, ...[] ) as `${typeof PKG_V18}::sui_system_state_inner::SystemParameters`, typeArgs: [ ] as [], isPhantom: SystemParameters.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SystemParameters.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SystemParameters.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SystemParameters.fromBcs( data, ), bcs: SystemParameters.bcs, fromJSONField: (field: any) => SystemParameters.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SystemParameters.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SystemParameters.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SystemParameters.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SystemParameters.fetch( client, id, ), new: ( fields: SystemParametersFields, ) => { return new SystemParameters( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): SystemParametersReified { return { typeName: SystemParameters.$typeName, fullTypeName: composeSuiType( SystemParameters.$typeName, ...[] ) as `${typeof PKG_V19}::sui_system_state_inner::SystemParameters`, typeArgs: [ ] as [], isPhantom: SystemParameters.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SystemParameters.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SystemParameters.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SystemParameters.fromBcs( data, ), bcs: SystemParameters.bcs, fromJSONField: (field: any) => SystemParameters.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SystemParameters.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SystemParameters.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SystemParameters.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SystemParameters.fetch( client, id, ), new: ( fields: SystemParametersFields, ) => { return new SystemParameters( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return SystemParameters.reified() }
 
@@ -288,7 +288,7 @@ export class SystemParameters implements StructClass { __StructClass = true as c
 
 /* ============================== SystemParametersV2 =============================== */
 
-export function isSystemParametersV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::sui_system_state_inner::SystemParametersV2`; }
+export function isSystemParametersV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::sui_system_state_inner::SystemParametersV2`; }
 
 export interface SystemParametersV2Fields { epochDurationMs: ToField<"u64">; stakeSubsidyStartEpoch: ToField<"u64">; minValidatorCount: ToField<"u64">; maxValidatorCount: ToField<"u64">; minValidatorJoiningStake: ToField<"u64">; validatorLowStakeThreshold: ToField<"u64">; validatorVeryLowStakeThreshold: ToField<"u64">; validatorLowStakeGracePeriod: ToField<"u64">; extraFields: ToField<Bag> }
 
@@ -296,17 +296,17 @@ export type SystemParametersV2Reified = Reified< SystemParametersV2, SystemParam
 
 export class SystemParametersV2 implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::sui_system_state_inner::SystemParametersV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::sui_system_state_inner::SystemParametersV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = SystemParametersV2.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::sui_system_state_inner::SystemParametersV2`; readonly $typeArgs: []; readonly $isPhantom = SystemParametersV2.$isPhantom;
+ readonly $typeName = SystemParametersV2.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::sui_system_state_inner::SystemParametersV2`; readonly $typeArgs: []; readonly $isPhantom = SystemParametersV2.$isPhantom;
 
  readonly epochDurationMs: ToField<"u64">; readonly stakeSubsidyStartEpoch: ToField<"u64">; readonly minValidatorCount: ToField<"u64">; readonly maxValidatorCount: ToField<"u64">; readonly minValidatorJoiningStake: ToField<"u64">; readonly validatorLowStakeThreshold: ToField<"u64">; readonly validatorVeryLowStakeThreshold: ToField<"u64">; readonly validatorLowStakeGracePeriod: ToField<"u64">; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: SystemParametersV2Fields, ) { this.$fullTypeName = composeSuiType( SystemParametersV2.$typeName, ...typeArgs ) as `${typeof PKG_V18}::sui_system_state_inner::SystemParametersV2`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: SystemParametersV2Fields, ) { this.$fullTypeName = composeSuiType( SystemParametersV2.$typeName, ...typeArgs ) as `${typeof PKG_V19}::sui_system_state_inner::SystemParametersV2`; this.$typeArgs = typeArgs;
 
  this.epochDurationMs = fields.epochDurationMs;; this.stakeSubsidyStartEpoch = fields.stakeSubsidyStartEpoch;; this.minValidatorCount = fields.minValidatorCount;; this.maxValidatorCount = fields.maxValidatorCount;; this.minValidatorJoiningStake = fields.minValidatorJoiningStake;; this.validatorLowStakeThreshold = fields.validatorLowStakeThreshold;; this.validatorVeryLowStakeThreshold = fields.validatorVeryLowStakeThreshold;; this.validatorLowStakeGracePeriod = fields.validatorLowStakeGracePeriod;; this.extraFields = fields.extraFields; }
 
- static reified( ): SystemParametersV2Reified { return { typeName: SystemParametersV2.$typeName, fullTypeName: composeSuiType( SystemParametersV2.$typeName, ...[] ) as `${typeof PKG_V18}::sui_system_state_inner::SystemParametersV2`, typeArgs: [ ] as [], isPhantom: SystemParametersV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SystemParametersV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SystemParametersV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SystemParametersV2.fromBcs( data, ), bcs: SystemParametersV2.bcs, fromJSONField: (field: any) => SystemParametersV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SystemParametersV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SystemParametersV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SystemParametersV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SystemParametersV2.fetch( client, id, ), new: ( fields: SystemParametersV2Fields, ) => { return new SystemParametersV2( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): SystemParametersV2Reified { return { typeName: SystemParametersV2.$typeName, fullTypeName: composeSuiType( SystemParametersV2.$typeName, ...[] ) as `${typeof PKG_V19}::sui_system_state_inner::SystemParametersV2`, typeArgs: [ ] as [], isPhantom: SystemParametersV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SystemParametersV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SystemParametersV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SystemParametersV2.fromBcs( data, ), bcs: SystemParametersV2.bcs, fromJSONField: (field: any) => SystemParametersV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SystemParametersV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SystemParametersV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SystemParametersV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SystemParametersV2.fetch( client, id, ), new: ( fields: SystemParametersV2Fields, ) => { return new SystemParametersV2( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return SystemParametersV2.reified() }
 

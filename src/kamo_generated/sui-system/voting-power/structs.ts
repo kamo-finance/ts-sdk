@@ -1,13 +1,13 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
-import {PKG_V18} from "../index";
+import {PKG_V19} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== VotingPowerInfo =============================== */
 
-export function isVotingPowerInfo(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::voting_power::VotingPowerInfo`; }
+export function isVotingPowerInfo(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::voting_power::VotingPowerInfo`; }
 
 export interface VotingPowerInfoFields { validatorIndex: ToField<"u64">; votingPower: ToField<"u64"> }
 
@@ -15,17 +15,17 @@ export type VotingPowerInfoReified = Reified< VotingPowerInfo, VotingPowerInfoFi
 
 export class VotingPowerInfo implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::voting_power::VotingPowerInfo`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::voting_power::VotingPowerInfo`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = VotingPowerInfo.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::voting_power::VotingPowerInfo`; readonly $typeArgs: []; readonly $isPhantom = VotingPowerInfo.$isPhantom;
+ readonly $typeName = VotingPowerInfo.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::voting_power::VotingPowerInfo`; readonly $typeArgs: []; readonly $isPhantom = VotingPowerInfo.$isPhantom;
 
  readonly validatorIndex: ToField<"u64">; readonly votingPower: ToField<"u64">
 
- private constructor(typeArgs: [], fields: VotingPowerInfoFields, ) { this.$fullTypeName = composeSuiType( VotingPowerInfo.$typeName, ...typeArgs ) as `${typeof PKG_V18}::voting_power::VotingPowerInfo`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: VotingPowerInfoFields, ) { this.$fullTypeName = composeSuiType( VotingPowerInfo.$typeName, ...typeArgs ) as `${typeof PKG_V19}::voting_power::VotingPowerInfo`; this.$typeArgs = typeArgs;
 
  this.validatorIndex = fields.validatorIndex;; this.votingPower = fields.votingPower; }
 
- static reified( ): VotingPowerInfoReified { return { typeName: VotingPowerInfo.$typeName, fullTypeName: composeSuiType( VotingPowerInfo.$typeName, ...[] ) as `${typeof PKG_V18}::voting_power::VotingPowerInfo`, typeArgs: [ ] as [], isPhantom: VotingPowerInfo.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VotingPowerInfo.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VotingPowerInfo.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VotingPowerInfo.fromBcs( data, ), bcs: VotingPowerInfo.bcs, fromJSONField: (field: any) => VotingPowerInfo.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VotingPowerInfo.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VotingPowerInfo.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VotingPowerInfo.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VotingPowerInfo.fetch( client, id, ), new: ( fields: VotingPowerInfoFields, ) => { return new VotingPowerInfo( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): VotingPowerInfoReified { return { typeName: VotingPowerInfo.$typeName, fullTypeName: composeSuiType( VotingPowerInfo.$typeName, ...[] ) as `${typeof PKG_V19}::voting_power::VotingPowerInfo`, typeArgs: [ ] as [], isPhantom: VotingPowerInfo.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VotingPowerInfo.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VotingPowerInfo.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VotingPowerInfo.fromBcs( data, ), bcs: VotingPowerInfo.bcs, fromJSONField: (field: any) => VotingPowerInfo.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VotingPowerInfo.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VotingPowerInfo.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VotingPowerInfo.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VotingPowerInfo.fetch( client, id, ), new: ( fields: VotingPowerInfoFields, ) => { return new VotingPowerInfo( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return VotingPowerInfo.reified() }
 
@@ -75,7 +75,7 @@ export class VotingPowerInfo implements StructClass { __StructClass = true as co
 
 /* ============================== VotingPowerInfoV2 =============================== */
 
-export function isVotingPowerInfoV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::voting_power::VotingPowerInfoV2`; }
+export function isVotingPowerInfoV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::voting_power::VotingPowerInfoV2`; }
 
 export interface VotingPowerInfoV2Fields { validatorIndex: ToField<"u64">; votingPower: ToField<"u64">; stake: ToField<"u64"> }
 
@@ -83,17 +83,17 @@ export type VotingPowerInfoV2Reified = Reified< VotingPowerInfoV2, VotingPowerIn
 
 export class VotingPowerInfoV2 implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::voting_power::VotingPowerInfoV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::voting_power::VotingPowerInfoV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = VotingPowerInfoV2.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::voting_power::VotingPowerInfoV2`; readonly $typeArgs: []; readonly $isPhantom = VotingPowerInfoV2.$isPhantom;
+ readonly $typeName = VotingPowerInfoV2.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::voting_power::VotingPowerInfoV2`; readonly $typeArgs: []; readonly $isPhantom = VotingPowerInfoV2.$isPhantom;
 
  readonly validatorIndex: ToField<"u64">; readonly votingPower: ToField<"u64">; readonly stake: ToField<"u64">
 
- private constructor(typeArgs: [], fields: VotingPowerInfoV2Fields, ) { this.$fullTypeName = composeSuiType( VotingPowerInfoV2.$typeName, ...typeArgs ) as `${typeof PKG_V18}::voting_power::VotingPowerInfoV2`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: VotingPowerInfoV2Fields, ) { this.$fullTypeName = composeSuiType( VotingPowerInfoV2.$typeName, ...typeArgs ) as `${typeof PKG_V19}::voting_power::VotingPowerInfoV2`; this.$typeArgs = typeArgs;
 
  this.validatorIndex = fields.validatorIndex;; this.votingPower = fields.votingPower;; this.stake = fields.stake; }
 
- static reified( ): VotingPowerInfoV2Reified { return { typeName: VotingPowerInfoV2.$typeName, fullTypeName: composeSuiType( VotingPowerInfoV2.$typeName, ...[] ) as `${typeof PKG_V18}::voting_power::VotingPowerInfoV2`, typeArgs: [ ] as [], isPhantom: VotingPowerInfoV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VotingPowerInfoV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VotingPowerInfoV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VotingPowerInfoV2.fromBcs( data, ), bcs: VotingPowerInfoV2.bcs, fromJSONField: (field: any) => VotingPowerInfoV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VotingPowerInfoV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VotingPowerInfoV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VotingPowerInfoV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VotingPowerInfoV2.fetch( client, id, ), new: ( fields: VotingPowerInfoV2Fields, ) => { return new VotingPowerInfoV2( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): VotingPowerInfoV2Reified { return { typeName: VotingPowerInfoV2.$typeName, fullTypeName: composeSuiType( VotingPowerInfoV2.$typeName, ...[] ) as `${typeof PKG_V19}::voting_power::VotingPowerInfoV2`, typeArgs: [ ] as [], isPhantom: VotingPowerInfoV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VotingPowerInfoV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VotingPowerInfoV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VotingPowerInfoV2.fromBcs( data, ), bcs: VotingPowerInfoV2.bcs, fromJSONField: (field: any) => VotingPowerInfoV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VotingPowerInfoV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VotingPowerInfoV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VotingPowerInfoV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VotingPowerInfoV2.fetch( client, id, ), new: ( fields: VotingPowerInfoV2Fields, ) => { return new VotingPowerInfoV2( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return VotingPowerInfoV2.reified() }
 

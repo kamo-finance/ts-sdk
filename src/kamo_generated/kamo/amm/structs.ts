@@ -1,8 +1,8 @@
 import * as reified from "../../_framework/reified";
+import {Balance, Supply} from "../../_dependencies/source/0x2/balance/structs";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, phantom, ToTypeStr as ToPhantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../_framework/util";
 import {FixedPoint64} from "../../legato-math/fixed-point64/structs";
-import {Balance, Supply} from "../../sui/balance/structs";
 import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
@@ -75,6 +75,76 @@ export class AddLiquidityEvent<PT extends PhantomTypeArgument, SY extends Phanto
  static async fetch<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArgs: [PT, SY], id: string ): Promise<AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AddLiquidityEvent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAddLiquidityEvent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AddLiquidityEvent object`); }
 
  return AddLiquidityEvent.fromSuiObjectData( typeArgs, res.data ); }
+
+ }
+
+/* ============================== BuyYoBorrowSy =============================== */
+
+export function isBuyYoBorrowSy(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::amm::BuyYoBorrowSy` + '<'); }
+
+export interface BuyYoBorrowSyFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { amount: ToField<"u64"> }
+
+export type BuyYoBorrowSyReified<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> = Reified< BuyYoBorrowSy<PT, SY>, BuyYoBorrowSyFields<PT, SY> >;
+
+export class BuyYoBorrowSy<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::amm::BuyYoBorrowSy`; static readonly $numTypeParams = 2; static readonly $isPhantom = [true,true,] as const;
+
+ readonly $typeName = BuyYoBorrowSy.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::amm::BuyYoBorrowSy<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; readonly $typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>]; readonly $isPhantom = BuyYoBorrowSy.$isPhantom;
+
+ readonly amount: ToField<"u64">
+
+ private constructor(typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>], fields: BuyYoBorrowSyFields<PT, SY>, ) { this.$fullTypeName = composeSuiType( BuyYoBorrowSy.$typeName, ...typeArgs ) as `${typeof PKG_V1}::amm::BuyYoBorrowSy<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; this.$typeArgs = typeArgs;
+
+ this.amount = fields.amount; }
+
+ static reified<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): BuyYoBorrowSyReified<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return { typeName: BuyYoBorrowSy.$typeName, fullTypeName: composeSuiType( BuyYoBorrowSy.$typeName, ...[extractType(PT), extractType(SY)] ) as `${typeof PKG_V1}::amm::BuyYoBorrowSy<${PhantomToTypeStr<ToPhantomTypeArgument<PT>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<SY>>}>`, typeArgs: [ extractType(PT), extractType(SY) ] as [PhantomToTypeStr<ToPhantomTypeArgument<PT>>, PhantomToTypeStr<ToPhantomTypeArgument<SY>>], isPhantom: BuyYoBorrowSy.$isPhantom, reifiedTypeArgs: [PT, SY], fromFields: (fields: Record<string, any>) => BuyYoBorrowSy.fromFields( [PT, SY], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BuyYoBorrowSy.fromFieldsWithTypes( [PT, SY], item, ), fromBcs: (data: Uint8Array) => BuyYoBorrowSy.fromBcs( [PT, SY], data, ), bcs: BuyYoBorrowSy.bcs, fromJSONField: (field: any) => BuyYoBorrowSy.fromJSONField( [PT, SY], field, ), fromJSON: (json: Record<string, any>) => BuyYoBorrowSy.fromJSON( [PT, SY], json, ), fromSuiParsedData: (content: SuiParsedData) => BuyYoBorrowSy.fromSuiParsedData( [PT, SY], content, ), fromSuiObjectData: (content: SuiObjectData) => BuyYoBorrowSy.fromSuiObjectData( [PT, SY], content, ), fetch: async (client: SuiClient, id: string) => BuyYoBorrowSy.fetch( client, [PT, SY], id, ), new: ( fields: BuyYoBorrowSyFields<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>, ) => { return new BuyYoBorrowSy( [extractType(PT), extractType(SY)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return BuyYoBorrowSy.reified }
+
+ static phantom<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): PhantomReified<ToTypeStr<BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>>> { return phantom(BuyYoBorrowSy.reified( PT, SY )); } static get p() { return BuyYoBorrowSy.phantom }
+
+ static get bcs() { return bcs.struct("BuyYoBorrowSy", {
+
+ amount: bcs.u64()
+
+}) };
+
+ static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return BuyYoBorrowSy.reified( typeArgs[0], typeArgs[1], ).new( { amount: decodeFromFields("u64", fields.amount) } ) }
+
+ static fromFieldsWithTypes<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], item: FieldsWithTypes ): BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (!isBuyYoBorrowSy(item.type)) { throw new Error("not a BuyYoBorrowSy type");
+
+ } assertFieldsWithTypesArgsMatch(item, typeArgs);
+
+ return BuyYoBorrowSy.reified( typeArgs[0], typeArgs[1], ).new( { amount: decodeFromFieldsWithTypes("u64", item.fields.amount) } ) }
+
+ static fromBcs<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: Uint8Array ): BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return BuyYoBorrowSy.fromFields( typeArgs, BuyYoBorrowSy.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ amount: this.amount.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return BuyYoBorrowSy.reified( typeArgs[0], typeArgs[1], ).new( { amount: decodeFromJSONField("u64", field.amount) } ) }
+
+ static fromJSON<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], json: Record<string, any> ): BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (json.$typeName !== BuyYoBorrowSy.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(BuyYoBorrowSy.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
+
+ return BuyYoBorrowSy.fromJSONField( typeArgs, json, ) }
+
+ static fromSuiParsedData<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], content: SuiParsedData ): BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBuyYoBorrowSy(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a BuyYoBorrowSy object`); } return BuyYoBorrowSy.fromFieldsWithTypes( typeArgs, content ); }
+
+ static fromSuiObjectData<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: SuiObjectData ): BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBuyYoBorrowSy(data.bcs.type)) { throw new Error(`object at is not a BuyYoBorrowSy object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 2) { throw new Error(`type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`); }; for (let i = 0; i < 2; i++) { const gotTypeArg = compressSuiType(gotTypeArgs[i]); const expectedTypeArg = compressSuiType(extractType(typeArgs[i])); if (gotTypeArg !== expectedTypeArg) { throw new Error(`type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); } };
+
+ return BuyYoBorrowSy.fromBcs( typeArgs, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return BuyYoBorrowSy.fromSuiParsedData( typeArgs, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArgs: [PT, SY], id: string ): Promise<BuyYoBorrowSy<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching BuyYoBorrowSy object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBuyYoBorrowSy(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a BuyYoBorrowSy object`); }
+
+ return BuyYoBorrowSy.fromSuiObjectData( typeArgs, res.data ); }
 
  }
 
@@ -152,7 +222,7 @@ export class LP<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> 
 
 export function isMarket(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::amm::Market` + '<'); }
 
-export interface MarketFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { totalPt: ToField<Balance<PT>>; totalSy: ToField<Balance<SY>>; totalLp: ToField<Supply<ToPhantom<LP<PT, SY>>>>; scalarRoot: ToField<FixedPoint64>; initialAnchor: ToField<FixedPoint64>; expiry: ToField<"u64">; lnFeeRateRoot: ToField<FixedPoint64>; reserveFeePercent: ToField<"u64">; lastLnImpliedRate: ToField<FixedPoint64>; feeBalance: ToField<Balance<SY>>; withdrawFeeAddress: ToField<"address"> }
+export interface MarketFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { ptBalance: ToField<Balance<PT>>; syBalance: ToField<Balance<SY>>; lpSupply: ToField<Supply<ToPhantom<LP<PT, SY>>>>; totalPt: ToField<"u64">; totalSy: ToField<"u64">; scalarRoot: ToField<FixedPoint64>; initialAnchor: ToField<FixedPoint64>; expiry: ToField<"u64">; lnFeeRateRoot: ToField<FixedPoint64>; reserveFeePercent: ToField<"u64">; lastLnImpliedRate: ToField<FixedPoint64>; feeBalance: ToField<Balance<SY>>; withdrawFeeAddress: ToField<"address"> }
 
 export type MarketReified<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> = Reified< Market<PT, SY>, MarketFields<PT, SY> >;
 
@@ -162,11 +232,11 @@ export class Market<PT extends PhantomTypeArgument, SY extends PhantomTypeArgume
 
  readonly $typeName = Market.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::amm::Market<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; readonly $typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>]; readonly $isPhantom = Market.$isPhantom;
 
- readonly totalPt: ToField<Balance<PT>>; readonly totalSy: ToField<Balance<SY>>; readonly totalLp: ToField<Supply<ToPhantom<LP<PT, SY>>>>; readonly scalarRoot: ToField<FixedPoint64>; readonly initialAnchor: ToField<FixedPoint64>; readonly expiry: ToField<"u64">; readonly lnFeeRateRoot: ToField<FixedPoint64>; readonly reserveFeePercent: ToField<"u64">; readonly lastLnImpliedRate: ToField<FixedPoint64>; readonly feeBalance: ToField<Balance<SY>>; readonly withdrawFeeAddress: ToField<"address">
+ readonly ptBalance: ToField<Balance<PT>>; readonly syBalance: ToField<Balance<SY>>; readonly lpSupply: ToField<Supply<ToPhantom<LP<PT, SY>>>>; readonly totalPt: ToField<"u64">; readonly totalSy: ToField<"u64">; readonly scalarRoot: ToField<FixedPoint64>; readonly initialAnchor: ToField<FixedPoint64>; readonly expiry: ToField<"u64">; readonly lnFeeRateRoot: ToField<FixedPoint64>; readonly reserveFeePercent: ToField<"u64">; readonly lastLnImpliedRate: ToField<FixedPoint64>; readonly feeBalance: ToField<Balance<SY>>; readonly withdrawFeeAddress: ToField<"address">
 
  private constructor(typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>], fields: MarketFields<PT, SY>, ) { this.$fullTypeName = composeSuiType( Market.$typeName, ...typeArgs ) as `${typeof PKG_V1}::amm::Market<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; this.$typeArgs = typeArgs;
 
- this.totalPt = fields.totalPt;; this.totalSy = fields.totalSy;; this.totalLp = fields.totalLp;; this.scalarRoot = fields.scalarRoot;; this.initialAnchor = fields.initialAnchor;; this.expiry = fields.expiry;; this.lnFeeRateRoot = fields.lnFeeRateRoot;; this.reserveFeePercent = fields.reserveFeePercent;; this.lastLnImpliedRate = fields.lastLnImpliedRate;; this.feeBalance = fields.feeBalance;; this.withdrawFeeAddress = fields.withdrawFeeAddress; }
+ this.ptBalance = fields.ptBalance;; this.syBalance = fields.syBalance;; this.lpSupply = fields.lpSupply;; this.totalPt = fields.totalPt;; this.totalSy = fields.totalSy;; this.scalarRoot = fields.scalarRoot;; this.initialAnchor = fields.initialAnchor;; this.expiry = fields.expiry;; this.lnFeeRateRoot = fields.lnFeeRateRoot;; this.reserveFeePercent = fields.reserveFeePercent;; this.lastLnImpliedRate = fields.lastLnImpliedRate;; this.feeBalance = fields.feeBalance;; this.withdrawFeeAddress = fields.withdrawFeeAddress; }
 
  static reified<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): MarketReified<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return { typeName: Market.$typeName, fullTypeName: composeSuiType( Market.$typeName, ...[extractType(PT), extractType(SY)] ) as `${typeof PKG_V1}::amm::Market<${PhantomToTypeStr<ToPhantomTypeArgument<PT>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<SY>>}>`, typeArgs: [ extractType(PT), extractType(SY) ] as [PhantomToTypeStr<ToPhantomTypeArgument<PT>>, PhantomToTypeStr<ToPhantomTypeArgument<SY>>], isPhantom: Market.$isPhantom, reifiedTypeArgs: [PT, SY], fromFields: (fields: Record<string, any>) => Market.fromFields( [PT, SY], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Market.fromFieldsWithTypes( [PT, SY], item, ), fromBcs: (data: Uint8Array) => Market.fromBcs( [PT, SY], data, ), bcs: Market.bcs, fromJSONField: (field: any) => Market.fromJSONField( [PT, SY], field, ), fromJSON: (json: Record<string, any>) => Market.fromJSON( [PT, SY], json, ), fromSuiParsedData: (content: SuiParsedData) => Market.fromSuiParsedData( [PT, SY], content, ), fromSuiObjectData: (content: SuiObjectData) => Market.fromSuiObjectData( [PT, SY], content, ), fetch: async (client: SuiClient, id: string) => Market.fetch( client, [PT, SY], id, ), new: ( fields: MarketFields<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>, ) => { return new Market( [extractType(PT), extractType(SY)], fields ) }, kind: "StructClassReified", } }
 
@@ -176,29 +246,29 @@ export class Market<PT extends PhantomTypeArgument, SY extends PhantomTypeArgume
 
  static get bcs() { return bcs.struct("Market", {
 
- total_pt: Balance.bcs, total_sy: Balance.bcs, total_lp: Supply.bcs, scalar_root: FixedPoint64.bcs, initial_anchor: FixedPoint64.bcs, expiry: bcs.u64(), ln_fee_rate_root: FixedPoint64.bcs, reserve_fee_percent: bcs.u64(), last_ln_implied_rate: FixedPoint64.bcs, fee_balance: Balance.bcs, withdraw_fee_address: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
+ pt_balance: Balance.bcs, sy_balance: Balance.bcs, lp_supply: Supply.bcs, total_pt: bcs.u64(), total_sy: bcs.u64(), scalar_root: FixedPoint64.bcs, initial_anchor: FixedPoint64.bcs, expiry: bcs.u64(), ln_fee_rate_root: FixedPoint64.bcs, reserve_fee_percent: bcs.u64(), last_ln_implied_rate: FixedPoint64.bcs, fee_balance: Balance.bcs, withdraw_fee_address: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
 }) };
 
- static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): Market<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return Market.reified( typeArgs[0], typeArgs[1], ).new( { totalPt: decodeFromFields(Balance.reified(typeArgs[0]), fields.total_pt), totalSy: decodeFromFields(Balance.reified(typeArgs[1]), fields.total_sy), totalLp: decodeFromFields(Supply.reified(reified.phantom(LP.reified(typeArgs[0], typeArgs[1]))), fields.total_lp), scalarRoot: decodeFromFields(FixedPoint64.reified(), fields.scalar_root), initialAnchor: decodeFromFields(FixedPoint64.reified(), fields.initial_anchor), expiry: decodeFromFields("u64", fields.expiry), lnFeeRateRoot: decodeFromFields(FixedPoint64.reified(), fields.ln_fee_rate_root), reserveFeePercent: decodeFromFields("u64", fields.reserve_fee_percent), lastLnImpliedRate: decodeFromFields(FixedPoint64.reified(), fields.last_ln_implied_rate), feeBalance: decodeFromFields(Balance.reified(typeArgs[1]), fields.fee_balance), withdrawFeeAddress: decodeFromFields("address", fields.withdraw_fee_address) } ) }
+ static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): Market<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return Market.reified( typeArgs[0], typeArgs[1], ).new( { ptBalance: decodeFromFields(Balance.reified(typeArgs[0]), fields.pt_balance), syBalance: decodeFromFields(Balance.reified(typeArgs[1]), fields.sy_balance), lpSupply: decodeFromFields(Supply.reified(reified.phantom(LP.reified(typeArgs[0], typeArgs[1]))), fields.lp_supply), totalPt: decodeFromFields("u64", fields.total_pt), totalSy: decodeFromFields("u64", fields.total_sy), scalarRoot: decodeFromFields(FixedPoint64.reified(), fields.scalar_root), initialAnchor: decodeFromFields(FixedPoint64.reified(), fields.initial_anchor), expiry: decodeFromFields("u64", fields.expiry), lnFeeRateRoot: decodeFromFields(FixedPoint64.reified(), fields.ln_fee_rate_root), reserveFeePercent: decodeFromFields("u64", fields.reserve_fee_percent), lastLnImpliedRate: decodeFromFields(FixedPoint64.reified(), fields.last_ln_implied_rate), feeBalance: decodeFromFields(Balance.reified(typeArgs[1]), fields.fee_balance), withdrawFeeAddress: decodeFromFields("address", fields.withdraw_fee_address) } ) }
 
  static fromFieldsWithTypes<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], item: FieldsWithTypes ): Market<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (!isMarket(item.type)) { throw new Error("not a Market type");
 
  } assertFieldsWithTypesArgsMatch(item, typeArgs);
 
- return Market.reified( typeArgs[0], typeArgs[1], ).new( { totalPt: decodeFromFieldsWithTypes(Balance.reified(typeArgs[0]), item.fields.total_pt), totalSy: decodeFromFieldsWithTypes(Balance.reified(typeArgs[1]), item.fields.total_sy), totalLp: decodeFromFieldsWithTypes(Supply.reified(reified.phantom(LP.reified(typeArgs[0], typeArgs[1]))), item.fields.total_lp), scalarRoot: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.scalar_root), initialAnchor: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.initial_anchor), expiry: decodeFromFieldsWithTypes("u64", item.fields.expiry), lnFeeRateRoot: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.ln_fee_rate_root), reserveFeePercent: decodeFromFieldsWithTypes("u64", item.fields.reserve_fee_percent), lastLnImpliedRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.last_ln_implied_rate), feeBalance: decodeFromFieldsWithTypes(Balance.reified(typeArgs[1]), item.fields.fee_balance), withdrawFeeAddress: decodeFromFieldsWithTypes("address", item.fields.withdraw_fee_address) } ) }
+ return Market.reified( typeArgs[0], typeArgs[1], ).new( { ptBalance: decodeFromFieldsWithTypes(Balance.reified(typeArgs[0]), item.fields.pt_balance), syBalance: decodeFromFieldsWithTypes(Balance.reified(typeArgs[1]), item.fields.sy_balance), lpSupply: decodeFromFieldsWithTypes(Supply.reified(reified.phantom(LP.reified(typeArgs[0], typeArgs[1]))), item.fields.lp_supply), totalPt: decodeFromFieldsWithTypes("u64", item.fields.total_pt), totalSy: decodeFromFieldsWithTypes("u64", item.fields.total_sy), scalarRoot: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.scalar_root), initialAnchor: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.initial_anchor), expiry: decodeFromFieldsWithTypes("u64", item.fields.expiry), lnFeeRateRoot: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.ln_fee_rate_root), reserveFeePercent: decodeFromFieldsWithTypes("u64", item.fields.reserve_fee_percent), lastLnImpliedRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.last_ln_implied_rate), feeBalance: decodeFromFieldsWithTypes(Balance.reified(typeArgs[1]), item.fields.fee_balance), withdrawFeeAddress: decodeFromFieldsWithTypes("address", item.fields.withdraw_fee_address) } ) }
 
  static fromBcs<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: Uint8Array ): Market<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return Market.fromFields( typeArgs, Market.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- totalPt: this.totalPt.toJSONField(),totalSy: this.totalSy.toJSONField(),totalLp: this.totalLp.toJSONField(),scalarRoot: this.scalarRoot.toJSONField(),initialAnchor: this.initialAnchor.toJSONField(),expiry: this.expiry.toString(),lnFeeRateRoot: this.lnFeeRateRoot.toJSONField(),reserveFeePercent: this.reserveFeePercent.toString(),lastLnImpliedRate: this.lastLnImpliedRate.toJSONField(),feeBalance: this.feeBalance.toJSONField(),withdrawFeeAddress: this.withdrawFeeAddress,
+ ptBalance: this.ptBalance.toJSONField(),syBalance: this.syBalance.toJSONField(),lpSupply: this.lpSupply.toJSONField(),totalPt: this.totalPt.toString(),totalSy: this.totalSy.toString(),scalarRoot: this.scalarRoot.toJSONField(),initialAnchor: this.initialAnchor.toJSONField(),expiry: this.expiry.toString(),lnFeeRateRoot: this.lnFeeRateRoot.toJSONField(),reserveFeePercent: this.reserveFeePercent.toString(),lastLnImpliedRate: this.lastLnImpliedRate.toJSONField(),feeBalance: this.feeBalance.toJSONField(),withdrawFeeAddress: this.withdrawFeeAddress,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): Market<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return Market.reified( typeArgs[0], typeArgs[1], ).new( { totalPt: decodeFromJSONField(Balance.reified(typeArgs[0]), field.totalPt), totalSy: decodeFromJSONField(Balance.reified(typeArgs[1]), field.totalSy), totalLp: decodeFromJSONField(Supply.reified(reified.phantom(LP.reified(typeArgs[0], typeArgs[1]))), field.totalLp), scalarRoot: decodeFromJSONField(FixedPoint64.reified(), field.scalarRoot), initialAnchor: decodeFromJSONField(FixedPoint64.reified(), field.initialAnchor), expiry: decodeFromJSONField("u64", field.expiry), lnFeeRateRoot: decodeFromJSONField(FixedPoint64.reified(), field.lnFeeRateRoot), reserveFeePercent: decodeFromJSONField("u64", field.reserveFeePercent), lastLnImpliedRate: decodeFromJSONField(FixedPoint64.reified(), field.lastLnImpliedRate), feeBalance: decodeFromJSONField(Balance.reified(typeArgs[1]), field.feeBalance), withdrawFeeAddress: decodeFromJSONField("address", field.withdrawFeeAddress) } ) }
+ static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): Market<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return Market.reified( typeArgs[0], typeArgs[1], ).new( { ptBalance: decodeFromJSONField(Balance.reified(typeArgs[0]), field.ptBalance), syBalance: decodeFromJSONField(Balance.reified(typeArgs[1]), field.syBalance), lpSupply: decodeFromJSONField(Supply.reified(reified.phantom(LP.reified(typeArgs[0], typeArgs[1]))), field.lpSupply), totalPt: decodeFromJSONField("u64", field.totalPt), totalSy: decodeFromJSONField("u64", field.totalSy), scalarRoot: decodeFromJSONField(FixedPoint64.reified(), field.scalarRoot), initialAnchor: decodeFromJSONField(FixedPoint64.reified(), field.initialAnchor), expiry: decodeFromJSONField("u64", field.expiry), lnFeeRateRoot: decodeFromJSONField(FixedPoint64.reified(), field.lnFeeRateRoot), reserveFeePercent: decodeFromJSONField("u64", field.reserveFeePercent), lastLnImpliedRate: decodeFromJSONField(FixedPoint64.reified(), field.lastLnImpliedRate), feeBalance: decodeFromJSONField(Balance.reified(typeArgs[1]), field.feeBalance), withdrawFeeAddress: decodeFromJSONField("address", field.withdrawFeeAddress) } ) }
 
  static fromJSON<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], json: Record<string, any> ): Market<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (json.$typeName !== Market.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(Market.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
 
@@ -353,6 +423,76 @@ export class RemoveLiquidityEvent<PT extends PhantomTypeArgument, SY extends Pha
  static async fetch<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArgs: [PT, SY], id: string ): Promise<RemoveLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching RemoveLiquidityEvent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isRemoveLiquidityEvent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a RemoveLiquidityEvent object`); }
 
  return RemoveLiquidityEvent.fromSuiObjectData( typeArgs, res.data ); }
+
+ }
+
+/* ============================== SellYoBorrowPt =============================== */
+
+export function isSellYoBorrowPt(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::amm::SellYoBorrowPt` + '<'); }
+
+export interface SellYoBorrowPtFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { amount: ToField<"u64"> }
+
+export type SellYoBorrowPtReified<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> = Reified< SellYoBorrowPt<PT, SY>, SellYoBorrowPtFields<PT, SY> >;
+
+export class SellYoBorrowPt<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::amm::SellYoBorrowPt`; static readonly $numTypeParams = 2; static readonly $isPhantom = [true,true,] as const;
+
+ readonly $typeName = SellYoBorrowPt.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::amm::SellYoBorrowPt<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; readonly $typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>]; readonly $isPhantom = SellYoBorrowPt.$isPhantom;
+
+ readonly amount: ToField<"u64">
+
+ private constructor(typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>], fields: SellYoBorrowPtFields<PT, SY>, ) { this.$fullTypeName = composeSuiType( SellYoBorrowPt.$typeName, ...typeArgs ) as `${typeof PKG_V1}::amm::SellYoBorrowPt<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; this.$typeArgs = typeArgs;
+
+ this.amount = fields.amount; }
+
+ static reified<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): SellYoBorrowPtReified<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return { typeName: SellYoBorrowPt.$typeName, fullTypeName: composeSuiType( SellYoBorrowPt.$typeName, ...[extractType(PT), extractType(SY)] ) as `${typeof PKG_V1}::amm::SellYoBorrowPt<${PhantomToTypeStr<ToPhantomTypeArgument<PT>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<SY>>}>`, typeArgs: [ extractType(PT), extractType(SY) ] as [PhantomToTypeStr<ToPhantomTypeArgument<PT>>, PhantomToTypeStr<ToPhantomTypeArgument<SY>>], isPhantom: SellYoBorrowPt.$isPhantom, reifiedTypeArgs: [PT, SY], fromFields: (fields: Record<string, any>) => SellYoBorrowPt.fromFields( [PT, SY], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SellYoBorrowPt.fromFieldsWithTypes( [PT, SY], item, ), fromBcs: (data: Uint8Array) => SellYoBorrowPt.fromBcs( [PT, SY], data, ), bcs: SellYoBorrowPt.bcs, fromJSONField: (field: any) => SellYoBorrowPt.fromJSONField( [PT, SY], field, ), fromJSON: (json: Record<string, any>) => SellYoBorrowPt.fromJSON( [PT, SY], json, ), fromSuiParsedData: (content: SuiParsedData) => SellYoBorrowPt.fromSuiParsedData( [PT, SY], content, ), fromSuiObjectData: (content: SuiObjectData) => SellYoBorrowPt.fromSuiObjectData( [PT, SY], content, ), fetch: async (client: SuiClient, id: string) => SellYoBorrowPt.fetch( client, [PT, SY], id, ), new: ( fields: SellYoBorrowPtFields<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>, ) => { return new SellYoBorrowPt( [extractType(PT), extractType(SY)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return SellYoBorrowPt.reified }
+
+ static phantom<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): PhantomReified<ToTypeStr<SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>>> { return phantom(SellYoBorrowPt.reified( PT, SY )); } static get p() { return SellYoBorrowPt.phantom }
+
+ static get bcs() { return bcs.struct("SellYoBorrowPt", {
+
+ amount: bcs.u64()
+
+}) };
+
+ static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SellYoBorrowPt.reified( typeArgs[0], typeArgs[1], ).new( { amount: decodeFromFields("u64", fields.amount) } ) }
+
+ static fromFieldsWithTypes<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], item: FieldsWithTypes ): SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (!isSellYoBorrowPt(item.type)) { throw new Error("not a SellYoBorrowPt type");
+
+ } assertFieldsWithTypesArgsMatch(item, typeArgs);
+
+ return SellYoBorrowPt.reified( typeArgs[0], typeArgs[1], ).new( { amount: decodeFromFieldsWithTypes("u64", item.fields.amount) } ) }
+
+ static fromBcs<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: Uint8Array ): SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SellYoBorrowPt.fromFields( typeArgs, SellYoBorrowPt.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ amount: this.amount.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SellYoBorrowPt.reified( typeArgs[0], typeArgs[1], ).new( { amount: decodeFromJSONField("u64", field.amount) } ) }
+
+ static fromJSON<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], json: Record<string, any> ): SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (json.$typeName !== SellYoBorrowPt.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(SellYoBorrowPt.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
+
+ return SellYoBorrowPt.fromJSONField( typeArgs, json, ) }
+
+ static fromSuiParsedData<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], content: SuiParsedData ): SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isSellYoBorrowPt(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a SellYoBorrowPt object`); } return SellYoBorrowPt.fromFieldsWithTypes( typeArgs, content ); }
+
+ static fromSuiObjectData<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: SuiObjectData ): SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isSellYoBorrowPt(data.bcs.type)) { throw new Error(`object at is not a SellYoBorrowPt object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 2) { throw new Error(`type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`); }; for (let i = 0; i < 2; i++) { const gotTypeArg = compressSuiType(gotTypeArgs[i]); const expectedTypeArg = compressSuiType(extractType(typeArgs[i])); if (gotTypeArg !== expectedTypeArg) { throw new Error(`type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); } };
+
+ return SellYoBorrowPt.fromBcs( typeArgs, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return SellYoBorrowPt.fromSuiParsedData( typeArgs, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArgs: [PT, SY], id: string ): Promise<SellYoBorrowPt<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching SellYoBorrowPt object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isSellYoBorrowPt(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a SellYoBorrowPt object`); }
+
+ return SellYoBorrowPt.fromSuiObjectData( typeArgs, res.data ); }
 
  }
 

@@ -7,14 +7,14 @@ import {Balance} from "../../sui/balance/structs";
 import {ID, UID} from "../../sui/object/structs";
 import {SUI} from "../../sui/sui/structs";
 import {Table} from "../../sui/table/structs";
-import {PKG_V18} from "../index";
+import {PKG_V19} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== FungibleStakedSui =============================== */
 
-export function isFungibleStakedSui(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::staking_pool::FungibleStakedSui`; }
+export function isFungibleStakedSui(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::staking_pool::FungibleStakedSui`; }
 
 export interface FungibleStakedSuiFields { id: ToField<UID>; poolId: ToField<ID>; value: ToField<"u64"> }
 
@@ -22,17 +22,17 @@ export type FungibleStakedSuiReified = Reified< FungibleStakedSui, FungibleStake
 
 export class FungibleStakedSui implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::staking_pool::FungibleStakedSui`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::staking_pool::FungibleStakedSui`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = FungibleStakedSui.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::staking_pool::FungibleStakedSui`; readonly $typeArgs: []; readonly $isPhantom = FungibleStakedSui.$isPhantom;
+ readonly $typeName = FungibleStakedSui.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::staking_pool::FungibleStakedSui`; readonly $typeArgs: []; readonly $isPhantom = FungibleStakedSui.$isPhantom;
 
  readonly id: ToField<UID>; readonly poolId: ToField<ID>; readonly value: ToField<"u64">
 
- private constructor(typeArgs: [], fields: FungibleStakedSuiFields, ) { this.$fullTypeName = composeSuiType( FungibleStakedSui.$typeName, ...typeArgs ) as `${typeof PKG_V18}::staking_pool::FungibleStakedSui`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: FungibleStakedSuiFields, ) { this.$fullTypeName = composeSuiType( FungibleStakedSui.$typeName, ...typeArgs ) as `${typeof PKG_V19}::staking_pool::FungibleStakedSui`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.poolId = fields.poolId;; this.value = fields.value; }
 
- static reified( ): FungibleStakedSuiReified { return { typeName: FungibleStakedSui.$typeName, fullTypeName: composeSuiType( FungibleStakedSui.$typeName, ...[] ) as `${typeof PKG_V18}::staking_pool::FungibleStakedSui`, typeArgs: [ ] as [], isPhantom: FungibleStakedSui.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => FungibleStakedSui.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => FungibleStakedSui.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => FungibleStakedSui.fromBcs( data, ), bcs: FungibleStakedSui.bcs, fromJSONField: (field: any) => FungibleStakedSui.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => FungibleStakedSui.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => FungibleStakedSui.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => FungibleStakedSui.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => FungibleStakedSui.fetch( client, id, ), new: ( fields: FungibleStakedSuiFields, ) => { return new FungibleStakedSui( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): FungibleStakedSuiReified { return { typeName: FungibleStakedSui.$typeName, fullTypeName: composeSuiType( FungibleStakedSui.$typeName, ...[] ) as `${typeof PKG_V19}::staking_pool::FungibleStakedSui`, typeArgs: [ ] as [], isPhantom: FungibleStakedSui.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => FungibleStakedSui.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => FungibleStakedSui.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => FungibleStakedSui.fromBcs( data, ), bcs: FungibleStakedSui.bcs, fromJSONField: (field: any) => FungibleStakedSui.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => FungibleStakedSui.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => FungibleStakedSui.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => FungibleStakedSui.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => FungibleStakedSui.fetch( client, id, ), new: ( fields: FungibleStakedSuiFields, ) => { return new FungibleStakedSui( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return FungibleStakedSui.reified() }
 
@@ -82,7 +82,7 @@ export class FungibleStakedSui implements StructClass { __StructClass = true as 
 
 /* ============================== FungibleStakedSuiData =============================== */
 
-export function isFungibleStakedSuiData(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::staking_pool::FungibleStakedSuiData`; }
+export function isFungibleStakedSuiData(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::staking_pool::FungibleStakedSuiData`; }
 
 export interface FungibleStakedSuiDataFields { id: ToField<UID>; totalSupply: ToField<"u64">; principal: ToField<Balance<ToPhantom<SUI>>> }
 
@@ -90,17 +90,17 @@ export type FungibleStakedSuiDataReified = Reified< FungibleStakedSuiData, Fungi
 
 export class FungibleStakedSuiData implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::staking_pool::FungibleStakedSuiData`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::staking_pool::FungibleStakedSuiData`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = FungibleStakedSuiData.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::staking_pool::FungibleStakedSuiData`; readonly $typeArgs: []; readonly $isPhantom = FungibleStakedSuiData.$isPhantom;
+ readonly $typeName = FungibleStakedSuiData.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::staking_pool::FungibleStakedSuiData`; readonly $typeArgs: []; readonly $isPhantom = FungibleStakedSuiData.$isPhantom;
 
  readonly id: ToField<UID>; readonly totalSupply: ToField<"u64">; readonly principal: ToField<Balance<ToPhantom<SUI>>>
 
- private constructor(typeArgs: [], fields: FungibleStakedSuiDataFields, ) { this.$fullTypeName = composeSuiType( FungibleStakedSuiData.$typeName, ...typeArgs ) as `${typeof PKG_V18}::staking_pool::FungibleStakedSuiData`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: FungibleStakedSuiDataFields, ) { this.$fullTypeName = composeSuiType( FungibleStakedSuiData.$typeName, ...typeArgs ) as `${typeof PKG_V19}::staking_pool::FungibleStakedSuiData`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.totalSupply = fields.totalSupply;; this.principal = fields.principal; }
 
- static reified( ): FungibleStakedSuiDataReified { return { typeName: FungibleStakedSuiData.$typeName, fullTypeName: composeSuiType( FungibleStakedSuiData.$typeName, ...[] ) as `${typeof PKG_V18}::staking_pool::FungibleStakedSuiData`, typeArgs: [ ] as [], isPhantom: FungibleStakedSuiData.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => FungibleStakedSuiData.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => FungibleStakedSuiData.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => FungibleStakedSuiData.fromBcs( data, ), bcs: FungibleStakedSuiData.bcs, fromJSONField: (field: any) => FungibleStakedSuiData.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => FungibleStakedSuiData.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => FungibleStakedSuiData.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => FungibleStakedSuiData.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => FungibleStakedSuiData.fetch( client, id, ), new: ( fields: FungibleStakedSuiDataFields, ) => { return new FungibleStakedSuiData( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): FungibleStakedSuiDataReified { return { typeName: FungibleStakedSuiData.$typeName, fullTypeName: composeSuiType( FungibleStakedSuiData.$typeName, ...[] ) as `${typeof PKG_V19}::staking_pool::FungibleStakedSuiData`, typeArgs: [ ] as [], isPhantom: FungibleStakedSuiData.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => FungibleStakedSuiData.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => FungibleStakedSuiData.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => FungibleStakedSuiData.fromBcs( data, ), bcs: FungibleStakedSuiData.bcs, fromJSONField: (field: any) => FungibleStakedSuiData.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => FungibleStakedSuiData.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => FungibleStakedSuiData.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => FungibleStakedSuiData.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => FungibleStakedSuiData.fetch( client, id, ), new: ( fields: FungibleStakedSuiDataFields, ) => { return new FungibleStakedSuiData( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return FungibleStakedSuiData.reified() }
 
@@ -150,7 +150,7 @@ export class FungibleStakedSuiData implements StructClass { __StructClass = true
 
 /* ============================== FungibleStakedSuiDataKey =============================== */
 
-export function isFungibleStakedSuiDataKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::staking_pool::FungibleStakedSuiDataKey`; }
+export function isFungibleStakedSuiDataKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::staking_pool::FungibleStakedSuiDataKey`; }
 
 export interface FungibleStakedSuiDataKeyFields { dummyField: ToField<"bool"> }
 
@@ -158,17 +158,17 @@ export type FungibleStakedSuiDataKeyReified = Reified< FungibleStakedSuiDataKey,
 
 export class FungibleStakedSuiDataKey implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::staking_pool::FungibleStakedSuiDataKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::staking_pool::FungibleStakedSuiDataKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = FungibleStakedSuiDataKey.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::staking_pool::FungibleStakedSuiDataKey`; readonly $typeArgs: []; readonly $isPhantom = FungibleStakedSuiDataKey.$isPhantom;
+ readonly $typeName = FungibleStakedSuiDataKey.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::staking_pool::FungibleStakedSuiDataKey`; readonly $typeArgs: []; readonly $isPhantom = FungibleStakedSuiDataKey.$isPhantom;
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: FungibleStakedSuiDataKeyFields, ) { this.$fullTypeName = composeSuiType( FungibleStakedSuiDataKey.$typeName, ...typeArgs ) as `${typeof PKG_V18}::staking_pool::FungibleStakedSuiDataKey`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: FungibleStakedSuiDataKeyFields, ) { this.$fullTypeName = composeSuiType( FungibleStakedSuiDataKey.$typeName, ...typeArgs ) as `${typeof PKG_V19}::staking_pool::FungibleStakedSuiDataKey`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): FungibleStakedSuiDataKeyReified { return { typeName: FungibleStakedSuiDataKey.$typeName, fullTypeName: composeSuiType( FungibleStakedSuiDataKey.$typeName, ...[] ) as `${typeof PKG_V18}::staking_pool::FungibleStakedSuiDataKey`, typeArgs: [ ] as [], isPhantom: FungibleStakedSuiDataKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => FungibleStakedSuiDataKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => FungibleStakedSuiDataKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => FungibleStakedSuiDataKey.fromBcs( data, ), bcs: FungibleStakedSuiDataKey.bcs, fromJSONField: (field: any) => FungibleStakedSuiDataKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => FungibleStakedSuiDataKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => FungibleStakedSuiDataKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => FungibleStakedSuiDataKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => FungibleStakedSuiDataKey.fetch( client, id, ), new: ( fields: FungibleStakedSuiDataKeyFields, ) => { return new FungibleStakedSuiDataKey( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): FungibleStakedSuiDataKeyReified { return { typeName: FungibleStakedSuiDataKey.$typeName, fullTypeName: composeSuiType( FungibleStakedSuiDataKey.$typeName, ...[] ) as `${typeof PKG_V19}::staking_pool::FungibleStakedSuiDataKey`, typeArgs: [ ] as [], isPhantom: FungibleStakedSuiDataKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => FungibleStakedSuiDataKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => FungibleStakedSuiDataKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => FungibleStakedSuiDataKey.fromBcs( data, ), bcs: FungibleStakedSuiDataKey.bcs, fromJSONField: (field: any) => FungibleStakedSuiDataKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => FungibleStakedSuiDataKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => FungibleStakedSuiDataKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => FungibleStakedSuiDataKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => FungibleStakedSuiDataKey.fetch( client, id, ), new: ( fields: FungibleStakedSuiDataKeyFields, ) => { return new FungibleStakedSuiDataKey( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return FungibleStakedSuiDataKey.reified() }
 
@@ -218,7 +218,7 @@ export class FungibleStakedSuiDataKey implements StructClass { __StructClass = t
 
 /* ============================== PoolTokenExchangeRate =============================== */
 
-export function isPoolTokenExchangeRate(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::staking_pool::PoolTokenExchangeRate`; }
+export function isPoolTokenExchangeRate(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::staking_pool::PoolTokenExchangeRate`; }
 
 export interface PoolTokenExchangeRateFields { suiAmount: ToField<"u64">; poolTokenAmount: ToField<"u64"> }
 
@@ -226,17 +226,17 @@ export type PoolTokenExchangeRateReified = Reified< PoolTokenExchangeRate, PoolT
 
 export class PoolTokenExchangeRate implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::staking_pool::PoolTokenExchangeRate`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::staking_pool::PoolTokenExchangeRate`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = PoolTokenExchangeRate.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::staking_pool::PoolTokenExchangeRate`; readonly $typeArgs: []; readonly $isPhantom = PoolTokenExchangeRate.$isPhantom;
+ readonly $typeName = PoolTokenExchangeRate.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::staking_pool::PoolTokenExchangeRate`; readonly $typeArgs: []; readonly $isPhantom = PoolTokenExchangeRate.$isPhantom;
 
  readonly suiAmount: ToField<"u64">; readonly poolTokenAmount: ToField<"u64">
 
- private constructor(typeArgs: [], fields: PoolTokenExchangeRateFields, ) { this.$fullTypeName = composeSuiType( PoolTokenExchangeRate.$typeName, ...typeArgs ) as `${typeof PKG_V18}::staking_pool::PoolTokenExchangeRate`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: PoolTokenExchangeRateFields, ) { this.$fullTypeName = composeSuiType( PoolTokenExchangeRate.$typeName, ...typeArgs ) as `${typeof PKG_V19}::staking_pool::PoolTokenExchangeRate`; this.$typeArgs = typeArgs;
 
  this.suiAmount = fields.suiAmount;; this.poolTokenAmount = fields.poolTokenAmount; }
 
- static reified( ): PoolTokenExchangeRateReified { return { typeName: PoolTokenExchangeRate.$typeName, fullTypeName: composeSuiType( PoolTokenExchangeRate.$typeName, ...[] ) as `${typeof PKG_V18}::staking_pool::PoolTokenExchangeRate`, typeArgs: [ ] as [], isPhantom: PoolTokenExchangeRate.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PoolTokenExchangeRate.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PoolTokenExchangeRate.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PoolTokenExchangeRate.fromBcs( data, ), bcs: PoolTokenExchangeRate.bcs, fromJSONField: (field: any) => PoolTokenExchangeRate.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PoolTokenExchangeRate.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PoolTokenExchangeRate.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PoolTokenExchangeRate.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PoolTokenExchangeRate.fetch( client, id, ), new: ( fields: PoolTokenExchangeRateFields, ) => { return new PoolTokenExchangeRate( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): PoolTokenExchangeRateReified { return { typeName: PoolTokenExchangeRate.$typeName, fullTypeName: composeSuiType( PoolTokenExchangeRate.$typeName, ...[] ) as `${typeof PKG_V19}::staking_pool::PoolTokenExchangeRate`, typeArgs: [ ] as [], isPhantom: PoolTokenExchangeRate.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PoolTokenExchangeRate.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PoolTokenExchangeRate.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PoolTokenExchangeRate.fromBcs( data, ), bcs: PoolTokenExchangeRate.bcs, fromJSONField: (field: any) => PoolTokenExchangeRate.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PoolTokenExchangeRate.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PoolTokenExchangeRate.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PoolTokenExchangeRate.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PoolTokenExchangeRate.fetch( client, id, ), new: ( fields: PoolTokenExchangeRateFields, ) => { return new PoolTokenExchangeRate( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return PoolTokenExchangeRate.reified() }
 
@@ -286,7 +286,7 @@ export class PoolTokenExchangeRate implements StructClass { __StructClass = true
 
 /* ============================== StakedSui =============================== */
 
-export function isStakedSui(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::staking_pool::StakedSui`; }
+export function isStakedSui(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::staking_pool::StakedSui`; }
 
 export interface StakedSuiFields { id: ToField<UID>; poolId: ToField<ID>; stakeActivationEpoch: ToField<"u64">; principal: ToField<Balance<ToPhantom<SUI>>> }
 
@@ -294,17 +294,17 @@ export type StakedSuiReified = Reified< StakedSui, StakedSuiFields >;
 
 export class StakedSui implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::staking_pool::StakedSui`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::staking_pool::StakedSui`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = StakedSui.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::staking_pool::StakedSui`; readonly $typeArgs: []; readonly $isPhantom = StakedSui.$isPhantom;
+ readonly $typeName = StakedSui.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::staking_pool::StakedSui`; readonly $typeArgs: []; readonly $isPhantom = StakedSui.$isPhantom;
 
  readonly id: ToField<UID>; readonly poolId: ToField<ID>; readonly stakeActivationEpoch: ToField<"u64">; readonly principal: ToField<Balance<ToPhantom<SUI>>>
 
- private constructor(typeArgs: [], fields: StakedSuiFields, ) { this.$fullTypeName = composeSuiType( StakedSui.$typeName, ...typeArgs ) as `${typeof PKG_V18}::staking_pool::StakedSui`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: StakedSuiFields, ) { this.$fullTypeName = composeSuiType( StakedSui.$typeName, ...typeArgs ) as `${typeof PKG_V19}::staking_pool::StakedSui`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.poolId = fields.poolId;; this.stakeActivationEpoch = fields.stakeActivationEpoch;; this.principal = fields.principal; }
 
- static reified( ): StakedSuiReified { return { typeName: StakedSui.$typeName, fullTypeName: composeSuiType( StakedSui.$typeName, ...[] ) as `${typeof PKG_V18}::staking_pool::StakedSui`, typeArgs: [ ] as [], isPhantom: StakedSui.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakedSui.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakedSui.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakedSui.fromBcs( data, ), bcs: StakedSui.bcs, fromJSONField: (field: any) => StakedSui.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakedSui.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakedSui.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakedSui.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakedSui.fetch( client, id, ), new: ( fields: StakedSuiFields, ) => { return new StakedSui( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): StakedSuiReified { return { typeName: StakedSui.$typeName, fullTypeName: composeSuiType( StakedSui.$typeName, ...[] ) as `${typeof PKG_V19}::staking_pool::StakedSui`, typeArgs: [ ] as [], isPhantom: StakedSui.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakedSui.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakedSui.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakedSui.fromBcs( data, ), bcs: StakedSui.bcs, fromJSONField: (field: any) => StakedSui.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakedSui.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakedSui.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakedSui.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakedSui.fetch( client, id, ), new: ( fields: StakedSuiFields, ) => { return new StakedSui( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return StakedSui.reified() }
 
@@ -354,7 +354,7 @@ export class StakedSui implements StructClass { __StructClass = true as const;
 
 /* ============================== StakingPool =============================== */
 
-export function isStakingPool(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::staking_pool::StakingPool`; }
+export function isStakingPool(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::staking_pool::StakingPool`; }
 
 export interface StakingPoolFields { id: ToField<UID>; activationEpoch: ToField<Option<"u64">>; deactivationEpoch: ToField<Option<"u64">>; suiBalance: ToField<"u64">; rewardsPool: ToField<Balance<ToPhantom<SUI>>>; poolTokenBalance: ToField<"u64">; exchangeRates: ToField<Table<"u64", ToPhantom<PoolTokenExchangeRate>>>; pendingStake: ToField<"u64">; pendingTotalSuiWithdraw: ToField<"u64">; pendingPoolTokenWithdraw: ToField<"u64">; extraFields: ToField<Bag> }
 
@@ -362,17 +362,17 @@ export type StakingPoolReified = Reified< StakingPool, StakingPoolFields >;
 
 export class StakingPool implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::staking_pool::StakingPool`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::staking_pool::StakingPool`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = StakingPool.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::staking_pool::StakingPool`; readonly $typeArgs: []; readonly $isPhantom = StakingPool.$isPhantom;
+ readonly $typeName = StakingPool.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::staking_pool::StakingPool`; readonly $typeArgs: []; readonly $isPhantom = StakingPool.$isPhantom;
 
  readonly id: ToField<UID>; readonly activationEpoch: ToField<Option<"u64">>; readonly deactivationEpoch: ToField<Option<"u64">>; readonly suiBalance: ToField<"u64">; readonly rewardsPool: ToField<Balance<ToPhantom<SUI>>>; readonly poolTokenBalance: ToField<"u64">; readonly exchangeRates: ToField<Table<"u64", ToPhantom<PoolTokenExchangeRate>>>; readonly pendingStake: ToField<"u64">; readonly pendingTotalSuiWithdraw: ToField<"u64">; readonly pendingPoolTokenWithdraw: ToField<"u64">; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: StakingPoolFields, ) { this.$fullTypeName = composeSuiType( StakingPool.$typeName, ...typeArgs ) as `${typeof PKG_V18}::staking_pool::StakingPool`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: StakingPoolFields, ) { this.$fullTypeName = composeSuiType( StakingPool.$typeName, ...typeArgs ) as `${typeof PKG_V19}::staking_pool::StakingPool`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.activationEpoch = fields.activationEpoch;; this.deactivationEpoch = fields.deactivationEpoch;; this.suiBalance = fields.suiBalance;; this.rewardsPool = fields.rewardsPool;; this.poolTokenBalance = fields.poolTokenBalance;; this.exchangeRates = fields.exchangeRates;; this.pendingStake = fields.pendingStake;; this.pendingTotalSuiWithdraw = fields.pendingTotalSuiWithdraw;; this.pendingPoolTokenWithdraw = fields.pendingPoolTokenWithdraw;; this.extraFields = fields.extraFields; }
 
- static reified( ): StakingPoolReified { return { typeName: StakingPool.$typeName, fullTypeName: composeSuiType( StakingPool.$typeName, ...[] ) as `${typeof PKG_V18}::staking_pool::StakingPool`, typeArgs: [ ] as [], isPhantom: StakingPool.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakingPool.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakingPool.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakingPool.fromBcs( data, ), bcs: StakingPool.bcs, fromJSONField: (field: any) => StakingPool.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakingPool.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakingPool.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakingPool.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakingPool.fetch( client, id, ), new: ( fields: StakingPoolFields, ) => { return new StakingPool( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): StakingPoolReified { return { typeName: StakingPool.$typeName, fullTypeName: composeSuiType( StakingPool.$typeName, ...[] ) as `${typeof PKG_V19}::staking_pool::StakingPool`, typeArgs: [ ] as [], isPhantom: StakingPool.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakingPool.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakingPool.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakingPool.fromBcs( data, ), bcs: StakingPool.bcs, fromJSONField: (field: any) => StakingPool.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakingPool.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakingPool.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakingPool.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakingPool.fetch( client, id, ), new: ( fields: StakingPoolFields, ) => { return new StakingPool( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return StakingPool.reified() }
 

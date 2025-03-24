@@ -7,7 +7,7 @@ import {Vector} from "../../_framework/vector";
 import {Bag} from "../../sui/bag/structs";
 import {ID} from "../../sui/object/structs";
 import {Url} from "../../sui/url/structs";
-import {PKG_V18} from "../index";
+import {PKG_V19} from "../index";
 import {StakingPool} from "../staking-pool/structs";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
@@ -15,7 +15,7 @@ import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 /* ============================== ConvertingToFungibleStakedSuiEvent =============================== */
 
-export function isConvertingToFungibleStakedSuiEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::validator::ConvertingToFungibleStakedSuiEvent`; }
+export function isConvertingToFungibleStakedSuiEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::validator::ConvertingToFungibleStakedSuiEvent`; }
 
 export interface ConvertingToFungibleStakedSuiEventFields { poolId: ToField<ID>; stakeActivationEpoch: ToField<"u64">; stakedSuiPrincipalAmount: ToField<"u64">; fungibleStakedSuiAmount: ToField<"u64"> }
 
@@ -23,17 +23,17 @@ export type ConvertingToFungibleStakedSuiEventReified = Reified< ConvertingToFun
 
 export class ConvertingToFungibleStakedSuiEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::validator::ConvertingToFungibleStakedSuiEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::validator::ConvertingToFungibleStakedSuiEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ConvertingToFungibleStakedSuiEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::validator::ConvertingToFungibleStakedSuiEvent`; readonly $typeArgs: []; readonly $isPhantom = ConvertingToFungibleStakedSuiEvent.$isPhantom;
+ readonly $typeName = ConvertingToFungibleStakedSuiEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::validator::ConvertingToFungibleStakedSuiEvent`; readonly $typeArgs: []; readonly $isPhantom = ConvertingToFungibleStakedSuiEvent.$isPhantom;
 
  readonly poolId: ToField<ID>; readonly stakeActivationEpoch: ToField<"u64">; readonly stakedSuiPrincipalAmount: ToField<"u64">; readonly fungibleStakedSuiAmount: ToField<"u64">
 
- private constructor(typeArgs: [], fields: ConvertingToFungibleStakedSuiEventFields, ) { this.$fullTypeName = composeSuiType( ConvertingToFungibleStakedSuiEvent.$typeName, ...typeArgs ) as `${typeof PKG_V18}::validator::ConvertingToFungibleStakedSuiEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ConvertingToFungibleStakedSuiEventFields, ) { this.$fullTypeName = composeSuiType( ConvertingToFungibleStakedSuiEvent.$typeName, ...typeArgs ) as `${typeof PKG_V19}::validator::ConvertingToFungibleStakedSuiEvent`; this.$typeArgs = typeArgs;
 
  this.poolId = fields.poolId;; this.stakeActivationEpoch = fields.stakeActivationEpoch;; this.stakedSuiPrincipalAmount = fields.stakedSuiPrincipalAmount;; this.fungibleStakedSuiAmount = fields.fungibleStakedSuiAmount; }
 
- static reified( ): ConvertingToFungibleStakedSuiEventReified { return { typeName: ConvertingToFungibleStakedSuiEvent.$typeName, fullTypeName: composeSuiType( ConvertingToFungibleStakedSuiEvent.$typeName, ...[] ) as `${typeof PKG_V18}::validator::ConvertingToFungibleStakedSuiEvent`, typeArgs: [ ] as [], isPhantom: ConvertingToFungibleStakedSuiEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConvertingToFungibleStakedSuiEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConvertingToFungibleStakedSuiEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConvertingToFungibleStakedSuiEvent.fromBcs( data, ), bcs: ConvertingToFungibleStakedSuiEvent.bcs, fromJSONField: (field: any) => ConvertingToFungibleStakedSuiEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConvertingToFungibleStakedSuiEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConvertingToFungibleStakedSuiEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConvertingToFungibleStakedSuiEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConvertingToFungibleStakedSuiEvent.fetch( client, id, ), new: ( fields: ConvertingToFungibleStakedSuiEventFields, ) => { return new ConvertingToFungibleStakedSuiEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ConvertingToFungibleStakedSuiEventReified { return { typeName: ConvertingToFungibleStakedSuiEvent.$typeName, fullTypeName: composeSuiType( ConvertingToFungibleStakedSuiEvent.$typeName, ...[] ) as `${typeof PKG_V19}::validator::ConvertingToFungibleStakedSuiEvent`, typeArgs: [ ] as [], isPhantom: ConvertingToFungibleStakedSuiEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConvertingToFungibleStakedSuiEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConvertingToFungibleStakedSuiEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConvertingToFungibleStakedSuiEvent.fromBcs( data, ), bcs: ConvertingToFungibleStakedSuiEvent.bcs, fromJSONField: (field: any) => ConvertingToFungibleStakedSuiEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConvertingToFungibleStakedSuiEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConvertingToFungibleStakedSuiEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConvertingToFungibleStakedSuiEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConvertingToFungibleStakedSuiEvent.fetch( client, id, ), new: ( fields: ConvertingToFungibleStakedSuiEventFields, ) => { return new ConvertingToFungibleStakedSuiEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ConvertingToFungibleStakedSuiEvent.reified() }
 
@@ -83,7 +83,7 @@ export class ConvertingToFungibleStakedSuiEvent implements StructClass { __Struc
 
 /* ============================== RedeemingFungibleStakedSuiEvent =============================== */
 
-export function isRedeemingFungibleStakedSuiEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::validator::RedeemingFungibleStakedSuiEvent`; }
+export function isRedeemingFungibleStakedSuiEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::validator::RedeemingFungibleStakedSuiEvent`; }
 
 export interface RedeemingFungibleStakedSuiEventFields { poolId: ToField<ID>; fungibleStakedSuiAmount: ToField<"u64">; suiAmount: ToField<"u64"> }
 
@@ -91,17 +91,17 @@ export type RedeemingFungibleStakedSuiEventReified = Reified< RedeemingFungibleS
 
 export class RedeemingFungibleStakedSuiEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::validator::RedeemingFungibleStakedSuiEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::validator::RedeemingFungibleStakedSuiEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = RedeemingFungibleStakedSuiEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::validator::RedeemingFungibleStakedSuiEvent`; readonly $typeArgs: []; readonly $isPhantom = RedeemingFungibleStakedSuiEvent.$isPhantom;
+ readonly $typeName = RedeemingFungibleStakedSuiEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::validator::RedeemingFungibleStakedSuiEvent`; readonly $typeArgs: []; readonly $isPhantom = RedeemingFungibleStakedSuiEvent.$isPhantom;
 
  readonly poolId: ToField<ID>; readonly fungibleStakedSuiAmount: ToField<"u64">; readonly suiAmount: ToField<"u64">
 
- private constructor(typeArgs: [], fields: RedeemingFungibleStakedSuiEventFields, ) { this.$fullTypeName = composeSuiType( RedeemingFungibleStakedSuiEvent.$typeName, ...typeArgs ) as `${typeof PKG_V18}::validator::RedeemingFungibleStakedSuiEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: RedeemingFungibleStakedSuiEventFields, ) { this.$fullTypeName = composeSuiType( RedeemingFungibleStakedSuiEvent.$typeName, ...typeArgs ) as `${typeof PKG_V19}::validator::RedeemingFungibleStakedSuiEvent`; this.$typeArgs = typeArgs;
 
  this.poolId = fields.poolId;; this.fungibleStakedSuiAmount = fields.fungibleStakedSuiAmount;; this.suiAmount = fields.suiAmount; }
 
- static reified( ): RedeemingFungibleStakedSuiEventReified { return { typeName: RedeemingFungibleStakedSuiEvent.$typeName, fullTypeName: composeSuiType( RedeemingFungibleStakedSuiEvent.$typeName, ...[] ) as `${typeof PKG_V18}::validator::RedeemingFungibleStakedSuiEvent`, typeArgs: [ ] as [], isPhantom: RedeemingFungibleStakedSuiEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => RedeemingFungibleStakedSuiEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => RedeemingFungibleStakedSuiEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => RedeemingFungibleStakedSuiEvent.fromBcs( data, ), bcs: RedeemingFungibleStakedSuiEvent.bcs, fromJSONField: (field: any) => RedeemingFungibleStakedSuiEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => RedeemingFungibleStakedSuiEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => RedeemingFungibleStakedSuiEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => RedeemingFungibleStakedSuiEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => RedeemingFungibleStakedSuiEvent.fetch( client, id, ), new: ( fields: RedeemingFungibleStakedSuiEventFields, ) => { return new RedeemingFungibleStakedSuiEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): RedeemingFungibleStakedSuiEventReified { return { typeName: RedeemingFungibleStakedSuiEvent.$typeName, fullTypeName: composeSuiType( RedeemingFungibleStakedSuiEvent.$typeName, ...[] ) as `${typeof PKG_V19}::validator::RedeemingFungibleStakedSuiEvent`, typeArgs: [ ] as [], isPhantom: RedeemingFungibleStakedSuiEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => RedeemingFungibleStakedSuiEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => RedeemingFungibleStakedSuiEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => RedeemingFungibleStakedSuiEvent.fromBcs( data, ), bcs: RedeemingFungibleStakedSuiEvent.bcs, fromJSONField: (field: any) => RedeemingFungibleStakedSuiEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => RedeemingFungibleStakedSuiEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => RedeemingFungibleStakedSuiEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => RedeemingFungibleStakedSuiEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => RedeemingFungibleStakedSuiEvent.fetch( client, id, ), new: ( fields: RedeemingFungibleStakedSuiEventFields, ) => { return new RedeemingFungibleStakedSuiEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return RedeemingFungibleStakedSuiEvent.reified() }
 
@@ -151,7 +151,7 @@ export class RedeemingFungibleStakedSuiEvent implements StructClass { __StructCl
 
 /* ============================== StakingRequestEvent =============================== */
 
-export function isStakingRequestEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::validator::StakingRequestEvent`; }
+export function isStakingRequestEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::validator::StakingRequestEvent`; }
 
 export interface StakingRequestEventFields { poolId: ToField<ID>; validatorAddress: ToField<"address">; stakerAddress: ToField<"address">; epoch: ToField<"u64">; amount: ToField<"u64"> }
 
@@ -159,17 +159,17 @@ export type StakingRequestEventReified = Reified< StakingRequestEvent, StakingRe
 
 export class StakingRequestEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::validator::StakingRequestEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::validator::StakingRequestEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = StakingRequestEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::validator::StakingRequestEvent`; readonly $typeArgs: []; readonly $isPhantom = StakingRequestEvent.$isPhantom;
+ readonly $typeName = StakingRequestEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::validator::StakingRequestEvent`; readonly $typeArgs: []; readonly $isPhantom = StakingRequestEvent.$isPhantom;
 
  readonly poolId: ToField<ID>; readonly validatorAddress: ToField<"address">; readonly stakerAddress: ToField<"address">; readonly epoch: ToField<"u64">; readonly amount: ToField<"u64">
 
- private constructor(typeArgs: [], fields: StakingRequestEventFields, ) { this.$fullTypeName = composeSuiType( StakingRequestEvent.$typeName, ...typeArgs ) as `${typeof PKG_V18}::validator::StakingRequestEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: StakingRequestEventFields, ) { this.$fullTypeName = composeSuiType( StakingRequestEvent.$typeName, ...typeArgs ) as `${typeof PKG_V19}::validator::StakingRequestEvent`; this.$typeArgs = typeArgs;
 
  this.poolId = fields.poolId;; this.validatorAddress = fields.validatorAddress;; this.stakerAddress = fields.stakerAddress;; this.epoch = fields.epoch;; this.amount = fields.amount; }
 
- static reified( ): StakingRequestEventReified { return { typeName: StakingRequestEvent.$typeName, fullTypeName: composeSuiType( StakingRequestEvent.$typeName, ...[] ) as `${typeof PKG_V18}::validator::StakingRequestEvent`, typeArgs: [ ] as [], isPhantom: StakingRequestEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakingRequestEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakingRequestEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakingRequestEvent.fromBcs( data, ), bcs: StakingRequestEvent.bcs, fromJSONField: (field: any) => StakingRequestEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakingRequestEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakingRequestEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakingRequestEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakingRequestEvent.fetch( client, id, ), new: ( fields: StakingRequestEventFields, ) => { return new StakingRequestEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): StakingRequestEventReified { return { typeName: StakingRequestEvent.$typeName, fullTypeName: composeSuiType( StakingRequestEvent.$typeName, ...[] ) as `${typeof PKG_V19}::validator::StakingRequestEvent`, typeArgs: [ ] as [], isPhantom: StakingRequestEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakingRequestEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakingRequestEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakingRequestEvent.fromBcs( data, ), bcs: StakingRequestEvent.bcs, fromJSONField: (field: any) => StakingRequestEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakingRequestEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakingRequestEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakingRequestEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakingRequestEvent.fetch( client, id, ), new: ( fields: StakingRequestEventFields, ) => { return new StakingRequestEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return StakingRequestEvent.reified() }
 
@@ -219,7 +219,7 @@ export class StakingRequestEvent implements StructClass { __StructClass = true a
 
 /* ============================== UnstakingRequestEvent =============================== */
 
-export function isUnstakingRequestEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::validator::UnstakingRequestEvent`; }
+export function isUnstakingRequestEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::validator::UnstakingRequestEvent`; }
 
 export interface UnstakingRequestEventFields { poolId: ToField<ID>; validatorAddress: ToField<"address">; stakerAddress: ToField<"address">; stakeActivationEpoch: ToField<"u64">; unstakingEpoch: ToField<"u64">; principalAmount: ToField<"u64">; rewardAmount: ToField<"u64"> }
 
@@ -227,17 +227,17 @@ export type UnstakingRequestEventReified = Reified< UnstakingRequestEvent, Unsta
 
 export class UnstakingRequestEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::validator::UnstakingRequestEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::validator::UnstakingRequestEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = UnstakingRequestEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::validator::UnstakingRequestEvent`; readonly $typeArgs: []; readonly $isPhantom = UnstakingRequestEvent.$isPhantom;
+ readonly $typeName = UnstakingRequestEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::validator::UnstakingRequestEvent`; readonly $typeArgs: []; readonly $isPhantom = UnstakingRequestEvent.$isPhantom;
 
  readonly poolId: ToField<ID>; readonly validatorAddress: ToField<"address">; readonly stakerAddress: ToField<"address">; readonly stakeActivationEpoch: ToField<"u64">; readonly unstakingEpoch: ToField<"u64">; readonly principalAmount: ToField<"u64">; readonly rewardAmount: ToField<"u64">
 
- private constructor(typeArgs: [], fields: UnstakingRequestEventFields, ) { this.$fullTypeName = composeSuiType( UnstakingRequestEvent.$typeName, ...typeArgs ) as `${typeof PKG_V18}::validator::UnstakingRequestEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: UnstakingRequestEventFields, ) { this.$fullTypeName = composeSuiType( UnstakingRequestEvent.$typeName, ...typeArgs ) as `${typeof PKG_V19}::validator::UnstakingRequestEvent`; this.$typeArgs = typeArgs;
 
  this.poolId = fields.poolId;; this.validatorAddress = fields.validatorAddress;; this.stakerAddress = fields.stakerAddress;; this.stakeActivationEpoch = fields.stakeActivationEpoch;; this.unstakingEpoch = fields.unstakingEpoch;; this.principalAmount = fields.principalAmount;; this.rewardAmount = fields.rewardAmount; }
 
- static reified( ): UnstakingRequestEventReified { return { typeName: UnstakingRequestEvent.$typeName, fullTypeName: composeSuiType( UnstakingRequestEvent.$typeName, ...[] ) as `${typeof PKG_V18}::validator::UnstakingRequestEvent`, typeArgs: [ ] as [], isPhantom: UnstakingRequestEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UnstakingRequestEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UnstakingRequestEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UnstakingRequestEvent.fromBcs( data, ), bcs: UnstakingRequestEvent.bcs, fromJSONField: (field: any) => UnstakingRequestEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UnstakingRequestEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UnstakingRequestEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UnstakingRequestEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UnstakingRequestEvent.fetch( client, id, ), new: ( fields: UnstakingRequestEventFields, ) => { return new UnstakingRequestEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): UnstakingRequestEventReified { return { typeName: UnstakingRequestEvent.$typeName, fullTypeName: composeSuiType( UnstakingRequestEvent.$typeName, ...[] ) as `${typeof PKG_V19}::validator::UnstakingRequestEvent`, typeArgs: [ ] as [], isPhantom: UnstakingRequestEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UnstakingRequestEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UnstakingRequestEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UnstakingRequestEvent.fromBcs( data, ), bcs: UnstakingRequestEvent.bcs, fromJSONField: (field: any) => UnstakingRequestEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UnstakingRequestEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UnstakingRequestEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UnstakingRequestEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UnstakingRequestEvent.fetch( client, id, ), new: ( fields: UnstakingRequestEventFields, ) => { return new UnstakingRequestEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return UnstakingRequestEvent.reified() }
 
@@ -287,7 +287,7 @@ export class UnstakingRequestEvent implements StructClass { __StructClass = true
 
 /* ============================== Validator =============================== */
 
-export function isValidator(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::validator::Validator`; }
+export function isValidator(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::validator::Validator`; }
 
 export interface ValidatorFields { metadata: ToField<ValidatorMetadata>; votingPower: ToField<"u64">; operationCapId: ToField<ID>; gasPrice: ToField<"u64">; stakingPool: ToField<StakingPool>; commissionRate: ToField<"u64">; nextEpochStake: ToField<"u64">; nextEpochGasPrice: ToField<"u64">; nextEpochCommissionRate: ToField<"u64">; extraFields: ToField<Bag> }
 
@@ -295,17 +295,17 @@ export type ValidatorReified = Reified< Validator, ValidatorFields >;
 
 export class Validator implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::validator::Validator`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::validator::Validator`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Validator.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::validator::Validator`; readonly $typeArgs: []; readonly $isPhantom = Validator.$isPhantom;
+ readonly $typeName = Validator.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::validator::Validator`; readonly $typeArgs: []; readonly $isPhantom = Validator.$isPhantom;
 
  readonly metadata: ToField<ValidatorMetadata>; readonly votingPower: ToField<"u64">; readonly operationCapId: ToField<ID>; readonly gasPrice: ToField<"u64">; readonly stakingPool: ToField<StakingPool>; readonly commissionRate: ToField<"u64">; readonly nextEpochStake: ToField<"u64">; readonly nextEpochGasPrice: ToField<"u64">; readonly nextEpochCommissionRate: ToField<"u64">; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: ValidatorFields, ) { this.$fullTypeName = composeSuiType( Validator.$typeName, ...typeArgs ) as `${typeof PKG_V18}::validator::Validator`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorFields, ) { this.$fullTypeName = composeSuiType( Validator.$typeName, ...typeArgs ) as `${typeof PKG_V19}::validator::Validator`; this.$typeArgs = typeArgs;
 
  this.metadata = fields.metadata;; this.votingPower = fields.votingPower;; this.operationCapId = fields.operationCapId;; this.gasPrice = fields.gasPrice;; this.stakingPool = fields.stakingPool;; this.commissionRate = fields.commissionRate;; this.nextEpochStake = fields.nextEpochStake;; this.nextEpochGasPrice = fields.nextEpochGasPrice;; this.nextEpochCommissionRate = fields.nextEpochCommissionRate;; this.extraFields = fields.extraFields; }
 
- static reified( ): ValidatorReified { return { typeName: Validator.$typeName, fullTypeName: composeSuiType( Validator.$typeName, ...[] ) as `${typeof PKG_V18}::validator::Validator`, typeArgs: [ ] as [], isPhantom: Validator.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Validator.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Validator.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Validator.fromBcs( data, ), bcs: Validator.bcs, fromJSONField: (field: any) => Validator.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Validator.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Validator.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Validator.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Validator.fetch( client, id, ), new: ( fields: ValidatorFields, ) => { return new Validator( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorReified { return { typeName: Validator.$typeName, fullTypeName: composeSuiType( Validator.$typeName, ...[] ) as `${typeof PKG_V19}::validator::Validator`, typeArgs: [ ] as [], isPhantom: Validator.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Validator.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Validator.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Validator.fromBcs( data, ), bcs: Validator.bcs, fromJSONField: (field: any) => Validator.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Validator.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Validator.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Validator.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Validator.fetch( client, id, ), new: ( fields: ValidatorFields, ) => { return new Validator( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Validator.reified() }
 
@@ -355,7 +355,7 @@ export class Validator implements StructClass { __StructClass = true as const;
 
 /* ============================== ValidatorMetadata =============================== */
 
-export function isValidatorMetadata(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::validator::ValidatorMetadata`; }
+export function isValidatorMetadata(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::validator::ValidatorMetadata`; }
 
 export interface ValidatorMetadataFields { suiAddress: ToField<"address">; protocolPubkeyBytes: ToField<Vector<"u8">>; networkPubkeyBytes: ToField<Vector<"u8">>; workerPubkeyBytes: ToField<Vector<"u8">>; proofOfPossession: ToField<Vector<"u8">>; name: ToField<String>; description: ToField<String>; imageUrl: ToField<Url>; projectUrl: ToField<Url>; netAddress: ToField<String>; p2PAddress: ToField<String>; primaryAddress: ToField<String>; workerAddress: ToField<String>; nextEpochProtocolPubkeyBytes: ToField<Option<Vector<"u8">>>; nextEpochProofOfPossession: ToField<Option<Vector<"u8">>>; nextEpochNetworkPubkeyBytes: ToField<Option<Vector<"u8">>>; nextEpochWorkerPubkeyBytes: ToField<Option<Vector<"u8">>>; nextEpochNetAddress: ToField<Option<String>>; nextEpochP2PAddress: ToField<Option<String>>; nextEpochPrimaryAddress: ToField<Option<String>>; nextEpochWorkerAddress: ToField<Option<String>>; extraFields: ToField<Bag> }
 
@@ -363,17 +363,17 @@ export type ValidatorMetadataReified = Reified< ValidatorMetadata, ValidatorMeta
 
 export class ValidatorMetadata implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::validator::ValidatorMetadata`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::validator::ValidatorMetadata`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ValidatorMetadata.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::validator::ValidatorMetadata`; readonly $typeArgs: []; readonly $isPhantom = ValidatorMetadata.$isPhantom;
+ readonly $typeName = ValidatorMetadata.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::validator::ValidatorMetadata`; readonly $typeArgs: []; readonly $isPhantom = ValidatorMetadata.$isPhantom;
 
  readonly suiAddress: ToField<"address">; readonly protocolPubkeyBytes: ToField<Vector<"u8">>; readonly networkPubkeyBytes: ToField<Vector<"u8">>; readonly workerPubkeyBytes: ToField<Vector<"u8">>; readonly proofOfPossession: ToField<Vector<"u8">>; readonly name: ToField<String>; readonly description: ToField<String>; readonly imageUrl: ToField<Url>; readonly projectUrl: ToField<Url>; readonly netAddress: ToField<String>; readonly p2PAddress: ToField<String>; readonly primaryAddress: ToField<String>; readonly workerAddress: ToField<String>; readonly nextEpochProtocolPubkeyBytes: ToField<Option<Vector<"u8">>>; readonly nextEpochProofOfPossession: ToField<Option<Vector<"u8">>>; readonly nextEpochNetworkPubkeyBytes: ToField<Option<Vector<"u8">>>; readonly nextEpochWorkerPubkeyBytes: ToField<Option<Vector<"u8">>>; readonly nextEpochNetAddress: ToField<Option<String>>; readonly nextEpochP2PAddress: ToField<Option<String>>; readonly nextEpochPrimaryAddress: ToField<Option<String>>; readonly nextEpochWorkerAddress: ToField<Option<String>>; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: ValidatorMetadataFields, ) { this.$fullTypeName = composeSuiType( ValidatorMetadata.$typeName, ...typeArgs ) as `${typeof PKG_V18}::validator::ValidatorMetadata`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorMetadataFields, ) { this.$fullTypeName = composeSuiType( ValidatorMetadata.$typeName, ...typeArgs ) as `${typeof PKG_V19}::validator::ValidatorMetadata`; this.$typeArgs = typeArgs;
 
  this.suiAddress = fields.suiAddress;; this.protocolPubkeyBytes = fields.protocolPubkeyBytes;; this.networkPubkeyBytes = fields.networkPubkeyBytes;; this.workerPubkeyBytes = fields.workerPubkeyBytes;; this.proofOfPossession = fields.proofOfPossession;; this.name = fields.name;; this.description = fields.description;; this.imageUrl = fields.imageUrl;; this.projectUrl = fields.projectUrl;; this.netAddress = fields.netAddress;; this.p2PAddress = fields.p2PAddress;; this.primaryAddress = fields.primaryAddress;; this.workerAddress = fields.workerAddress;; this.nextEpochProtocolPubkeyBytes = fields.nextEpochProtocolPubkeyBytes;; this.nextEpochProofOfPossession = fields.nextEpochProofOfPossession;; this.nextEpochNetworkPubkeyBytes = fields.nextEpochNetworkPubkeyBytes;; this.nextEpochWorkerPubkeyBytes = fields.nextEpochWorkerPubkeyBytes;; this.nextEpochNetAddress = fields.nextEpochNetAddress;; this.nextEpochP2PAddress = fields.nextEpochP2PAddress;; this.nextEpochPrimaryAddress = fields.nextEpochPrimaryAddress;; this.nextEpochWorkerAddress = fields.nextEpochWorkerAddress;; this.extraFields = fields.extraFields; }
 
- static reified( ): ValidatorMetadataReified { return { typeName: ValidatorMetadata.$typeName, fullTypeName: composeSuiType( ValidatorMetadata.$typeName, ...[] ) as `${typeof PKG_V18}::validator::ValidatorMetadata`, typeArgs: [ ] as [], isPhantom: ValidatorMetadata.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorMetadata.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorMetadata.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorMetadata.fromBcs( data, ), bcs: ValidatorMetadata.bcs, fromJSONField: (field: any) => ValidatorMetadata.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorMetadata.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorMetadata.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorMetadata.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorMetadata.fetch( client, id, ), new: ( fields: ValidatorMetadataFields, ) => { return new ValidatorMetadata( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorMetadataReified { return { typeName: ValidatorMetadata.$typeName, fullTypeName: composeSuiType( ValidatorMetadata.$typeName, ...[] ) as `${typeof PKG_V19}::validator::ValidatorMetadata`, typeArgs: [ ] as [], isPhantom: ValidatorMetadata.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorMetadata.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorMetadata.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorMetadata.fromBcs( data, ), bcs: ValidatorMetadata.bcs, fromJSONField: (field: any) => ValidatorMetadata.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorMetadata.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorMetadata.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorMetadata.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorMetadata.fetch( client, id, ), new: ( fields: ValidatorMetadataFields, ) => { return new ValidatorMetadata( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ValidatorMetadata.reified() }
 

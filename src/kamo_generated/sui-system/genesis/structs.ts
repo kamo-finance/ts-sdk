@@ -3,14 +3,14 @@ import {Option} from "../../_dependencies/source/0x1/option/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
 import {Vector} from "../../_framework/vector";
-import {PKG_V18} from "../index";
+import {PKG_V19} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 /* ============================== GenesisChainParameters =============================== */
 
-export function isGenesisChainParameters(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::genesis::GenesisChainParameters`; }
+export function isGenesisChainParameters(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::genesis::GenesisChainParameters`; }
 
 export interface GenesisChainParametersFields { protocolVersion: ToField<"u64">; chainStartTimestampMs: ToField<"u64">; epochDurationMs: ToField<"u64">; stakeSubsidyStartEpoch: ToField<"u64">; stakeSubsidyInitialDistributionAmount: ToField<"u64">; stakeSubsidyPeriodLength: ToField<"u64">; stakeSubsidyDecreaseRate: ToField<"u16">; maxValidatorCount: ToField<"u64">; minValidatorJoiningStake: ToField<"u64">; validatorLowStakeThreshold: ToField<"u64">; validatorVeryLowStakeThreshold: ToField<"u64">; validatorLowStakeGracePeriod: ToField<"u64"> }
 
@@ -18,17 +18,17 @@ export type GenesisChainParametersReified = Reified< GenesisChainParameters, Gen
 
 export class GenesisChainParameters implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::genesis::GenesisChainParameters`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::genesis::GenesisChainParameters`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = GenesisChainParameters.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::genesis::GenesisChainParameters`; readonly $typeArgs: []; readonly $isPhantom = GenesisChainParameters.$isPhantom;
+ readonly $typeName = GenesisChainParameters.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::genesis::GenesisChainParameters`; readonly $typeArgs: []; readonly $isPhantom = GenesisChainParameters.$isPhantom;
 
  readonly protocolVersion: ToField<"u64">; readonly chainStartTimestampMs: ToField<"u64">; readonly epochDurationMs: ToField<"u64">; readonly stakeSubsidyStartEpoch: ToField<"u64">; readonly stakeSubsidyInitialDistributionAmount: ToField<"u64">; readonly stakeSubsidyPeriodLength: ToField<"u64">; readonly stakeSubsidyDecreaseRate: ToField<"u16">; readonly maxValidatorCount: ToField<"u64">; readonly minValidatorJoiningStake: ToField<"u64">; readonly validatorLowStakeThreshold: ToField<"u64">; readonly validatorVeryLowStakeThreshold: ToField<"u64">; readonly validatorLowStakeGracePeriod: ToField<"u64">
 
- private constructor(typeArgs: [], fields: GenesisChainParametersFields, ) { this.$fullTypeName = composeSuiType( GenesisChainParameters.$typeName, ...typeArgs ) as `${typeof PKG_V18}::genesis::GenesisChainParameters`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: GenesisChainParametersFields, ) { this.$fullTypeName = composeSuiType( GenesisChainParameters.$typeName, ...typeArgs ) as `${typeof PKG_V19}::genesis::GenesisChainParameters`; this.$typeArgs = typeArgs;
 
  this.protocolVersion = fields.protocolVersion;; this.chainStartTimestampMs = fields.chainStartTimestampMs;; this.epochDurationMs = fields.epochDurationMs;; this.stakeSubsidyStartEpoch = fields.stakeSubsidyStartEpoch;; this.stakeSubsidyInitialDistributionAmount = fields.stakeSubsidyInitialDistributionAmount;; this.stakeSubsidyPeriodLength = fields.stakeSubsidyPeriodLength;; this.stakeSubsidyDecreaseRate = fields.stakeSubsidyDecreaseRate;; this.maxValidatorCount = fields.maxValidatorCount;; this.minValidatorJoiningStake = fields.minValidatorJoiningStake;; this.validatorLowStakeThreshold = fields.validatorLowStakeThreshold;; this.validatorVeryLowStakeThreshold = fields.validatorVeryLowStakeThreshold;; this.validatorLowStakeGracePeriod = fields.validatorLowStakeGracePeriod; }
 
- static reified( ): GenesisChainParametersReified { return { typeName: GenesisChainParameters.$typeName, fullTypeName: composeSuiType( GenesisChainParameters.$typeName, ...[] ) as `${typeof PKG_V18}::genesis::GenesisChainParameters`, typeArgs: [ ] as [], isPhantom: GenesisChainParameters.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => GenesisChainParameters.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => GenesisChainParameters.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => GenesisChainParameters.fromBcs( data, ), bcs: GenesisChainParameters.bcs, fromJSONField: (field: any) => GenesisChainParameters.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => GenesisChainParameters.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => GenesisChainParameters.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => GenesisChainParameters.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => GenesisChainParameters.fetch( client, id, ), new: ( fields: GenesisChainParametersFields, ) => { return new GenesisChainParameters( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): GenesisChainParametersReified { return { typeName: GenesisChainParameters.$typeName, fullTypeName: composeSuiType( GenesisChainParameters.$typeName, ...[] ) as `${typeof PKG_V19}::genesis::GenesisChainParameters`, typeArgs: [ ] as [], isPhantom: GenesisChainParameters.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => GenesisChainParameters.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => GenesisChainParameters.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => GenesisChainParameters.fromBcs( data, ), bcs: GenesisChainParameters.bcs, fromJSONField: (field: any) => GenesisChainParameters.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => GenesisChainParameters.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => GenesisChainParameters.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => GenesisChainParameters.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => GenesisChainParameters.fetch( client, id, ), new: ( fields: GenesisChainParametersFields, ) => { return new GenesisChainParameters( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return GenesisChainParameters.reified() }
 
@@ -78,7 +78,7 @@ export class GenesisChainParameters implements StructClass { __StructClass = tru
 
 /* ============================== GenesisValidatorMetadata =============================== */
 
-export function isGenesisValidatorMetadata(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::genesis::GenesisValidatorMetadata`; }
+export function isGenesisValidatorMetadata(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::genesis::GenesisValidatorMetadata`; }
 
 export interface GenesisValidatorMetadataFields { name: ToField<Vector<"u8">>; description: ToField<Vector<"u8">>; imageUrl: ToField<Vector<"u8">>; projectUrl: ToField<Vector<"u8">>; suiAddress: ToField<"address">; gasPrice: ToField<"u64">; commissionRate: ToField<"u64">; protocolPublicKey: ToField<Vector<"u8">>; proofOfPossession: ToField<Vector<"u8">>; networkPublicKey: ToField<Vector<"u8">>; workerPublicKey: ToField<Vector<"u8">>; networkAddress: ToField<Vector<"u8">>; p2PAddress: ToField<Vector<"u8">>; primaryAddress: ToField<Vector<"u8">>; workerAddress: ToField<Vector<"u8">> }
 
@@ -86,17 +86,17 @@ export type GenesisValidatorMetadataReified = Reified< GenesisValidatorMetadata,
 
 export class GenesisValidatorMetadata implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::genesis::GenesisValidatorMetadata`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::genesis::GenesisValidatorMetadata`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = GenesisValidatorMetadata.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::genesis::GenesisValidatorMetadata`; readonly $typeArgs: []; readonly $isPhantom = GenesisValidatorMetadata.$isPhantom;
+ readonly $typeName = GenesisValidatorMetadata.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::genesis::GenesisValidatorMetadata`; readonly $typeArgs: []; readonly $isPhantom = GenesisValidatorMetadata.$isPhantom;
 
  readonly name: ToField<Vector<"u8">>; readonly description: ToField<Vector<"u8">>; readonly imageUrl: ToField<Vector<"u8">>; readonly projectUrl: ToField<Vector<"u8">>; readonly suiAddress: ToField<"address">; readonly gasPrice: ToField<"u64">; readonly commissionRate: ToField<"u64">; readonly protocolPublicKey: ToField<Vector<"u8">>; readonly proofOfPossession: ToField<Vector<"u8">>; readonly networkPublicKey: ToField<Vector<"u8">>; readonly workerPublicKey: ToField<Vector<"u8">>; readonly networkAddress: ToField<Vector<"u8">>; readonly p2PAddress: ToField<Vector<"u8">>; readonly primaryAddress: ToField<Vector<"u8">>; readonly workerAddress: ToField<Vector<"u8">>
 
- private constructor(typeArgs: [], fields: GenesisValidatorMetadataFields, ) { this.$fullTypeName = composeSuiType( GenesisValidatorMetadata.$typeName, ...typeArgs ) as `${typeof PKG_V18}::genesis::GenesisValidatorMetadata`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: GenesisValidatorMetadataFields, ) { this.$fullTypeName = composeSuiType( GenesisValidatorMetadata.$typeName, ...typeArgs ) as `${typeof PKG_V19}::genesis::GenesisValidatorMetadata`; this.$typeArgs = typeArgs;
 
  this.name = fields.name;; this.description = fields.description;; this.imageUrl = fields.imageUrl;; this.projectUrl = fields.projectUrl;; this.suiAddress = fields.suiAddress;; this.gasPrice = fields.gasPrice;; this.commissionRate = fields.commissionRate;; this.protocolPublicKey = fields.protocolPublicKey;; this.proofOfPossession = fields.proofOfPossession;; this.networkPublicKey = fields.networkPublicKey;; this.workerPublicKey = fields.workerPublicKey;; this.networkAddress = fields.networkAddress;; this.p2PAddress = fields.p2PAddress;; this.primaryAddress = fields.primaryAddress;; this.workerAddress = fields.workerAddress; }
 
- static reified( ): GenesisValidatorMetadataReified { return { typeName: GenesisValidatorMetadata.$typeName, fullTypeName: composeSuiType( GenesisValidatorMetadata.$typeName, ...[] ) as `${typeof PKG_V18}::genesis::GenesisValidatorMetadata`, typeArgs: [ ] as [], isPhantom: GenesisValidatorMetadata.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => GenesisValidatorMetadata.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => GenesisValidatorMetadata.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => GenesisValidatorMetadata.fromBcs( data, ), bcs: GenesisValidatorMetadata.bcs, fromJSONField: (field: any) => GenesisValidatorMetadata.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => GenesisValidatorMetadata.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => GenesisValidatorMetadata.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => GenesisValidatorMetadata.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => GenesisValidatorMetadata.fetch( client, id, ), new: ( fields: GenesisValidatorMetadataFields, ) => { return new GenesisValidatorMetadata( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): GenesisValidatorMetadataReified { return { typeName: GenesisValidatorMetadata.$typeName, fullTypeName: composeSuiType( GenesisValidatorMetadata.$typeName, ...[] ) as `${typeof PKG_V19}::genesis::GenesisValidatorMetadata`, typeArgs: [ ] as [], isPhantom: GenesisValidatorMetadata.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => GenesisValidatorMetadata.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => GenesisValidatorMetadata.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => GenesisValidatorMetadata.fromBcs( data, ), bcs: GenesisValidatorMetadata.bcs, fromJSONField: (field: any) => GenesisValidatorMetadata.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => GenesisValidatorMetadata.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => GenesisValidatorMetadata.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => GenesisValidatorMetadata.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => GenesisValidatorMetadata.fetch( client, id, ), new: ( fields: GenesisValidatorMetadataFields, ) => { return new GenesisValidatorMetadata( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return GenesisValidatorMetadata.reified() }
 
@@ -146,7 +146,7 @@ export class GenesisValidatorMetadata implements StructClass { __StructClass = t
 
 /* ============================== TokenAllocation =============================== */
 
-export function isTokenAllocation(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::genesis::TokenAllocation`; }
+export function isTokenAllocation(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::genesis::TokenAllocation`; }
 
 export interface TokenAllocationFields { recipientAddress: ToField<"address">; amountMist: ToField<"u64">; stakedWithValidator: ToField<Option<"address">> }
 
@@ -154,17 +154,17 @@ export type TokenAllocationReified = Reified< TokenAllocation, TokenAllocationFi
 
 export class TokenAllocation implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::genesis::TokenAllocation`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::genesis::TokenAllocation`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = TokenAllocation.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::genesis::TokenAllocation`; readonly $typeArgs: []; readonly $isPhantom = TokenAllocation.$isPhantom;
+ readonly $typeName = TokenAllocation.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::genesis::TokenAllocation`; readonly $typeArgs: []; readonly $isPhantom = TokenAllocation.$isPhantom;
 
  readonly recipientAddress: ToField<"address">; readonly amountMist: ToField<"u64">; readonly stakedWithValidator: ToField<Option<"address">>
 
- private constructor(typeArgs: [], fields: TokenAllocationFields, ) { this.$fullTypeName = composeSuiType( TokenAllocation.$typeName, ...typeArgs ) as `${typeof PKG_V18}::genesis::TokenAllocation`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: TokenAllocationFields, ) { this.$fullTypeName = composeSuiType( TokenAllocation.$typeName, ...typeArgs ) as `${typeof PKG_V19}::genesis::TokenAllocation`; this.$typeArgs = typeArgs;
 
  this.recipientAddress = fields.recipientAddress;; this.amountMist = fields.amountMist;; this.stakedWithValidator = fields.stakedWithValidator; }
 
- static reified( ): TokenAllocationReified { return { typeName: TokenAllocation.$typeName, fullTypeName: composeSuiType( TokenAllocation.$typeName, ...[] ) as `${typeof PKG_V18}::genesis::TokenAllocation`, typeArgs: [ ] as [], isPhantom: TokenAllocation.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TokenAllocation.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TokenAllocation.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TokenAllocation.fromBcs( data, ), bcs: TokenAllocation.bcs, fromJSONField: (field: any) => TokenAllocation.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TokenAllocation.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TokenAllocation.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TokenAllocation.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TokenAllocation.fetch( client, id, ), new: ( fields: TokenAllocationFields, ) => { return new TokenAllocation( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): TokenAllocationReified { return { typeName: TokenAllocation.$typeName, fullTypeName: composeSuiType( TokenAllocation.$typeName, ...[] ) as `${typeof PKG_V19}::genesis::TokenAllocation`, typeArgs: [ ] as [], isPhantom: TokenAllocation.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TokenAllocation.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TokenAllocation.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TokenAllocation.fromBcs( data, ), bcs: TokenAllocation.bcs, fromJSONField: (field: any) => TokenAllocation.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TokenAllocation.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TokenAllocation.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TokenAllocation.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TokenAllocation.fetch( client, id, ), new: ( fields: TokenAllocationFields, ) => { return new TokenAllocation( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return TokenAllocation.reified() }
 
@@ -214,7 +214,7 @@ export class TokenAllocation implements StructClass { __StructClass = true as co
 
 /* ============================== TokenDistributionSchedule =============================== */
 
-export function isTokenDistributionSchedule(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V18}::genesis::TokenDistributionSchedule`; }
+export function isTokenDistributionSchedule(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V19}::genesis::TokenDistributionSchedule`; }
 
 export interface TokenDistributionScheduleFields { stakeSubsidyFundMist: ToField<"u64">; allocations: ToField<Vector<TokenAllocation>> }
 
@@ -222,17 +222,17 @@ export type TokenDistributionScheduleReified = Reified< TokenDistributionSchedul
 
 export class TokenDistributionSchedule implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V18}::genesis::TokenDistributionSchedule`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V19}::genesis::TokenDistributionSchedule`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = TokenDistributionSchedule.$typeName; readonly $fullTypeName: `${typeof PKG_V18}::genesis::TokenDistributionSchedule`; readonly $typeArgs: []; readonly $isPhantom = TokenDistributionSchedule.$isPhantom;
+ readonly $typeName = TokenDistributionSchedule.$typeName; readonly $fullTypeName: `${typeof PKG_V19}::genesis::TokenDistributionSchedule`; readonly $typeArgs: []; readonly $isPhantom = TokenDistributionSchedule.$isPhantom;
 
  readonly stakeSubsidyFundMist: ToField<"u64">; readonly allocations: ToField<Vector<TokenAllocation>>
 
- private constructor(typeArgs: [], fields: TokenDistributionScheduleFields, ) { this.$fullTypeName = composeSuiType( TokenDistributionSchedule.$typeName, ...typeArgs ) as `${typeof PKG_V18}::genesis::TokenDistributionSchedule`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: TokenDistributionScheduleFields, ) { this.$fullTypeName = composeSuiType( TokenDistributionSchedule.$typeName, ...typeArgs ) as `${typeof PKG_V19}::genesis::TokenDistributionSchedule`; this.$typeArgs = typeArgs;
 
  this.stakeSubsidyFundMist = fields.stakeSubsidyFundMist;; this.allocations = fields.allocations; }
 
- static reified( ): TokenDistributionScheduleReified { return { typeName: TokenDistributionSchedule.$typeName, fullTypeName: composeSuiType( TokenDistributionSchedule.$typeName, ...[] ) as `${typeof PKG_V18}::genesis::TokenDistributionSchedule`, typeArgs: [ ] as [], isPhantom: TokenDistributionSchedule.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TokenDistributionSchedule.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TokenDistributionSchedule.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TokenDistributionSchedule.fromBcs( data, ), bcs: TokenDistributionSchedule.bcs, fromJSONField: (field: any) => TokenDistributionSchedule.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TokenDistributionSchedule.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TokenDistributionSchedule.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TokenDistributionSchedule.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TokenDistributionSchedule.fetch( client, id, ), new: ( fields: TokenDistributionScheduleFields, ) => { return new TokenDistributionSchedule( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): TokenDistributionScheduleReified { return { typeName: TokenDistributionSchedule.$typeName, fullTypeName: composeSuiType( TokenDistributionSchedule.$typeName, ...[] ) as `${typeof PKG_V19}::genesis::TokenDistributionSchedule`, typeArgs: [ ] as [], isPhantom: TokenDistributionSchedule.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TokenDistributionSchedule.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TokenDistributionSchedule.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TokenDistributionSchedule.fromBcs( data, ), bcs: TokenDistributionSchedule.bcs, fromJSONField: (field: any) => TokenDistributionSchedule.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TokenDistributionSchedule.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TokenDistributionSchedule.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TokenDistributionSchedule.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TokenDistributionSchedule.fetch( client, id, ), new: ( fields: TokenDistributionScheduleFields, ) => { return new TokenDistributionSchedule( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return TokenDistributionSchedule.reified() }
 

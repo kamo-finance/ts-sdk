@@ -115,6 +115,10 @@ export interface SetCandidateValidatorGasPriceArgs { self: TransactionObjectInpu
 
 export function setCandidateValidatorGasPrice( tx: Transaction, args: SetCandidateValidatorGasPriceArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sui_system_state_inner::set_candidate_validator_gas_price`, arguments: [ obj(tx, args.self), obj(tx, args.cap), pure(tx, args.newGasPrice, `u64`) ], }) }
 
+export interface StoreExecutionTimeEstimatesArgs { self: TransactionObjectInput; estimates: Array<number | TransactionArgument> | TransactionArgument }
+
+export function storeExecutionTimeEstimates( tx: Transaction, args: StoreExecutionTimeEstimatesArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sui_system_state_inner::store_execution_time_estimates`, arguments: [ obj(tx, args.self), pure(tx, args.estimates, `vector<u8>`) ], }) }
+
 export function systemStateVersion( tx: Transaction, self: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::sui_system_state_inner::system_state_version`, arguments: [ obj(tx, self) ], }) }
 
 export interface UndoReportValidatorArgs { self: TransactionObjectInput; cap: TransactionObjectInput; reporteeAddr: string | TransactionArgument }
