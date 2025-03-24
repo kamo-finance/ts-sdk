@@ -6,7 +6,7 @@ import { Market } from "../kamo_generated/kamo/amm/structs";
 import { SwapSyForExactPtParams } from "../transaction";
 import { SUPPORTED_MARKETS } from "../const";
 import { mappingState } from "../transaction/utils";
-import { FixedPoint64 } from "./fixedpoint64";
+import { FixedPoint64 } from "../fixedpoint64";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 
 export interface NewYieldMarketParams {

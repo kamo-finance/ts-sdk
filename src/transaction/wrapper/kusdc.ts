@@ -4,7 +4,7 @@ import { kamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
 import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../utils";
 import { FixedPoint64 as MoveFixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
-import { FixedPoint64 } from "../../market/fixedpoint64";
+import { FixedPoint64 } from "../../fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
 import { PUBLISHED_AT as KUSDC_WRAPPER_PACKAGE_ID } from "../../kamo_generated/kusdc_wrapper";
 import { AddLiquidityParams, KamoTransaction, MintParams, NewStateParams, RedeemBeforeMaturityParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForExactPtParams, SwapSyForPtParams, SwapYoForSyParams } from "../transaction";

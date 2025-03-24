@@ -1,5 +1,5 @@
 import { N } from "vitest/dist/chunks/reporters.66aFHiyX";
-import { ln } from "../kamo_generated/legato-math/legato-math/functions";
+import { ln } from "./kamo_generated/legato-math/legato-math/functions";
 
 const LN2 = BigInt("12786308645202655660");
 const BIGFACTOR = BigInt("22045359733108027");

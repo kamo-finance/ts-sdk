@@ -8,7 +8,7 @@ import BigNumber from 'bignumber.js';
 import { compressSuiAddress, compressSuiType } from '../kamo_generated/_framework/util';
 import { exp } from '../kamo_generated/legato-math/math-fixed64/functions';
 import { ln, nthRoot } from '../kamo_generated/legato-math/legato-math/functions';
-import { FixedPoint64 } from '../market/fixedpoint64';
+import { FixedPoint64 } from '../fixedpoint64';
 import { getExchangeRatePtToAsset } from '../kamo_generated/kamo/amm/functions';
 
 export interface AddLiquidityParams {

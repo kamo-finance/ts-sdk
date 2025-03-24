@@ -1,7 +1,7 @@
 import { KamoTransaction } from "./transaction";
 import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../const";
 import { SimulateSwapSyForExactPtParams, YieldMarket } from "../market/market";
-import { FixedPoint64 } from "../market/fixedpoint64";
+import { FixedPoint64 } from "../fixedpoint64";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 import { YieldObject } from "../kamo_generated/kamo/yield-object/structs";
 import { TransactionResult } from "@mysten/sui/transactions";

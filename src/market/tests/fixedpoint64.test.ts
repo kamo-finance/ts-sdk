@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'vitest'
-import { FixedPoint64 } from '../fixedpoint64';
+import { FixedPoint64 } from '../../fixedpoint64';
 import { expFixedPoint64, lnFixedPoint64, nthRootFixedPoint64 } from '../../transaction';
 
 describe("FixedPoint64 functions", () => {

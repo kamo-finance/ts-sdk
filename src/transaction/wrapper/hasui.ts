@@ -8,7 +8,7 @@ import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
 import { merge, split, swapSyForExactPt } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../utils";
 import { FixedPoint64 as MoveFixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
-import { FixedPoint64 } from "../../market/fixedpoint64";
+import { FixedPoint64 } from "../../fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
 import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../../kamo_generated/hasui_wrapper/';
 import { createFromRawValue } from "../../kamo_generated/legato-math/fixed-point64/functions";
