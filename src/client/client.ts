@@ -6,12 +6,11 @@ import { PUBLISHED_AT as KAMO_PACKAGE } from "../kamo_generated/kamo";
 import { isYieldObject, YieldObject } from "../kamo_generated/kamo/yield-object/structs";
 import { phantom } from "../kamo_generated/_framework/reified";
 import { compressSuiType } from "../kamo_generated/_framework/util";
-import { cp } from "fs";
 import { mappingState } from "../transaction/utils";
 
 export const suiClient = new SuiClient(
     {
-        url: getFullnodeUrl("mainnet"),
+        url: getFullnodeUrl("testnet"),
     }
 );
 

@@ -6,6 +6,8 @@ import { bcs } from "@mysten/sui/bcs";
 import dotenv from "dotenv";
 import { binarySearchPtAmount, improvedBinarySearchPtAmount } from "./transaction/utils";
 import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "./const";
+import { firstPutUsdc } from "./kamo_generated/kusdc/system/functions";
+import { KUSDCTransaction } from "./transaction/wrapper/kusdc";
 dotenv.config();
 
 const pk = process.env.SUI_PRIVATE_KEY ?? "";
@@ -60,7 +62,10 @@ async function newState() {
   const scalarRoot = BigInt("321807139714677870000");
   const initialAnchor = BigInt("21916576633974318274");
   const lnFeeRateRoot = BigInt("183551206696995753");
-  const tx = await KamoTransaction.NewState({
+  const kUSDCTransaction = newKamoTransaction({
+    market: "KUSDC",
+  });
+  const tx = await kUSDCTransaction.newState({
     expiry,
     scalarRoot,
     initialAnchor,
@@ -209,14 +214,37 @@ async function query() {
 }
 
 async function main() {
+  // const kamoTx = newKamoTransaction({
+  //   market: "HASUI",
+  // });
+  // const exchangeRate = await kamoTx.getCurrentExchangeRate();
+  // const ptAmount = await improvedBinarySearchPtAmount(BigInt(1000), exchangeRate);
+  // console.log(ptAmount);
+  // const ptAmount2 = await binarySearchPtAmount(kamoTx, BigInt(1000));
+  // console.log(ptAmount2);
   const kamoTx = newKamoTransaction({
-    market: "HASUI",
+    market: "KUSDC",
   });
-  const exchangeRate = await kamoTx.getCurrentExchangeRate();
-  const ptAmount = await improvedBinarySearchPtAmount(BigInt(1000), exchangeRate);
-  console.log(ptAmount);
-  const ptAmount2 = await binarySearchPtAmount(kamoTx, BigInt(1000));
-  console.log(ptAmount2);
+  const tx = await (kamoTx as KUSDCTransaction).firstPutUsdc({
+    amount: 100,
+  });
+  tx.setSender(kp.toSuiAddress());
+  tx.setGasBudget(100000000);
+  const builtTx = await tx.build({
+    client: suiClient,
+  });
+  const result = await suiClient.dryRunTransactionBlock({
+    transactionBlock: builtTx,
+  });
+  if (result.effects.status.status === "success") {
+    const digest = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer: kp,
+    });
+    console.log(digest);
+  } else {
+    console.log(result);
+  }
 }
 
 async function swapYoForSy() {
@@ -247,7 +275,7 @@ async function swapYoForSy() {
   // }
 }
 
-// main();
+main();
 
 // query();
 
@@ -259,7 +287,7 @@ async function swapYoForSy() {
 
 // removeLiquidity();
 
-swapPtForSy();
+// swapPtForSy();
 
 // swapSyForPt();
 

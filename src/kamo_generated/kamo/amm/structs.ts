@@ -1,8 +1,8 @@
 import * as reified from "../../_framework/reified";
+import {Balance, Supply} from "../../_dependencies/source/0x2/balance/structs";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, phantom, ToTypeStr as ToPhantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../_framework/util";
 import {FixedPoint64} from "../../legato-math/fixed-point64/structs";
-import {Balance, Supply} from "../../sui/balance/structs";
 import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";

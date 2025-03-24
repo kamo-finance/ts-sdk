@@ -1,5 +1,7 @@
 import * as amm from "./amm/structs";
+import * as kamo from "./kamo/structs";
 import * as syTokenization from "./sy-tokenization/structs";
+import * as vekamo from "./vekamo/structs";
 import * as yieldObject from "./yield-object/structs";
 import {StructClassLoader} from "../_framework/loader";
 
@@ -22,4 +24,10 @@ loader.register(syTokenization.Factory);
 loader.register(syTokenization.NewRegistryEvent);
 loader.register(syTokenization.Registry);
 loader.register(syTokenization.TypenameItem);
+loader.register(kamo.KAMO);
+loader.register(kamo.KamoTreasuryCap);
+loader.register(kamo.TokensBurned);
+loader.register(kamo.TokensMinted);
+loader.register(vekamo.VeKAMOUpdated);
+loader.register(vekamo.VotingEscrow);
  }

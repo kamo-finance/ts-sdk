@@ -1,6 +1,7 @@
 import { STATE_ADDRESS_MAP } from "../const";
 import { KamoTransaction } from "./transaction";
 import { HasuiTransaction } from "./wrapper";
+import { KUSDCTransaction } from "./wrapper/kusdc";
 
 export interface CreateNewKamoTransactionParams {
   market?: string;
@@ -18,6 +19,9 @@ export const newKamoTransaction = (params: CreateNewKamoTransactionParams): Kamo
   }
   if (market === "HASUI") {
       return new HasuiTransaction();
+  }
+  if (market === "KUSDC") {
+      return new KUSDCTransaction();
   }
   throw new Error(`Unsupported market: ${market}`);
 }

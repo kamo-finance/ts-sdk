@@ -1,8 +1,8 @@
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
-import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForPtParams, SwapSyForExactPtParams, SwapYoForSyParams } from "../transaction";
-import { addLiquidity, borrowPt, getExchangeRate, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, removeLiquidity, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPtWithHotPotato } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
+import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForPtParams, SwapSyForExactPtParams, SwapYoForSyParams, NewStateParams } from "../transaction";
+import { addLiquidity, borrowPt, createNewState, getExchangeRate, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, removeLiquidity, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPtWithHotPotato } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { State } from "../../kamo_generated/hasui_wrapper/wrapper/structs";
-import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
+import { FACTORY, STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
 import { kamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
 import { merge, split, swapSyForExactPt } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
@@ -10,7 +10,8 @@ import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPt
 import { FixedPoint64 as MoveFixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
 import { FixedPoint64 } from "../../market/fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
-
+import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../../kamo_generated/hasui_wrapper/';
+import { createFromRawValue } from "../../kamo_generated/legato-math/fixed-point64/functions";
 
 const HAEDAL_STAKING = "0x47b224762220393057ebf4f70501b6e657c3e56684737568439a04f80849b2ca";
 const DEFAULT_STATE_ID = STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!;
@@ -257,4 +258,31 @@ export class HasuiTransaction extends KamoTransaction {
         return tx;
     }
 
+    async newState(params: NewStateParams) {
+        const tx = new Transaction();
+        const objects = await suiClient.getOwnedObjects({
+            owner: params.owner,
+            options: {
+                showType: true,
+            },
+            filter: {
+                StructType: `0x2::coin::TreasuryCap<${HASUI_WRAPPER_PACKAGE_ID}::PT::PT>`
+            }
+        });
+        const treasuryCap = objects.data[0];
+        if (!treasuryCap || !treasuryCap.data) {
+            throw new Error(`TreasuryCap not found`);
+        }
+
+        createNewState(tx, {
+            factory: FACTORY,
+            treasury: treasuryCap.data.objectId,
+            expiry: params.expiry,
+            scalarRoot: createFromRawValue(tx, params.scalarRoot),
+            initialAnchor: createFromRawValue(tx, params.initialAnchor),
+            lnFeeRateRoot: createFromRawValue(tx, params.lnFeeRateRoot),
+            clock: tx.object.clock()
+        });
+        return tx;  
+    }
 }

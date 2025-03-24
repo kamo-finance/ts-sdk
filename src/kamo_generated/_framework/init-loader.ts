@@ -1,19 +1,23 @@
+import * as package_source_0 from "../_dependencies/source/0x0/init";
 import * as package_source_1 from "../_dependencies/source/0x1/init";
-import * as package_source_bde4ba4c2e274a60ce15c1cfff9e5c42e41654ac8b6d906a57efa4bd3c29f47d from "../haedal/init";
-import * as package_source_96df5f4a9d5224afa158a51577b189494a5cce1999b99cbd9c0878ad9e3fe867 from "../hasui_wrapper/init";
-import * as package_source_b153cf1dcef744d282bff9c1783b99e3e1889e2de64b8987257328e3fe574780 from "../kamo/init";
-import * as package_source_2dc2de613e946a2a56434189b8875cfcc457ab2c6735e014bdb56209a1bedb6 from "../legato-math/init";
-import * as package_source_3 from "../sui-system/init";
-import * as package_source_2 from "../sui/init";
+import * as package_source_2 from "../_dependencies/source/0x2/init";
+import * as package_source_3 from "../_dependencies/source/0x3/init";
+import * as package_source_a1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29 from "../_dependencies/source/0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29/init";
+import * as package_source_b6f623f0b3c49859ca50ae8cff539efd5afa258960973f3dc65613f0d06d010f from "../kamo/init";
+import * as package_source_8c0f4b69ea08bf5c5f4d5f3951215060374a83660794ed60a5581a719ea3121f from "../kusdc/init";
+import * as package_source_419ee9c91c3acb2258b6ff00b2c6c8d49eb62f90b3aa1c2d8f82e63d72b26637 from "../kusdc_wrapper/init";
+import * as package_source_9ef0f05fd43c7b1ffcbd7739d4f534407490b2c5be1adffe91df76bc344dc6bb from "../legato-math/init";
 import {StructClassLoader} from "./loader";
 
-function registerClassesSource(loader: StructClassLoader) { package_source_1.registerClasses(loader);
+function registerClassesSource(loader: StructClassLoader) { package_source_0.registerClasses(loader);
+package_source_1.registerClasses(loader);
 package_source_2.registerClasses(loader);
 package_source_3.registerClasses(loader);
-package_source_2dc2de613e946a2a56434189b8875cfcc457ab2c6735e014bdb56209a1bedb6.registerClasses(loader);
-package_source_96df5f4a9d5224afa158a51577b189494a5cce1999b99cbd9c0878ad9e3fe867.registerClasses(loader);
-package_source_b153cf1dcef744d282bff9c1783b99e3e1889e2de64b8987257328e3fe574780.registerClasses(loader);
-package_source_bde4ba4c2e274a60ce15c1cfff9e5c42e41654ac8b6d906a57efa4bd3c29f47d.registerClasses(loader);
+package_source_419ee9c91c3acb2258b6ff00b2c6c8d49eb62f90b3aa1c2d8f82e63d72b26637.registerClasses(loader);
+package_source_8c0f4b69ea08bf5c5f4d5f3951215060374a83660794ed60a5581a719ea3121f.registerClasses(loader);
+package_source_9ef0f05fd43c7b1ffcbd7739d4f534407490b2c5be1adffe91df76bc344dc6bb.registerClasses(loader);
+package_source_a1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29.registerClasses(loader);
+package_source_b6f623f0b3c49859ca50ae8cff539efd5afa258960973f3dc65613f0d06d010f.registerClasses(loader);
  }
 
 export function registerClasses(loader: StructClassLoader) { registerClassesSource(loader); }

@@ -2,7 +2,6 @@ import { Transaction } from '@mysten/sui/transactions';
 import { createNewState } from '../kamo_generated/hasui_wrapper/wrapper/functions';
 import { createFromRawValue, createFromU128 } from '../kamo_generated/legato-math/fixed-point64/functions';
 import { suiClient } from '../client/client';
-import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../kamo_generated/hasui_wrapper';
 import { FACTORY } from '../const';
 import { FixedPoint64 as MoveFixedPoint64 } from '../kamo_generated/legato-math/fixed-point64/structs';
 import BigNumber from 'bignumber.js';
@@ -87,34 +86,7 @@ export abstract class KamoTransaction {
     abstract swapSyForExactPt(params: SwapSyForExactPtParams): Promise<Transaction>;
     abstract swapYoForSy(params: SwapYoForSyParams): Promise<Transaction>;
     abstract getCurrentExchangeRate(): Promise<FixedPoint64>;
-
-    static async NewState(params: NewStateParams) {
-        const tx = new Transaction();
-        const objects = await suiClient.getOwnedObjects({
-            owner: params.owner,
-            options: {
-                showType: true,
-            },
-            filter: {
-                StructType: `0x2::coin::TreasuryCap<${HASUI_WRAPPER_PACKAGE_ID}::PT::PT>`
-            }
-        });
-        const treasuryCap = objects.data[0];
-        if (!treasuryCap || !treasuryCap.data) {
-            throw new Error(`TreasuryCap not found`);
-        }
-
-        createNewState(tx, {
-            factory: FACTORY,
-            treasury: treasuryCap.data.objectId,
-            expiry: params.expiry,
-            scalarRoot: createFromRawValue(tx, params.scalarRoot),
-            initialAnchor: createFromRawValue(tx, params.initialAnchor),
-            lnFeeRateRoot: createFromRawValue(tx, params.lnFeeRateRoot),
-            clock: tx.object.clock()
-        });
-        return tx;  
-    }
+    abstract newState(params: NewStateParams): Promise<Transaction>;
 }
 
 export const expFixedPoint64 = async (rt: bigint) => {

@@ -1,11 +1,11 @@
 import * as reified from "../../_framework/reified";
 import {TypeName} from "../../_dependencies/source/0x1/type-name/structs";
+import {Balance} from "../../_dependencies/source/0x2/balance/structs";
+import {TreasuryCap} from "../../_dependencies/source/0x2/coin/structs";
+import {ID, UID} from "../../_dependencies/source/0x2/object/structs";
+import {Table} from "../../_dependencies/source/0x2/table/structs";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, phantom, ToTypeStr as ToPhantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../_framework/util";
-import {Balance} from "../../sui/balance/structs";
-import {TreasuryCap} from "../../sui/coin/structs";
-import {ID, UID} from "../../sui/object/structs";
-import {Table} from "../../sui/table/structs";
 import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";

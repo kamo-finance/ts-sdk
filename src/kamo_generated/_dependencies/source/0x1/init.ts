@@ -14,7 +14,7 @@ loader.register(uq6464.UQ64_64);
 loader.register(option.Option);
 loader.register(ascii.Char);
 loader.register(ascii.String);
-loader.register(bitVector.BitVector);
 loader.register(string.String);
 loader.register(typeName.TypeName);
+loader.register(bitVector.BitVector);
  }
