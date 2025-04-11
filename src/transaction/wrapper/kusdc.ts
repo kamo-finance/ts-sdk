@@ -2,9 +2,9 @@ import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
 import { FACTORY, STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
 import { kamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
-import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../utils";
+import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../../utils";
 import { FixedPoint64 as MoveFixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
-import { FixedPoint64 } from "../../market/fixedpoint64";
+import { FixedPoint64 } from "../../utils/fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
 import { PUBLISHED_AT as KUSDC_WRAPPER_PACKAGE_ID } from "../../kamo_generated/kusdc_wrapper";
 import { AddLiquidityParams, KamoTransaction, MintParams, NewStateParams, RedeemBeforeMaturityParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForExactPtParams, SwapSyForPtParams, SwapYoForSyParams } from "../transaction";
@@ -13,9 +13,10 @@ import { State } from "../../kamo_generated/kusdc_wrapper/wrapper/structs";
 import { createFromRawValue } from "../../kamo_generated/legato-math/fixed-point64/functions";
 import { firstPutUsdc } from "../../kamo_generated/kusdc/system/functions";
 import { USDC } from "../../kamo_generated/_dependencies/source/0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29/usdc/structs";
+import { mint as mintKusdc } from "../../kamo_generated/kusdc/system/functions";
 
-
-const KUSDC_SYSTEM = "0x47b224762220393057ebf4f70501b6e657c3e56684737568439a04f80849b2ca";
+const KUSDC_SYSTEM = "0x4c572e9850fb9bbf65caca8920d4b43d3d0e11d9173d0068e68f2d799cdaeb8d";
+const KUSDC_TREASURY_CAP = "0x5619c7304f17460cb81359fe2bf2085b43c77e360b94b4bb24fbee1fdffc0806";
 const DEFAULT_STATE_ID = STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!;
 
 export class KUSDCTransaction extends KamoTransaction {
@@ -25,13 +26,15 @@ export class KUSDCTransaction extends KamoTransaction {
         if (Date.now() > state.market.expiry) {
             throw new Error("Market expired");
         }
-        const sy = coinWithBalance({
-            type: state.market.$typeArgs[1],
-            balance: params.sy_amount_in
-        });
+        if (!params.coin && !params.sy_amount_in) {
+            throw new Error("Either coin or sy_amount_in must be provided");
+        }
         const [pt, yield_object] = mint(tx, {
             state: DEFAULT_STATE_ID,
-            kusdcCoinIn: sy,
+            kusdcCoinIn: params.coin || coinWithBalance({
+                type: state.market.$typeArgs[1],
+                balance: params.sy_amount_in ?? 0
+            }),
             system: KUSDC_SYSTEM,
             clock: tx.object.clock()
         });
@@ -162,14 +165,14 @@ export class KUSDCTransaction extends KamoTransaction {
             balance: params.syAmount
         });
         const ptAmount = await improvedBinarySearchPtAmount(params.syAmount, await this.getCurrentExchangeRate());
-        const pt = swapSyForExactPt(tx, {
+        const [syRemain, pt] = swapSyForExactPt(tx, {
             state: DEFAULT_STATE_ID,
             syCoin: sy,
             system: KUSDC_SYSTEM,
             ptAmount,
             clock: tx.object.clock()
         });
-        tx.transferObjects([pt], params.sender);
+        tx.transferObjects([pt, syRemain], params.sender);
         return tx;
     }
 
@@ -275,7 +278,6 @@ export class KUSDCTransaction extends KamoTransaction {
         if (!treasuryCap || !treasuryCap.data) {
             throw new Error(`TreasuryCap not found`);
         }
-
         createNewState(tx, {
             factory: FACTORY,
             treasury: treasuryCap.data.objectId,
@@ -285,8 +287,7 @@ export class KUSDCTransaction extends KamoTransaction {
             lnFeeRateRoot: createFromRawValue(tx, params.lnFeeRateRoot),
             clock: tx.object.clock()
         });
-
-        this.firstPutUsdc({
+        await this.firstPutUsdc({
             amount: 100
         });
         return tx;  
@@ -296,7 +297,6 @@ export class KUSDCTransaction extends KamoTransaction {
         amount: string | number;
     }) {
         const tx = new Transaction();
-        const state = await State.fetch(suiClient, DEFAULT_STATE_ID);
         const coin = coinWithBalance({
             type: USDC.$typeName,
             balance: BigInt(params.amount)
@@ -306,5 +306,25 @@ export class KUSDCTransaction extends KamoTransaction {
             coin
         });
         return tx;
+    }
+
+    mint_kusdc(params: {
+        amount: string | number;
+        sender: string;
+        tx?: Transaction;
+    }) {
+        const tx = params.tx || new Transaction();
+        const kusdc = mintKusdc(tx, {
+            system: KUSDC_SYSTEM,
+            cap: KUSDC_TREASURY_CAP,
+            coin: coinWithBalance({
+                type: USDC.$typeName,
+                balance: BigInt(params.amount)
+            })
+        });
+        return {
+            tx,
+            coin: kusdc
+        };
     }
 }

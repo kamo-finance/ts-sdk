@@ -1,5 +1,6 @@
 import { N } from "vitest/dist/chunks/reporters.66aFHiyX";
 import { ln } from "../kamo_generated/legato-math/legato-math/functions";
+import BigNumber from "bignumber.js";
 
 const LN2 = BigInt("12786308645202655660");
 const BIGFACTOR = BigInt("22045359733108027");
@@ -88,6 +89,10 @@ export class FixedPoint64 {
       return this.ceil();
     }
     return this.floor();
+  }
+
+  decimalValue(): BigNumber {
+    return new BigNumber(this.value.toString()).div(BigNumber(2).pow(64));
   }
 
   absolute(x: FixedPoint64): FixedPoint64 {

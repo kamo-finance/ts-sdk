@@ -12,7 +12,7 @@ import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 export function isAddLiquidityEvent(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::amm::AddLiquidityEvent` + '<'); }
 
-export interface AddLiquidityEventFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { ptAmount: ToField<"u64">; syAmount: ToField<"u64">; lpAmount: ToField<"u64">; exchangeRate: ToField<FixedPoint64>; sender: ToField<"address">; isBootstrap: ToField<"bool"> }
+export interface AddLiquidityEventFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { ptAmount: ToField<"u64">; syAmount: ToField<"u64">; lpAmount: ToField<"u64">; syExchangeRate: ToField<FixedPoint64>; sender: ToField<"address">; isBootstrap: ToField<"bool">; lnImpliedRateAfterAction: ToField<FixedPoint64> }
 
 export type AddLiquidityEventReified<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> = Reified< AddLiquidityEvent<PT, SY>, AddLiquidityEventFields<PT, SY> >;
 
@@ -22,11 +22,11 @@ export class AddLiquidityEvent<PT extends PhantomTypeArgument, SY extends Phanto
 
  readonly $typeName = AddLiquidityEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::amm::AddLiquidityEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; readonly $typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>]; readonly $isPhantom = AddLiquidityEvent.$isPhantom;
 
- readonly ptAmount: ToField<"u64">; readonly syAmount: ToField<"u64">; readonly lpAmount: ToField<"u64">; readonly exchangeRate: ToField<FixedPoint64>; readonly sender: ToField<"address">; readonly isBootstrap: ToField<"bool">
+ readonly ptAmount: ToField<"u64">; readonly syAmount: ToField<"u64">; readonly lpAmount: ToField<"u64">; readonly syExchangeRate: ToField<FixedPoint64>; readonly sender: ToField<"address">; readonly isBootstrap: ToField<"bool">; readonly lnImpliedRateAfterAction: ToField<FixedPoint64>
 
  private constructor(typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>], fields: AddLiquidityEventFields<PT, SY>, ) { this.$fullTypeName = composeSuiType( AddLiquidityEvent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::amm::AddLiquidityEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; this.$typeArgs = typeArgs;
 
- this.ptAmount = fields.ptAmount;; this.syAmount = fields.syAmount;; this.lpAmount = fields.lpAmount;; this.exchangeRate = fields.exchangeRate;; this.sender = fields.sender;; this.isBootstrap = fields.isBootstrap; }
+ this.ptAmount = fields.ptAmount;; this.syAmount = fields.syAmount;; this.lpAmount = fields.lpAmount;; this.syExchangeRate = fields.syExchangeRate;; this.sender = fields.sender;; this.isBootstrap = fields.isBootstrap;; this.lnImpliedRateAfterAction = fields.lnImpliedRateAfterAction; }
 
  static reified<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): AddLiquidityEventReified<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return { typeName: AddLiquidityEvent.$typeName, fullTypeName: composeSuiType( AddLiquidityEvent.$typeName, ...[extractType(PT), extractType(SY)] ) as `${typeof PKG_V1}::amm::AddLiquidityEvent<${PhantomToTypeStr<ToPhantomTypeArgument<PT>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<SY>>}>`, typeArgs: [ extractType(PT), extractType(SY) ] as [PhantomToTypeStr<ToPhantomTypeArgument<PT>>, PhantomToTypeStr<ToPhantomTypeArgument<SY>>], isPhantom: AddLiquidityEvent.$isPhantom, reifiedTypeArgs: [PT, SY], fromFields: (fields: Record<string, any>) => AddLiquidityEvent.fromFields( [PT, SY], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AddLiquidityEvent.fromFieldsWithTypes( [PT, SY], item, ), fromBcs: (data: Uint8Array) => AddLiquidityEvent.fromBcs( [PT, SY], data, ), bcs: AddLiquidityEvent.bcs, fromJSONField: (field: any) => AddLiquidityEvent.fromJSONField( [PT, SY], field, ), fromJSON: (json: Record<string, any>) => AddLiquidityEvent.fromJSON( [PT, SY], json, ), fromSuiParsedData: (content: SuiParsedData) => AddLiquidityEvent.fromSuiParsedData( [PT, SY], content, ), fromSuiObjectData: (content: SuiObjectData) => AddLiquidityEvent.fromSuiObjectData( [PT, SY], content, ), fetch: async (client: SuiClient, id: string) => AddLiquidityEvent.fetch( client, [PT, SY], id, ), new: ( fields: AddLiquidityEventFields<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>, ) => { return new AddLiquidityEvent( [extractType(PT), extractType(SY)], fields ) }, kind: "StructClassReified", } }
 
@@ -36,29 +36,29 @@ export class AddLiquidityEvent<PT extends PhantomTypeArgument, SY extends Phanto
 
  static get bcs() { return bcs.struct("AddLiquidityEvent", {
 
- pt_amount: bcs.u64(), sy_amount: bcs.u64(), lp_amount: bcs.u64(), exchange_rate: FixedPoint64.bcs, sender: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), is_bootstrap: bcs.bool()
+ pt_amount: bcs.u64(), sy_amount: bcs.u64(), lp_amount: bcs.u64(), sy_exchange_rate: FixedPoint64.bcs, sender: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), is_bootstrap: bcs.bool(), ln_implied_rate_after_action: FixedPoint64.bcs
 
 }) };
 
- static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return AddLiquidityEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFields("u64", fields.pt_amount), syAmount: decodeFromFields("u64", fields.sy_amount), lpAmount: decodeFromFields("u64", fields.lp_amount), exchangeRate: decodeFromFields(FixedPoint64.reified(), fields.exchange_rate), sender: decodeFromFields("address", fields.sender), isBootstrap: decodeFromFields("bool", fields.is_bootstrap) } ) }
+ static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return AddLiquidityEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFields("u64", fields.pt_amount), syAmount: decodeFromFields("u64", fields.sy_amount), lpAmount: decodeFromFields("u64", fields.lp_amount), syExchangeRate: decodeFromFields(FixedPoint64.reified(), fields.sy_exchange_rate), sender: decodeFromFields("address", fields.sender), isBootstrap: decodeFromFields("bool", fields.is_bootstrap), lnImpliedRateAfterAction: decodeFromFields(FixedPoint64.reified(), fields.ln_implied_rate_after_action) } ) }
 
  static fromFieldsWithTypes<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], item: FieldsWithTypes ): AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (!isAddLiquidityEvent(item.type)) { throw new Error("not a AddLiquidityEvent type");
 
  } assertFieldsWithTypesArgsMatch(item, typeArgs);
 
- return AddLiquidityEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFieldsWithTypes("u64", item.fields.pt_amount), syAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_amount), lpAmount: decodeFromFieldsWithTypes("u64", item.fields.lp_amount), exchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.exchange_rate), sender: decodeFromFieldsWithTypes("address", item.fields.sender), isBootstrap: decodeFromFieldsWithTypes("bool", item.fields.is_bootstrap) } ) }
+ return AddLiquidityEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFieldsWithTypes("u64", item.fields.pt_amount), syAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_amount), lpAmount: decodeFromFieldsWithTypes("u64", item.fields.lp_amount), syExchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.sy_exchange_rate), sender: decodeFromFieldsWithTypes("address", item.fields.sender), isBootstrap: decodeFromFieldsWithTypes("bool", item.fields.is_bootstrap), lnImpliedRateAfterAction: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.ln_implied_rate_after_action) } ) }
 
  static fromBcs<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: Uint8Array ): AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return AddLiquidityEvent.fromFields( typeArgs, AddLiquidityEvent.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- ptAmount: this.ptAmount.toString(),syAmount: this.syAmount.toString(),lpAmount: this.lpAmount.toString(),exchangeRate: this.exchangeRate.toJSONField(),sender: this.sender,isBootstrap: this.isBootstrap,
+ ptAmount: this.ptAmount.toString(),syAmount: this.syAmount.toString(),lpAmount: this.lpAmount.toString(),syExchangeRate: this.syExchangeRate.toJSONField(),sender: this.sender,isBootstrap: this.isBootstrap,lnImpliedRateAfterAction: this.lnImpliedRateAfterAction.toJSONField(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return AddLiquidityEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromJSONField("u64", field.ptAmount), syAmount: decodeFromJSONField("u64", field.syAmount), lpAmount: decodeFromJSONField("u64", field.lpAmount), exchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.exchangeRate), sender: decodeFromJSONField("address", field.sender), isBootstrap: decodeFromJSONField("bool", field.isBootstrap) } ) }
+ static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return AddLiquidityEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromJSONField("u64", field.ptAmount), syAmount: decodeFromJSONField("u64", field.syAmount), lpAmount: decodeFromJSONField("u64", field.lpAmount), syExchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.syExchangeRate), sender: decodeFromJSONField("address", field.sender), isBootstrap: decodeFromJSONField("bool", field.isBootstrap), lnImpliedRateAfterAction: decodeFromJSONField(FixedPoint64.reified(), field.lnImpliedRateAfterAction) } ) }
 
  static fromJSON<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], json: Record<string, any> ): AddLiquidityEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (json.$typeName !== AddLiquidityEvent.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(AddLiquidityEvent.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
 
@@ -500,7 +500,7 @@ export class SellYoBorrowPt<PT extends PhantomTypeArgument, SY extends PhantomTy
 
 export function isSwapExactPtForSyEvent(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::amm::SwapExactPtForSyEvent` + '<'); }
 
-export interface SwapExactPtForSyEventFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { ptAmount: ToField<"u64">; syAmount: ToField<"u64">; syFeeAmount: ToField<"u64">; exchangeRate: ToField<FixedPoint64>; sender: ToField<"address"> }
+export interface SwapExactPtForSyEventFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { ptAmount: ToField<"u64">; syAmount: ToField<"u64">; syFeeAmount: ToField<"u64">; syExchangeRate: ToField<FixedPoint64>; swapExchangeRate: ToField<FixedPoint64>; lnImpliedRateAfterAction: ToField<FixedPoint64>; sender: ToField<"address"> }
 
 export type SwapExactPtForSyEventReified<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> = Reified< SwapExactPtForSyEvent<PT, SY>, SwapExactPtForSyEventFields<PT, SY> >;
 
@@ -510,11 +510,11 @@ export class SwapExactPtForSyEvent<PT extends PhantomTypeArgument, SY extends Ph
 
  readonly $typeName = SwapExactPtForSyEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::amm::SwapExactPtForSyEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; readonly $typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>]; readonly $isPhantom = SwapExactPtForSyEvent.$isPhantom;
 
- readonly ptAmount: ToField<"u64">; readonly syAmount: ToField<"u64">; readonly syFeeAmount: ToField<"u64">; readonly exchangeRate: ToField<FixedPoint64>; readonly sender: ToField<"address">
+ readonly ptAmount: ToField<"u64">; readonly syAmount: ToField<"u64">; readonly syFeeAmount: ToField<"u64">; readonly syExchangeRate: ToField<FixedPoint64>; readonly swapExchangeRate: ToField<FixedPoint64>; readonly lnImpliedRateAfterAction: ToField<FixedPoint64>; readonly sender: ToField<"address">
 
  private constructor(typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>], fields: SwapExactPtForSyEventFields<PT, SY>, ) { this.$fullTypeName = composeSuiType( SwapExactPtForSyEvent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::amm::SwapExactPtForSyEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; this.$typeArgs = typeArgs;
 
- this.ptAmount = fields.ptAmount;; this.syAmount = fields.syAmount;; this.syFeeAmount = fields.syFeeAmount;; this.exchangeRate = fields.exchangeRate;; this.sender = fields.sender; }
+ this.ptAmount = fields.ptAmount;; this.syAmount = fields.syAmount;; this.syFeeAmount = fields.syFeeAmount;; this.syExchangeRate = fields.syExchangeRate;; this.swapExchangeRate = fields.swapExchangeRate;; this.lnImpliedRateAfterAction = fields.lnImpliedRateAfterAction;; this.sender = fields.sender; }
 
  static reified<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): SwapExactPtForSyEventReified<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return { typeName: SwapExactPtForSyEvent.$typeName, fullTypeName: composeSuiType( SwapExactPtForSyEvent.$typeName, ...[extractType(PT), extractType(SY)] ) as `${typeof PKG_V1}::amm::SwapExactPtForSyEvent<${PhantomToTypeStr<ToPhantomTypeArgument<PT>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<SY>>}>`, typeArgs: [ extractType(PT), extractType(SY) ] as [PhantomToTypeStr<ToPhantomTypeArgument<PT>>, PhantomToTypeStr<ToPhantomTypeArgument<SY>>], isPhantom: SwapExactPtForSyEvent.$isPhantom, reifiedTypeArgs: [PT, SY], fromFields: (fields: Record<string, any>) => SwapExactPtForSyEvent.fromFields( [PT, SY], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SwapExactPtForSyEvent.fromFieldsWithTypes( [PT, SY], item, ), fromBcs: (data: Uint8Array) => SwapExactPtForSyEvent.fromBcs( [PT, SY], data, ), bcs: SwapExactPtForSyEvent.bcs, fromJSONField: (field: any) => SwapExactPtForSyEvent.fromJSONField( [PT, SY], field, ), fromJSON: (json: Record<string, any>) => SwapExactPtForSyEvent.fromJSON( [PT, SY], json, ), fromSuiParsedData: (content: SuiParsedData) => SwapExactPtForSyEvent.fromSuiParsedData( [PT, SY], content, ), fromSuiObjectData: (content: SuiObjectData) => SwapExactPtForSyEvent.fromSuiObjectData( [PT, SY], content, ), fetch: async (client: SuiClient, id: string) => SwapExactPtForSyEvent.fetch( client, [PT, SY], id, ), new: ( fields: SwapExactPtForSyEventFields<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>, ) => { return new SwapExactPtForSyEvent( [extractType(PT), extractType(SY)], fields ) }, kind: "StructClassReified", } }
 
@@ -524,29 +524,29 @@ export class SwapExactPtForSyEvent<PT extends PhantomTypeArgument, SY extends Ph
 
  static get bcs() { return bcs.struct("SwapExactPtForSyEvent", {
 
- pt_amount: bcs.u64(), sy_amount: bcs.u64(), sy_fee_amount: bcs.u64(), exchange_rate: FixedPoint64.bcs, sender: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
+ pt_amount: bcs.u64(), sy_amount: bcs.u64(), sy_fee_amount: bcs.u64(), sy_exchange_rate: FixedPoint64.bcs, swap_exchange_rate: FixedPoint64.bcs, ln_implied_rate_after_action: FixedPoint64.bcs, sender: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
 }) };
 
- static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): SwapExactPtForSyEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapExactPtForSyEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFields("u64", fields.pt_amount), syAmount: decodeFromFields("u64", fields.sy_amount), syFeeAmount: decodeFromFields("u64", fields.sy_fee_amount), exchangeRate: decodeFromFields(FixedPoint64.reified(), fields.exchange_rate), sender: decodeFromFields("address", fields.sender) } ) }
+ static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): SwapExactPtForSyEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapExactPtForSyEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFields("u64", fields.pt_amount), syAmount: decodeFromFields("u64", fields.sy_amount), syFeeAmount: decodeFromFields("u64", fields.sy_fee_amount), syExchangeRate: decodeFromFields(FixedPoint64.reified(), fields.sy_exchange_rate), swapExchangeRate: decodeFromFields(FixedPoint64.reified(), fields.swap_exchange_rate), lnImpliedRateAfterAction: decodeFromFields(FixedPoint64.reified(), fields.ln_implied_rate_after_action), sender: decodeFromFields("address", fields.sender) } ) }
 
  static fromFieldsWithTypes<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], item: FieldsWithTypes ): SwapExactPtForSyEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (!isSwapExactPtForSyEvent(item.type)) { throw new Error("not a SwapExactPtForSyEvent type");
 
  } assertFieldsWithTypesArgsMatch(item, typeArgs);
 
- return SwapExactPtForSyEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFieldsWithTypes("u64", item.fields.pt_amount), syAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_amount), syFeeAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_fee_amount), exchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.exchange_rate), sender: decodeFromFieldsWithTypes("address", item.fields.sender) } ) }
+ return SwapExactPtForSyEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFieldsWithTypes("u64", item.fields.pt_amount), syAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_amount), syFeeAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_fee_amount), syExchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.sy_exchange_rate), swapExchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.swap_exchange_rate), lnImpliedRateAfterAction: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.ln_implied_rate_after_action), sender: decodeFromFieldsWithTypes("address", item.fields.sender) } ) }
 
  static fromBcs<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: Uint8Array ): SwapExactPtForSyEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapExactPtForSyEvent.fromFields( typeArgs, SwapExactPtForSyEvent.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- ptAmount: this.ptAmount.toString(),syAmount: this.syAmount.toString(),syFeeAmount: this.syFeeAmount.toString(),exchangeRate: this.exchangeRate.toJSONField(),sender: this.sender,
+ ptAmount: this.ptAmount.toString(),syAmount: this.syAmount.toString(),syFeeAmount: this.syFeeAmount.toString(),syExchangeRate: this.syExchangeRate.toJSONField(),swapExchangeRate: this.swapExchangeRate.toJSONField(),lnImpliedRateAfterAction: this.lnImpliedRateAfterAction.toJSONField(),sender: this.sender,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): SwapExactPtForSyEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapExactPtForSyEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromJSONField("u64", field.ptAmount), syAmount: decodeFromJSONField("u64", field.syAmount), syFeeAmount: decodeFromJSONField("u64", field.syFeeAmount), exchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.exchangeRate), sender: decodeFromJSONField("address", field.sender) } ) }
+ static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): SwapExactPtForSyEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapExactPtForSyEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromJSONField("u64", field.ptAmount), syAmount: decodeFromJSONField("u64", field.syAmount), syFeeAmount: decodeFromJSONField("u64", field.syFeeAmount), syExchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.syExchangeRate), swapExchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.swapExchangeRate), lnImpliedRateAfterAction: decodeFromJSONField(FixedPoint64.reified(), field.lnImpliedRateAfterAction), sender: decodeFromJSONField("address", field.sender) } ) }
 
  static fromJSON<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], json: Record<string, any> ): SwapExactPtForSyEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (json.$typeName !== SwapExactPtForSyEvent.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(SwapExactPtForSyEvent.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
 
@@ -570,7 +570,7 @@ export class SwapExactPtForSyEvent<PT extends PhantomTypeArgument, SY extends Ph
 
 export function isSwapSyForExactPtEvent(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::amm::SwapSyForExactPtEvent` + '<'); }
 
-export interface SwapSyForExactPtEventFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { ptAmount: ToField<"u64">; syAmount: ToField<"u64">; syFeeAmount: ToField<"u64">; exchangeRate: ToField<FixedPoint64>; sender: ToField<"address"> }
+export interface SwapSyForExactPtEventFields<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> { ptAmount: ToField<"u64">; syAmount: ToField<"u64">; syFeeAmount: ToField<"u64">; syExchangeRate: ToField<FixedPoint64>; swapExchangeRate: ToField<FixedPoint64>; lnImpliedRateAfterAction: ToField<FixedPoint64>; sender: ToField<"address"> }
 
 export type SwapSyForExactPtEventReified<PT extends PhantomTypeArgument, SY extends PhantomTypeArgument> = Reified< SwapSyForExactPtEvent<PT, SY>, SwapSyForExactPtEventFields<PT, SY> >;
 
@@ -580,11 +580,11 @@ export class SwapSyForExactPtEvent<PT extends PhantomTypeArgument, SY extends Ph
 
  readonly $typeName = SwapSyForExactPtEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::amm::SwapSyForExactPtEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; readonly $typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>]; readonly $isPhantom = SwapSyForExactPtEvent.$isPhantom;
 
- readonly ptAmount: ToField<"u64">; readonly syAmount: ToField<"u64">; readonly syFeeAmount: ToField<"u64">; readonly exchangeRate: ToField<FixedPoint64>; readonly sender: ToField<"address">
+ readonly ptAmount: ToField<"u64">; readonly syAmount: ToField<"u64">; readonly syFeeAmount: ToField<"u64">; readonly syExchangeRate: ToField<FixedPoint64>; readonly swapExchangeRate: ToField<FixedPoint64>; readonly lnImpliedRateAfterAction: ToField<FixedPoint64>; readonly sender: ToField<"address">
 
  private constructor(typeArgs: [PhantomToTypeStr<PT>, PhantomToTypeStr<SY>], fields: SwapSyForExactPtEventFields<PT, SY>, ) { this.$fullTypeName = composeSuiType( SwapSyForExactPtEvent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::amm::SwapSyForExactPtEvent<${PhantomToTypeStr<PT>}, ${PhantomToTypeStr<SY>}>`; this.$typeArgs = typeArgs;
 
- this.ptAmount = fields.ptAmount;; this.syAmount = fields.syAmount;; this.syFeeAmount = fields.syFeeAmount;; this.exchangeRate = fields.exchangeRate;; this.sender = fields.sender; }
+ this.ptAmount = fields.ptAmount;; this.syAmount = fields.syAmount;; this.syFeeAmount = fields.syFeeAmount;; this.syExchangeRate = fields.syExchangeRate;; this.swapExchangeRate = fields.swapExchangeRate;; this.lnImpliedRateAfterAction = fields.lnImpliedRateAfterAction;; this.sender = fields.sender; }
 
  static reified<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( PT: PT, SY: SY ): SwapSyForExactPtEventReified<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return { typeName: SwapSyForExactPtEvent.$typeName, fullTypeName: composeSuiType( SwapSyForExactPtEvent.$typeName, ...[extractType(PT), extractType(SY)] ) as `${typeof PKG_V1}::amm::SwapSyForExactPtEvent<${PhantomToTypeStr<ToPhantomTypeArgument<PT>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<SY>>}>`, typeArgs: [ extractType(PT), extractType(SY) ] as [PhantomToTypeStr<ToPhantomTypeArgument<PT>>, PhantomToTypeStr<ToPhantomTypeArgument<SY>>], isPhantom: SwapSyForExactPtEvent.$isPhantom, reifiedTypeArgs: [PT, SY], fromFields: (fields: Record<string, any>) => SwapSyForExactPtEvent.fromFields( [PT, SY], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SwapSyForExactPtEvent.fromFieldsWithTypes( [PT, SY], item, ), fromBcs: (data: Uint8Array) => SwapSyForExactPtEvent.fromBcs( [PT, SY], data, ), bcs: SwapSyForExactPtEvent.bcs, fromJSONField: (field: any) => SwapSyForExactPtEvent.fromJSONField( [PT, SY], field, ), fromJSON: (json: Record<string, any>) => SwapSyForExactPtEvent.fromJSON( [PT, SY], json, ), fromSuiParsedData: (content: SuiParsedData) => SwapSyForExactPtEvent.fromSuiParsedData( [PT, SY], content, ), fromSuiObjectData: (content: SuiObjectData) => SwapSyForExactPtEvent.fromSuiObjectData( [PT, SY], content, ), fetch: async (client: SuiClient, id: string) => SwapSyForExactPtEvent.fetch( client, [PT, SY], id, ), new: ( fields: SwapSyForExactPtEventFields<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>>, ) => { return new SwapSyForExactPtEvent( [extractType(PT), extractType(SY)], fields ) }, kind: "StructClassReified", } }
 
@@ -594,29 +594,29 @@ export class SwapSyForExactPtEvent<PT extends PhantomTypeArgument, SY extends Ph
 
  static get bcs() { return bcs.struct("SwapSyForExactPtEvent", {
 
- pt_amount: bcs.u64(), sy_amount: bcs.u64(), sy_fee_amount: bcs.u64(), exchange_rate: FixedPoint64.bcs, sender: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
+ pt_amount: bcs.u64(), sy_amount: bcs.u64(), sy_fee_amount: bcs.u64(), sy_exchange_rate: FixedPoint64.bcs, swap_exchange_rate: FixedPoint64.bcs, ln_implied_rate_after_action: FixedPoint64.bcs, sender: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
 }) };
 
- static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): SwapSyForExactPtEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapSyForExactPtEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFields("u64", fields.pt_amount), syAmount: decodeFromFields("u64", fields.sy_amount), syFeeAmount: decodeFromFields("u64", fields.sy_fee_amount), exchangeRate: decodeFromFields(FixedPoint64.reified(), fields.exchange_rate), sender: decodeFromFields("address", fields.sender) } ) }
+ static fromFields<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], fields: Record<string, any> ): SwapSyForExactPtEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapSyForExactPtEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFields("u64", fields.pt_amount), syAmount: decodeFromFields("u64", fields.sy_amount), syFeeAmount: decodeFromFields("u64", fields.sy_fee_amount), syExchangeRate: decodeFromFields(FixedPoint64.reified(), fields.sy_exchange_rate), swapExchangeRate: decodeFromFields(FixedPoint64.reified(), fields.swap_exchange_rate), lnImpliedRateAfterAction: decodeFromFields(FixedPoint64.reified(), fields.ln_implied_rate_after_action), sender: decodeFromFields("address", fields.sender) } ) }
 
  static fromFieldsWithTypes<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], item: FieldsWithTypes ): SwapSyForExactPtEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (!isSwapSyForExactPtEvent(item.type)) { throw new Error("not a SwapSyForExactPtEvent type");
 
  } assertFieldsWithTypesArgsMatch(item, typeArgs);
 
- return SwapSyForExactPtEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFieldsWithTypes("u64", item.fields.pt_amount), syAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_amount), syFeeAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_fee_amount), exchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.exchange_rate), sender: decodeFromFieldsWithTypes("address", item.fields.sender) } ) }
+ return SwapSyForExactPtEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromFieldsWithTypes("u64", item.fields.pt_amount), syAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_amount), syFeeAmount: decodeFromFieldsWithTypes("u64", item.fields.sy_fee_amount), syExchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.sy_exchange_rate), swapExchangeRate: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.swap_exchange_rate), lnImpliedRateAfterAction: decodeFromFieldsWithTypes(FixedPoint64.reified(), item.fields.ln_implied_rate_after_action), sender: decodeFromFieldsWithTypes("address", item.fields.sender) } ) }
 
  static fromBcs<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], data: Uint8Array ): SwapSyForExactPtEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapSyForExactPtEvent.fromFields( typeArgs, SwapSyForExactPtEvent.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- ptAmount: this.ptAmount.toString(),syAmount: this.syAmount.toString(),syFeeAmount: this.syFeeAmount.toString(),exchangeRate: this.exchangeRate.toJSONField(),sender: this.sender,
+ ptAmount: this.ptAmount.toString(),syAmount: this.syAmount.toString(),syFeeAmount: this.syFeeAmount.toString(),syExchangeRate: this.syExchangeRate.toJSONField(),swapExchangeRate: this.swapExchangeRate.toJSONField(),lnImpliedRateAfterAction: this.lnImpliedRateAfterAction.toJSONField(),sender: this.sender,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): SwapSyForExactPtEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapSyForExactPtEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromJSONField("u64", field.ptAmount), syAmount: decodeFromJSONField("u64", field.syAmount), syFeeAmount: decodeFromJSONField("u64", field.syFeeAmount), exchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.exchangeRate), sender: decodeFromJSONField("address", field.sender) } ) }
+ static fromJSONField<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], field: any ): SwapSyForExactPtEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { return SwapSyForExactPtEvent.reified( typeArgs[0], typeArgs[1], ).new( { ptAmount: decodeFromJSONField("u64", field.ptAmount), syAmount: decodeFromJSONField("u64", field.syAmount), syFeeAmount: decodeFromJSONField("u64", field.syFeeAmount), syExchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.syExchangeRate), swapExchangeRate: decodeFromJSONField(FixedPoint64.reified(), field.swapExchangeRate), lnImpliedRateAfterAction: decodeFromJSONField(FixedPoint64.reified(), field.lnImpliedRateAfterAction), sender: decodeFromJSONField("address", field.sender) } ) }
 
  static fromJSON<PT extends PhantomReified<PhantomTypeArgument>, SY extends PhantomReified<PhantomTypeArgument>>( typeArgs: [PT, SY], json: Record<string, any> ): SwapSyForExactPtEvent<ToPhantomTypeArgument<PT>, ToPhantomTypeArgument<SY>> { if (json.$typeName !== SwapSyForExactPtEvent.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(SwapSyForExactPtEvent.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
 

@@ -6,9 +6,9 @@ import { FACTORY, STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
 import { kamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
 import { merge, split, swapSyForExactPt } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
-import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../utils";
+import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../../utils";
 import { FixedPoint64 as MoveFixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
-import { FixedPoint64 } from "../../market/fixedpoint64";
+import { FixedPoint64 } from "../../utils/fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
 import { PUBLISHED_AT as HASUI_WRAPPER_PACKAGE_ID } from '../../kamo_generated/hasui_wrapper/';
 import { createFromRawValue } from "../../kamo_generated/legato-math/fixed-point64/functions";
@@ -23,13 +23,16 @@ export class HasuiTransaction extends KamoTransaction {
         if (Date.now() > state.market.expiry) {
             throw new Error("Market expired");
         }
+        if (!params.coin && !params.sy_amount_in) {
+            throw new Error("Either coin or sy_amount_in must be provided");
+        }
         const sy = coinWithBalance({
             type: state.market.$typeArgs[1],
-            balance: params.sy_amount_in
+            balance: params.sy_amount_in ?? 0
         });
         const [pt, yield_object] = mint(tx, {
             state: DEFAULT_STATE_ID,
-            hasuiCoinIn: sy,
+            hasuiCoinIn: params.coin || sy,
             staking: HAEDAL_STAKING,
             clock: tx.object.clock()
         });
