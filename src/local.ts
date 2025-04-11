@@ -256,16 +256,22 @@ async function swapSyForPt() {
 }
 
 async function query() {
-  const exchangRate = await newKamoTransaction({
-    market: "HASUI",
-  }).getCurrentExchangeRate();
-  console.log(exchangRate);
+  // const exchangRate = await newKamoTransaction({
+  //   market: "KUSDC",
+  // }).getSyExchangeRate();
+  // console.log(exchangRate);
 
-  const yieldObjects = await kamoClient.getYieldObjects({
-    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!,
-    owner: kp.toSuiAddress(),
-  });
-  console.log(yieldObjects);
+  // const ptAmount = await kamoClient.getMintAmount({
+  //   stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+  //   syAmount: BigInt(1000),
+  // });
+  // console.log(ptAmount.toBigNumber().toString());
+
+  // const yieldObjects = await kamoClient.getYieldObjects({
+  //   stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+  //   owner: kp.toSuiAddress(),
+  // });
+  // console.log(exchangRate);
 }
 
 async function main() {
@@ -306,7 +312,7 @@ async function swapYoForSy() {
   const kamoTx = newKamoTransaction({
     market: "HASUI",
   });
-  console.log(await improvedBinarySearchPtAmount(BigInt(809), await kamoTx.getCurrentExchangeRate()));
+  console.log(await improvedBinarySearchPtAmount(BigInt(809), await kamoTx.getSyExchangeRate()));
   const tx = await kamoTx.swapYoForSy({
     yoAmount: BigInt(1000),
     sender: kp.toSuiAddress(),
@@ -332,7 +338,7 @@ async function swapYoForSy() {
 
 // main();
 
-// query();
+query();
 
 // currentTimestamp();
 

@@ -164,7 +164,7 @@ export class KUSDCTransaction extends KamoTransaction {
             type: state.market.$typeArgs[1],
             balance: params.syAmount
         });
-        const ptAmount = await improvedBinarySearchPtAmount(params.syAmount, await this.getCurrentExchangeRate());
+        const ptAmount = await improvedBinarySearchPtAmount(params.syAmount, await this.getSyExchangeRate());
         const [syRemain, pt] = swapSyForExactPt(tx, {
             state: DEFAULT_STATE_ID,
             syCoin: sy,
@@ -194,7 +194,7 @@ export class KUSDCTransaction extends KamoTransaction {
         return tx;
     }
 
-    async getCurrentExchangeRate(): Promise<FixedPoint64> {
+    async getSyExchangeRate(): Promise<FixedPoint64> {
         const tx = new Transaction();
         getExchangeRate(tx, KUSDC_SYSTEM);
         const result = await suiClient.devInspectTransactionBlock({
@@ -244,7 +244,7 @@ export class KUSDCTransaction extends KamoTransaction {
             system: KUSDC_SYSTEM,
             clock: tx.object.clock()
         });
-        const syAmount = await getSyAmountNeedForExactPt(params.yoAmount, await this.getCurrentExchangeRate());
+        const syAmount = await getSyAmountNeedForExactPt(params.yoAmount, await this.getSyExchangeRate());
         const syCoinIn = tx.splitCoins(sy, [syAmount]);
         const [syRemain, pt, hotPotato2] = swapSyForExactPtWithHotPotato(tx, {
             state: DEFAULT_STATE_ID,

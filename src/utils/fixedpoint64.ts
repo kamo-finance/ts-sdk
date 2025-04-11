@@ -196,4 +196,8 @@ export class FixedPoint64 {
       return guess;
     }
   }
+
+  toBigNumber(): BigNumber {
+    return new BigNumber(this.value.toString()).div(BigNumber(2).pow(64));
+  }
 } 

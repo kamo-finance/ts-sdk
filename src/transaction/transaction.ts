@@ -86,7 +86,7 @@ export abstract class KamoTransaction {
     abstract swapSyForPt(params: SwapSyForPtParams): Promise<Transaction>;
     abstract swapSyForExactPt(params: SwapSyForExactPtParams): Promise<Transaction>;
     abstract swapYoForSy(params: SwapYoForSyParams): Promise<Transaction>;
-    abstract getCurrentExchangeRate(): Promise<FixedPoint64>;
+    abstract getSyExchangeRate(): Promise<FixedPoint64>;
     abstract newState(params: NewStateParams): Promise<Transaction>;
 }
 
