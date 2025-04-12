@@ -5,8 +5,8 @@ import { State } from "../kamo_generated/hasui_wrapper/wrapper/structs";
 import { Market } from "../kamo_generated/kamo/amm/structs";
 import { SwapSyForExactPtParams } from "../transaction";
 import { SUPPORTED_MARKETS } from "../const";
-import { mappingState } from "../transaction/utils";
-import { FixedPoint64 } from "./fixedpoint64";
+import { mappingState } from "../utils";
+import { FixedPoint64 } from "../utils/fixedpoint64";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 
 export interface NewYieldMarketParams {
@@ -42,6 +42,15 @@ export interface GetExchangeRatePtToAssetParams {
 
 const IMPLIED_RATE_TIME = BigInt(1000 * 60 * 60 * 24 * 365);
 
+// Error codes
+const EMarketZeroAmountsInput = 0;
+const EMarketInsufficientLiquidity = 1;
+const EMarketRateScalarBelowZero = 4;
+const EMarketZeroTotalPtOrTotalAsset = 5;
+const EMarketExchangeRateBelowOne = 6;
+const EMarketProportionTooHigh = 7;
+
+
 function syToAsset(syAmount: bigint, exchangeRate: FixedPoint64): bigint {
   return (syAmount * exchangeRate.value) >> BigInt(64);
 }
@@ -69,6 +78,9 @@ export class YieldMarket {
 
   getRateScalar(timeToExpiry: bigint): FixedPoint64 {
     const rateScalar = this.market.scalarRoot.value * IMPLIED_RATE_TIME / timeToExpiry;
+    if (rateScalar === BigInt(0)) {
+      throw new Error(`Market rate scalar below zero: ${EMarketRateScalarBelowZero}`);
+    }
     return new FixedPoint64(rateScalar);
   }
 
@@ -79,6 +91,9 @@ export class YieldMarket {
 
   getRateAnchor(params: GetRateAnchorParams): FixedPoint64 {
     const exchangeRate = this.getExchangeRateFromImpliedRate(new FixedPoint64(this.market.lastLnImpliedRate.value), params.timeToExpiry);
+    if (exchangeRate.value < BigInt(1)) {
+      throw new Error(`Market exchange rate below one: ${EMarketExchangeRateBelowOne}`);
+    }
     const proportion = FixedPoint64.CreateFromRational(params.totalPt, params.totalPt + params.totalAsset);
     const iProportion = FixedPoint64.CreateFromRational(proportion.value, FixedPoint64.CreateFromU128(BigInt(1)).value - proportion.value);
     const lnProportion = iProportion.ln();
@@ -96,6 +111,9 @@ export class YieldMarket {
     const rateScalar = this.getRateScalar(timeToExpiry);
     const totalPt = this.market.totalPt;
     const totalAsset = syToAsset(this.market.totalSy, exchangeRate);
+    if (totalPt === BigInt(0) || totalAsset === BigInt(0)) {
+      throw new Error(`Market zero total PT or total asset: ${EMarketZeroTotalPtOrTotalAsset}`);
+    }
     const rateAnchor = this.getRateAnchor({
         totalPt,
         totalAsset,
@@ -114,6 +132,9 @@ export class YieldMarket {
   getExchangeRatePtToAsset(params: GetExchangeRatePtToAssetParams): FixedPoint64 {
     const newPtAmount = params.sell ? params.totalPt + params.ptAmount : params.totalPt - params.ptAmount;
     const proportion = FixedPoint64.CreateFromRational(newPtAmount, params.totalPt + params.preCompute.totalAsset);
+    if (proportion.value > FixedPoint64.CreateFromRational(BigInt(96), BigInt(100)).value) {
+      throw new Error(`Market proportion too high: ${EMarketProportionTooHigh}`);
+    }
     const iProportion = FixedPoint64.CreateFromRational(proportion.value, FixedPoint64.CreateFromU128(BigInt(1)).value - proportion.value);
     const lnProportion = iProportion.ln();
     let exchangeRate;
@@ -121,6 +142,9 @@ export class YieldMarket {
         exchangeRate = params.preCompute.rateAnchor.subDivFixed64(lnProportion, params.preCompute.rateScalar);
     } else {
         exchangeRate = params.preCompute.rateAnchor.addDivFixed64(lnProportion, params.preCompute.rateScalar);
+    }
+    if (exchangeRate.value < BigInt(1)) {
+      throw new Error(`Market exchange rate below one: ${EMarketExchangeRateBelowOne}`);
     }
     return exchangeRate;
   } 
@@ -145,11 +169,17 @@ export class YieldMarket {
   } 
 
   executeSellSy(params: SimulateSwapSyForExactPtParams) {
+    if (params.ptAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input: ${EMarketZeroAmountsInput}`);
+    }
     const preComputeValue = this.preComputeValue(params.exchangeRate, params.now);
     const {
         syAmount: netSyToMarket,
         syFee: netSyFee,
     } = this.calcTrade(preComputeValue, params.exchangeRate, params.ptAmount, false);
+    if (netSyToMarket === BigInt(0) || netSyFee === BigInt(0)) {
+      throw new Error(`Market insufficient liquidity: ${EMarketInsufficientLiquidity}`);
+    }
     return {
         netSyToMarket,
         netSyFee

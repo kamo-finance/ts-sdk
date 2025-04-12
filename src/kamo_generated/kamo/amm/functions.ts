@@ -2,9 +2,9 @@ import {PUBLISHED_AT} from "..";
 import {obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface AddLiquidityArgs { market: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; exchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
+export interface AddLiquidityArgs { market: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; syExchangeRate: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function addLiquidity( tx: Transaction, typeArgs: [string, string], args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::add_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
+export function addLiquidity( tx: Transaction, typeArgs: [string, string], args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::add_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.syExchangeRate), obj(tx, args.clock) ], }) }
 
 export interface BorrowPtArgs { market: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
 
@@ -78,17 +78,17 @@ export interface SetNewMarketMarketTradeArgs { market: TransactionObjectInput; p
 
 export function setNewMarketMarketTrade( tx: Transaction, typeArgs: [string, string], args: SetNewMarketMarketTradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::set_new_market_market_trade`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.preCompute), obj(tx, args.exchangeRate), obj(tx, args.clock) ], }) }
 
-export interface SwapExactPtForSyArgs { market: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
+export interface SwapExactPtForSyArgs { market: TransactionObjectInput; syExchangeRate: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function swapExactPtForSy( tx: Transaction, typeArgs: [string, string], args: SwapExactPtForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::swap_exact_pt_for_sy`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.exchangeRate), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }
+export function swapExactPtForSy( tx: Transaction, typeArgs: [string, string], args: SwapExactPtForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::swap_exact_pt_for_sy`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.syExchangeRate), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }
 
 export interface SwapExactPtForSyWithHotPotatoArgs { market: TransactionObjectInput; hotPotato: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function swapExactPtForSyWithHotPotato( tx: Transaction, typeArgs: [string, string], args: SwapExactPtForSyWithHotPotatoArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::swap_exact_pt_for_sy_with_hot_potato`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.hotPotato), obj(tx, args.exchangeRate), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }
 
-export interface SwapSyForExactPtArgs { market: TransactionObjectInput; exchangeRate: TransactionObjectInput; syInCoin: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
+export interface SwapSyForExactPtArgs { market: TransactionObjectInput; syExchangeRate: TransactionObjectInput; syInCoin: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
 
-export function swapSyForExactPt( tx: Transaction, typeArgs: [string, string], args: SwapSyForExactPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::swap_sy_for_exact_pt`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.exchangeRate), obj(tx, args.syInCoin), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
+export function swapSyForExactPt( tx: Transaction, typeArgs: [string, string], args: SwapSyForExactPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::swap_sy_for_exact_pt`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.syExchangeRate), obj(tx, args.syInCoin), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
 
 export interface SwapSyForExactPtWithHotPotatoArgs { market: TransactionObjectInput; hotPotato: TransactionObjectInput; exchangeRate: TransactionObjectInput; exactSyInCoin: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
 

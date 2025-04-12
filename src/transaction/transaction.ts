@@ -1,4 +1,4 @@
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction, TransactionResult } from '@mysten/sui/transactions';
 import { createNewState } from '../kamo_generated/hasui_wrapper/wrapper/functions';
 import { createFromRawValue, createFromU128 } from '../kamo_generated/legato-math/fixed-point64/functions';
 import { suiClient } from '../client/client';
@@ -8,7 +8,7 @@ import BigNumber from 'bignumber.js';
 import { compressSuiAddress, compressSuiType } from '../kamo_generated/_framework/util';
 import { exp } from '../kamo_generated/legato-math/math-fixed64/functions';
 import { ln, nthRoot } from '../kamo_generated/legato-math/legato-math/functions';
-import { FixedPoint64 } from '../market/fixedpoint64';
+import { FixedPoint64 } from '../utils/fixedpoint64';
 import { getExchangeRatePtToAsset } from '../kamo_generated/kamo/amm/functions';
 
 export interface AddLiquidityParams {
@@ -33,7 +33,8 @@ export interface NewStateParams {
 }
 
 export interface MintParams {
-    sy_amount_in: bigint;
+    sy_amount_in?: bigint;
+    coin?: TransactionResult;
     sender: string;
     tx?: Transaction;
 }
@@ -85,7 +86,7 @@ export abstract class KamoTransaction {
     abstract swapSyForPt(params: SwapSyForPtParams): Promise<Transaction>;
     abstract swapSyForExactPt(params: SwapSyForExactPtParams): Promise<Transaction>;
     abstract swapYoForSy(params: SwapYoForSyParams): Promise<Transaction>;
-    abstract getCurrentExchangeRate(): Promise<FixedPoint64>;
+    abstract getSyExchangeRate(): Promise<FixedPoint64>;
     abstract newState(params: NewStateParams): Promise<Transaction>;
 }
 
