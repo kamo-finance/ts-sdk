@@ -7,9 +7,9 @@ describe("Binary functions", () => {
     test("equals", async () => {
         const ptAmount = Math.floor(Math.random() * 1000);
         const kamoTx = newKamoTransaction({
-            market: "HASUI",
+            market: "KUSDC",
         });
-        const exchangeRate = await kamoTx.getCurrentExchangeRate();
+        const exchangeRate = await kamoTx.getSyExchangeRate();
         const ptAmount1 = await improvedBinarySearchPtAmount(BigInt(ptAmount), exchangeRate);
         console.log(ptAmount1);
         const ptAmount2 = await binarySearchPtAmount(kamoTx, BigInt(ptAmount));
