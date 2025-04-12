@@ -1,7 +1,8 @@
 import BigNumber from "bignumber.js";
 import { suiClient } from "../client";
 import { PhantomTypeArgument } from "../kamo_generated/_framework/reified";
-import { State } from "../kamo_generated/hasui_wrapper/wrapper/structs";
+import { State as HasuiState, State } from "../kamo_generated/hasui_wrapper/wrapper/structs";
+import { State as KusdcState } from "../kamo_generated/kusdc_wrapper/wrapper/structs";
 import { Market } from "../kamo_generated/kamo/amm/structs";
 import { SwapSyForExactPtParams } from "../transaction";
 import { SUPPORTED_MARKETS } from "../const";
@@ -65,9 +66,18 @@ export class YieldMarket {
   static async GetFromState(params: NewYieldMarketParams): Promise<YieldMarket> {
     const type = mappingState(params.stateId);
     if (type === SUPPORTED_MARKETS.HASUI) {
-      const state = await State.fetch(new SuiClient(
+      const state = await HasuiState.fetch(new SuiClient(
       {
-          url: getFullnodeUrl("mainnet"),
+          url: getFullnodeUrl("testnet"),
+      }), params.stateId);
+      const yieldMarket = new YieldMarket();
+      yieldMarket.market = state.market;
+      return yieldMarket;
+    }
+    if (type === SUPPORTED_MARKETS.KUSDC) {
+      const state = await KusdcState.fetch(new SuiClient(
+      {
+          url: getFullnodeUrl("testnet"),
       }), params.stateId);
       const yieldMarket = new YieldMarket();
       yieldMarket.market = state.market;
