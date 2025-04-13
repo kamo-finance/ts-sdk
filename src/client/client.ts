@@ -17,6 +17,7 @@ export const suiClient = new SuiClient(
 );
 
 export interface CreateNewKamoClientParams {
+    client: SuiClient;
 }
 
 export interface GetYieldObjectsParams {
@@ -39,9 +40,16 @@ export interface GetMintAmountParams {
     syAmount: bigint;
 }
 
-class KamoClient {    
-    constructor(params: CreateNewKamoClientParams) {
+export interface GetLiquidityAmountParams {
+    stateId: string;
+    owner: string;
+}
 
+export class KamoClient {    
+    private client: SuiClient;
+
+    constructor(params: CreateNewKamoClientParams) {
+        this.client = params.client;
     }
 
     async getYieldObjects(params: GetYieldObjectsParams) {
@@ -49,16 +57,16 @@ class KamoClient {
         const type = mappingState(params.stateId);
         let state: any = undefined;
         if (type === SUPPORTED_MARKETS.HASUI) {
-            state = await HasuiState.fetch(suiClient, stateId);
+            state = await HasuiState.fetch(this.client, stateId);
         }
         if (type === SUPPORTED_MARKETS.KUSDC) {
-            state = await KusdcState.fetch(suiClient, stateId);
+            state = await KusdcState.fetch(this.client, stateId);
         }   
         if (!state) {
             throw `Could not get state: ${stateId}`;
         }
         const yieldObjectType = `${KAMO_PACKAGE}::yield_object::YieldObject<${state.market.$typeArgs[0]},${state.market.$typeArgs[1]}>`;
-        const ownedObject = await suiClient.getOwnedObjects({
+        const ownedObject = await this.client.getOwnedObjects({
             owner: params.owner,
             options: {
                 showType: true,
@@ -103,32 +111,29 @@ class KamoClient {
         })).reduce((acc, yo) => {
             return acc + BigInt(yo.amount);
         }, BigInt(0));
+
+        const lpObjects = await this.client.getOwnedObjects({
+            owner: params.owner,
+            options: {
+                showType: true,
+                showContent: true,
+            },
+            filter: {
+                StructType: `0x2::coin::Coin<${KAMO_PACKAGE}::amm::LP<${state.market.$typeArgs[0]},${state.market.$typeArgs[1]}>>`,
+            }
+        });
+        const liquidityBalance = lpObjects.data.reduce((acc, lp) => {
+            return acc + BigInt((lp.data as any).content.fields.balance);
+        }, BigInt(0));
+
         return {
             syBalance,
             ptBalance,
-            yoBalance,
+            yoBalance, 
+            liquidityBalance,
         };
     }
 
-    async getMintAmount(params: GetMintAmountParams) {
-        const stateId = params.stateId;
-        const type = mappingState(params.stateId);
-        let state: HasuiState | KusdcState | undefined = undefined; 
-        if (type === SUPPORTED_MARKETS.HASUI) {
-            state = await HasuiState.fetch(suiClient, stateId);
-        }
-        if (type === SUPPORTED_MARKETS.KUSDC) {
-            state = await KusdcState.fetch(suiClient, stateId);
-        }
-        if (!state) {
-            throw `Could not get state: ${stateId}`;
-        }
-        const kamoTx = newKamoTransaction({
-            stateId: params.stateId,
-        });
-        const exchangeRate = await kamoTx.getSyExchangeRate();
-        return exchangeRate.mul(FixedPoint64.CreateFromU128(params.syAmount));
-    }
     // async getUnclaimedSyAmount(params: GetUnclaimedSyAmountParams) {
     //     try {
     //         let type = mappingState(params.stateId);
@@ -146,5 +151,3 @@ class KamoClient {
     //     }
     // }
 }
-
-export const kamoClient = new KamoClient({});

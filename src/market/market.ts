@@ -4,9 +4,10 @@ import { PhantomTypeArgument } from "../kamo_generated/_framework/reified";
 import { State as HasuiState, State } from "../kamo_generated/hasui_wrapper/wrapper/structs";
 import { State as KusdcState } from "../kamo_generated/kusdc_wrapper/wrapper/structs";
 import { Market } from "../kamo_generated/kamo/amm/structs";
-import { SwapSyForExactPtParams } from "../transaction";
+import { RemoveLiquidityParams, SwapSyForExactPtParams } from "../transaction";
 import { SUPPORTED_MARKETS } from "../const";
-import { mappingState } from "../utils";
+import { improvedBinarySearchPtAmount, mappingState } from "../utils";
+import { BigIntMath } from "../utils/bigint_math";
 import { FixedPoint64 } from "../utils/fixedpoint64";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 
@@ -18,6 +19,26 @@ export interface SimulateSwapSyForExactPtParams {
   ptAmount: bigint;
   exchangeRate: FixedPoint64;
   now: number;
+}
+
+export interface SimulateSwapExactPtForSyParams {
+  ptAmount: bigint;
+  exchangeRate: FixedPoint64;
+  now: number;
+}
+
+export interface SimulateSwapExactSyForPtParams {
+  syAmount: bigint;
+  exchangeRate: FixedPoint64;
+  now: number;
+}
+
+export interface SimulateAddLiquidityExactPtParams {
+  ptAmount: bigint;
+}
+
+export interface SimulateAddLiquidityExactSyParams {
+  syAmount: bigint;
 }
 
 export interface GetRateAnchorParams {
@@ -41,15 +62,16 @@ export interface GetExchangeRatePtToAssetParams {
     sell: boolean;
 }
 
-const IMPLIED_RATE_TIME = BigInt(1000 * 60 * 60 * 24 * 365);
+export interface SimulateAddLiquidityParams {
+    ptAmount: bigint;
+    syAmount: bigint;
+}
 
-// Error codes
-const EMarketZeroAmountsInput = 0;
-const EMarketInsufficientLiquidity = 1;
-const EMarketRateScalarBelowZero = 4;
-const EMarketZeroTotalPtOrTotalAsset = 5;
-const EMarketExchangeRateBelowOne = 6;
-const EMarketProportionTooHigh = 7;
+export interface SimulateRemoveLiquidityParams {
+    lpAmount: bigint;
+}
+
+const IMPLIED_RATE_TIME = BigInt(1000 * 60 * 60 * 24 * 365);
 
 
 function syToAsset(syAmount: bigint, exchangeRate: FixedPoint64): bigint {
@@ -62,6 +84,7 @@ function assetToSy(assetAmount: bigint, exchangeRate: FixedPoint64): bigint {
 
 export class YieldMarket {
   market: Market<PhantomTypeArgument, PhantomTypeArgument>;
+  stateId: string;
 
   static async GetFromState(params: NewYieldMarketParams): Promise<YieldMarket> {
     const type = mappingState(params.stateId);
@@ -72,6 +95,7 @@ export class YieldMarket {
       }), params.stateId);
       const yieldMarket = new YieldMarket();
       yieldMarket.market = state.market;
+      yieldMarket.stateId = params.stateId;
       return yieldMarket;
     }
     if (type === SUPPORTED_MARKETS.KUSDC) {
@@ -81,6 +105,7 @@ export class YieldMarket {
       }), params.stateId);
       const yieldMarket = new YieldMarket();
       yieldMarket.market = state.market;
+      yieldMarket.stateId = params.stateId;
       return yieldMarket;
     }
     throw new Error("Unsupported market type");
@@ -89,7 +114,7 @@ export class YieldMarket {
   getRateScalar(timeToExpiry: bigint): FixedPoint64 {
     const rateScalar = this.market.scalarRoot.value * IMPLIED_RATE_TIME / timeToExpiry;
     if (rateScalar === BigInt(0)) {
-      throw new Error(`Market rate scalar below zero: ${EMarketRateScalarBelowZero}`);
+      throw new Error(`Market rate scalar below zero`);
     }
     return new FixedPoint64(rateScalar);
   }
@@ -102,7 +127,7 @@ export class YieldMarket {
   getRateAnchor(params: GetRateAnchorParams): FixedPoint64 {
     const exchangeRate = this.getExchangeRateFromImpliedRate(new FixedPoint64(this.market.lastLnImpliedRate.value), params.timeToExpiry);
     if (exchangeRate.value < BigInt(1)) {
-      throw new Error(`Market exchange rate below one: ${EMarketExchangeRateBelowOne}`);
+      throw new Error(`Market exchange rate below one`);
     }
     const proportion = FixedPoint64.CreateFromRational(params.totalPt, params.totalPt + params.totalAsset);
     const iProportion = FixedPoint64.CreateFromRational(proportion.value, FixedPoint64.CreateFromU128(BigInt(1)).value - proportion.value);
@@ -122,7 +147,7 @@ export class YieldMarket {
     const totalPt = this.market.totalPt;
     const totalAsset = syToAsset(this.market.totalSy, exchangeRate);
     if (totalPt === BigInt(0) || totalAsset === BigInt(0)) {
-      throw new Error(`Market zero total PT or total asset: ${EMarketZeroTotalPtOrTotalAsset}`);
+      throw new Error(`Market zero total PT or total asset`);
     }
     const rateAnchor = this.getRateAnchor({
         totalPt,
@@ -143,7 +168,7 @@ export class YieldMarket {
     const newPtAmount = params.sell ? params.totalPt + params.ptAmount : params.totalPt - params.ptAmount;
     const proportion = FixedPoint64.CreateFromRational(newPtAmount, params.totalPt + params.preCompute.totalAsset);
     if (proportion.value > FixedPoint64.CreateFromRational(BigInt(96), BigInt(100)).value) {
-      throw new Error(`Market proportion too high: ${EMarketProportionTooHigh}`);
+      throw new Error(`Market proportion too high`);
     }
     const iProportion = FixedPoint64.CreateFromRational(proportion.value, FixedPoint64.CreateFromU128(BigInt(1)).value - proportion.value);
     const lnProportion = iProportion.ln();
@@ -154,7 +179,7 @@ export class YieldMarket {
         exchangeRate = params.preCompute.rateAnchor.addDivFixed64(lnProportion, params.preCompute.rateScalar);
     }
     if (exchangeRate.value < BigInt(1)) {
-      throw new Error(`Market exchange rate below one: ${EMarketExchangeRateBelowOne}`);
+      throw new Error(`Market exchange rate below one`);
     }
     return exchangeRate;
   } 
@@ -178,21 +203,230 @@ export class YieldMarket {
     }
   } 
 
-  executeSellSy(params: SimulateSwapSyForExactPtParams) {
+  swapSyForExactPt(params: SimulateSwapSyForExactPtParams) {
     if (params.ptAmount === BigInt(0)) {
-      throw new Error(`Market zero amounts input: ${EMarketZeroAmountsInput}`);
+      throw new Error(`Market zero amounts input`);
     }
     const preComputeValue = this.preComputeValue(params.exchangeRate, params.now);
     const {
         syAmount: netSyToMarket,
         syFee: netSyFee,
     } = this.calcTrade(preComputeValue, params.exchangeRate, params.ptAmount, false);
-    if (netSyToMarket === BigInt(0) || netSyFee === BigInt(0)) {
-      throw new Error(`Market insufficient liquidity: ${EMarketInsufficientLiquidity}`);
+    if (netSyToMarket === BigInt(0)) {
+      throw new Error(`Market insufficient liquidity`);
     }
     return {
         netSyToMarket,
         netSyFee
     }
+  }
+
+  async swapExactSyForPt(params: SimulateSwapExactSyForPtParams) {
+    if (params.syAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input`);
+    }
+    const ptToAccount = await improvedBinarySearchPtAmount(this.stateId, params.syAmount, params.exchangeRate);
+    return { 
+      ptToAccount,
+
+    } 
+  }
+
+  swapExactPtForSy(params: SimulateSwapExactPtForSyParams) {
+    if (params.ptAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input`);
+    }
+    const preComputeValue = this.preComputeValue(params.exchangeRate, params.now);
+    const {
+      syAmount: netSyToAccount,
+      syFee: netSyFee,
+    } = this.calcTrade(preComputeValue, params.exchangeRate, params.ptAmount, true);
+    if (netSyToAccount === BigInt(0)) {
+      throw new Error(`Market insufficient liquidity`);
+    }
+    return {
+        netSyToAccount,
+        netSyFee
+    }
+  }
+
+  addLiquidity(params: SimulateAddLiquidityParams): {
+    ptUsed: bigint;
+    syUsed: bigint;
+    lpToAccount: bigint;
+  } {
+    const {
+      ptAmount,
+      syAmount,
+    } = params;
+
+    if (ptAmount === BigInt(0) || syAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input`);
+    }
+
+    const currentLp = this.market.lpSupply.value;
+    const totalPt = this.market.totalPt;
+    const totalSy = this.market.totalSy;
+
+    let lpToAccount = BigInt(0);
+    let lpToReserve = BigInt(0);
+    let syUsed = BigInt(0);
+    let ptUsed = BigInt(0);
+
+    if (currentLp === BigInt(0)) {
+      // First liquidity provider
+      lpToAccount = BigIntMath.sqrt(ptAmount * syAmount) - BigInt(1000); // MINIMUM_LIQUIDITY
+      lpToReserve = BigInt(1000);
+      syUsed = syAmount;
+      ptUsed = ptAmount;
+    } else {
+      const netLpByPt = (ptAmount * currentLp) / totalPt;
+      const netLpBySy = (syAmount * currentLp) / totalSy;
+
+      if (netLpByPt < netLpBySy) {
+        lpToAccount = netLpByPt;
+        ptUsed = ptAmount;
+        syUsed = (totalSy * lpToAccount) / currentLp;
+      } else {
+        lpToAccount = netLpBySy;
+        syUsed = syAmount;
+        ptUsed = (totalPt * lpToAccount) / currentLp;
+      }
+    }
+
+    if (lpToAccount <= BigInt(0) || syUsed <= BigInt(0) || ptUsed <= BigInt(0)) {
+      throw new Error(`Market insufficient liquidity`);
+    }
+
+    if (ptUsed > ptAmount) {
+      throw new Error(`Market insufficient amount`);
+    }
+
+    if (syUsed > syAmount) {
+      throw new Error(`Market insufficient amount`);
+    }
+
+    return {
+      ptUsed,
+      syUsed,
+      lpToAccount,
+    };
+  }
+
+  addLiquidityExactPt(params: SimulateAddLiquidityExactPtParams): {
+    syNeeded: bigint;
+    lpToAccount: bigint;
+  } {
+    const {
+      ptAmount,
+    } = params;
+
+    if (ptAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input`);
+    }
+
+    let left = BigInt(0);
+    let right = BigInt(2) ** BigInt(32);
+    while (right - left > BigInt(1)) {
+      const mid = (left + right) / BigInt(2);
+      const {
+        ptUsed,
+        syUsed,
+      } = this.addLiquidity({
+        ptAmount,
+        syAmount: mid,
+      });
+      console.log(mid, left, right, ptUsed, syUsed);
+      if (ptUsed >= ptAmount) {
+        right = mid;
+      } else {
+        left = mid;
+      }
+    }
+    const {
+      ptUsed,
+      syUsed,
+      lpToAccount,
+    } = this.addLiquidity({
+      ptAmount,
+      syAmount: right,
+    });
+    return {
+      syNeeded: right,
+      lpToAccount,
+    }
+  }  
+
+  addLiquidityExactSy(params: SimulateAddLiquidityExactSyParams): {
+    ptNeeded: bigint;
+    lpToAccount: bigint;
+  } {
+    const {
+      syAmount,
+    } = params;
+
+    if (syAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input`);
+    }
+    
+    let left = BigInt(0);
+    let right = BigInt(2) ** BigInt(32);
+    while (right - left > BigInt(1)) {
+      const mid = (left + right) / BigInt(2);
+      const {
+        syUsed,
+      } = this.addLiquidity({
+        ptAmount: mid,
+        syAmount,
+      });
+      if (syUsed >= syAmount) {
+        right = mid;
+      } else {
+        left = mid;
+      }
+    }
+    const {
+      ptUsed,
+      syUsed,
+      lpToAccount,
+    } = this.addLiquidity({
+      ptAmount: right,
+      syAmount,
+    });
+    return {
+      ptNeeded: right,
+      lpToAccount,
+    }
+  }
+
+  removeLiquidity(params: SimulateRemoveLiquidityParams): {
+    ptToAccount: bigint;
+    syToAccount: bigint;
+    lpToMarket: bigint;
+  } {
+    const {
+      lpAmount
+    } = params;
+
+    if (!lpAmount) {
+      throw new Error(`Market zero amounts input`);
+    }
+
+    const currentLp = this.market.lpSupply.value;
+    const totalPt = this.market.totalPt;
+    const totalSy = this.market.totalSy;
+
+    const netSyToAccount = (lpAmount * totalSy) / currentLp;
+    const netPtToAccount = (lpAmount * totalPt) / currentLp;
+
+    if (netSyToAccount === BigInt(0) || netPtToAccount === BigInt(0)) {
+      throw new Error(`Market insufficient liquidity`);
+    }
+
+    return {
+      ptToAccount: netPtToAccount,
+      syToAccount: netSyToAccount,
+      lpToMarket: lpAmount,
+    };
   }
 }

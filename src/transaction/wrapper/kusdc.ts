@@ -1,6 +1,6 @@
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
 import { FACTORY, STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
-import { kamoClient, suiClient } from "../../client/client";
+import { KamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
 import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../../utils";
 import { FixedPoint64 as MoveFixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
@@ -49,6 +49,9 @@ export class KUSDCTransaction extends KamoTransaction {
             type: state.market.$typeArgs[0],
             balance: params.ptAmountBurned
         }); 
+        const kamoClient = new KamoClient({
+            client: suiClient
+        });
         const yieldObjects = await kamoClient.getYieldObjects({
             stateId: DEFAULT_STATE_ID,
             owner: params.sender
@@ -164,7 +167,7 @@ export class KUSDCTransaction extends KamoTransaction {
             type: state.market.$typeArgs[1],
             balance: params.syAmount
         });
-        const ptAmount = await improvedBinarySearchPtAmount(params.syAmount, await this.getSyExchangeRate());
+        const ptAmount = await improvedBinarySearchPtAmount(DEFAULT_STATE_ID, params.syAmount, await this.getSyExchangeRate());
         const [syRemain, pt] = swapSyForExactPt(tx, {
             state: DEFAULT_STATE_ID,
             syCoin: sy,
@@ -207,6 +210,9 @@ export class KUSDCTransaction extends KamoTransaction {
     }
 
     async swapYoForSy(params: SwapYoForSyParams) {
+        const kamoClient = new KamoClient({
+            client: suiClient
+        });
         const yieldObjects = await kamoClient.getYieldObjects({
             stateId: DEFAULT_STATE_ID,
             owner: params.sender
@@ -244,7 +250,7 @@ export class KUSDCTransaction extends KamoTransaction {
             system: KUSDC_SYSTEM,
             clock: tx.object.clock()
         });
-        const syAmount = await getSyAmountNeedForExactPt(params.yoAmount, await this.getSyExchangeRate());
+        const syAmount = await getSyAmountNeedForExactPt(DEFAULT_STATE_ID, BigInt(params.yoAmount), await this.getSyExchangeRate());
         const syCoinIn = tx.splitCoins(sy, [syAmount]);
         const [syRemain, pt, hotPotato2] = swapSyForExactPtWithHotPotato(tx, {
             state: DEFAULT_STATE_ID,

@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { expFixedPoint64, KamoTransaction, newKamoTransaction, nthRootFixedPoint64 } from "./transaction";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { kamoClient, suiClient } from "./client/client";
+import { KamoClient, suiClient } from "./client/client";
 import { bcs } from "@mysten/sui/bcs";
 import dotenv from "dotenv";
 import { binarySearchPtAmount, FixedPoint64, improvedBinarySearchPtAmount } from "./utils";
@@ -9,6 +9,7 @@ import { STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "./const";
 import { firstPutUsdc } from "./kamo_generated/kusdc/system/functions";
 import { KUSDCTransaction } from "./transaction/wrapper/kusdc"; 
 import { value } from './kamo_generated/sui/nitro-attestation/functions';
+import { YieldMarket } from "./market";
 dotenv.config();
 
 const pk = process.env.SUI_PRIVATE_KEY ?? "";
@@ -126,33 +127,58 @@ async function first_put_usdc() {
   }
 }
 
-// async function addLiquidity() {
-//   const kamoTx = newKamoTransaction({
-//     market: "KUSDC",
-//   });
-//   const tx = await kamoTx.addLiquidity({
-//     amountPT: 2097,
-//     amountSY: 2000,
-//     sender: kp.toSuiAddress(),
-//   });
-//   tx.setSender(kp.toSuiAddress());
-//   tx.setGasBudget(100000000);
-//   const builtTx = await tx.build({
-//     client: suiClient,
-//   });
-//   const result = await suiClient.dryRunTransactionBlock({
-//     transactionBlock: builtTx,
-//   });
-//   if (result.effects.status.status === "success") {
-//     const digest = await suiClient.signAndExecuteTransaction({
-//       transaction: tx,
-//       signer: kp,
-//     });
-//     console.log(digest);
-//   } else {
-//     console.log(result);
-//   }
-// }
+async function addLiquidity() {
+  const kamoTx = newKamoTransaction({
+    market: "KUSDC",
+  });
+  const market = await YieldMarket.GetFromState({
+    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+  });
+  // const {
+  //   syNeeded,
+  //   lpToAccount
+  // } = market.addLiquidityExactPt({
+  //   ptAmount: BigInt(2000),
+  // });
+  // console.log(syNeeded, lpToAccount);
+  // const tx = await kamoTx.addLiquidity({
+  //   amountPT: Number(2000),
+  //   amountSY: Number(syNeeded),
+  //   sender: kp.toSuiAddress(),
+  // });
+
+  const {
+    ptNeeded,
+    lpToAccount: lpToAccount,
+  } = market.addLiquidityExactSy({
+    syAmount: BigInt(2000),
+  });
+  console.log(ptNeeded, lpToAccount);
+  const tx = await kamoTx.addLiquidity({
+    amountPT: Number(ptNeeded),
+    amountSY: Number(2000),
+    sender: kp.toSuiAddress(),
+  });
+
+  tx.setSender(kp.toSuiAddress());
+  tx.setGasBudget(100000000);
+  const builtTx = await tx.build({
+    client: suiClient,
+  });
+  const result = await suiClient.dryRunTransactionBlock({
+    transactionBlock: builtTx,
+  });
+  console.log(result);
+  // if (result.effects.status.status === "success") {
+  //   const digest = await suiClient.signAndExecuteTransaction({
+  //     transaction: tx,
+  //     signer: kp,
+  //   });
+  //   console.log(digest);
+  // } else {
+  //   console.log(result);
+  // }
+}
 
 async function removeLiquidity() {
   const kamoTx = newKamoTransaction({
@@ -185,6 +211,20 @@ async function swapPtForSy() {
   const kamoTx = newKamoTransaction({
     market: "KUSDC",
   });
+  const exchangeRate = await kamoTx.getSyExchangeRate();
+  const market = await YieldMarket.GetFromState({
+    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+  });
+  const {
+    netSyToAccount,
+    netSyFee
+  } = market.swapExactPtForSy({
+    ptAmount: BigInt(100),
+    exchangeRate,
+    now: Date.now(),
+  });
+  console.log("netSyToAccount", netSyToAccount);
+  console.log("netSyFee", netSyFee);
   const tx = await kamoTx.swapPtForSy({
     ptAmount: BigInt(100),
     sender: kp.toSuiAddress(),
@@ -222,6 +262,16 @@ async function swapSyForPt() {
   const kamoTx = newKamoTransaction({
     market: "KUSDC",
   });
+  const exchangeRate = await kamoTx.getSyExchangeRate();
+  const market = await YieldMarket.GetFromState({
+    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+  });
+  const a = await market.swapExactSyForPt({
+    syAmount: BigInt(100),
+    exchangeRate,
+    now: Date.now(),
+  });
+  console.log(a);
   const tx = await kamoTx.swapSyForPt({
     syAmount: BigInt(100),
     sender: kp.toSuiAddress(),
@@ -235,14 +285,15 @@ async function swapSyForPt() {
     transactionBlock: builtTx,
   });
   if (result.effects.status.status === "success") {
-    const digest = await suiClient.signAndExecuteTransaction({
-      transaction: tx,
-      signer: kp,
-      options: {
-        showEvents: true,
-      }
-    });
-    console.log(digest);
+    // const digest = await suiClient.signAndExecuteTransaction({
+    //   transaction: tx,
+    //   signer: kp,
+    //   options: {
+    //     showEvents: true,
+    //   }
+    // });
+    const digest = result;
+    console.log(digest.events?.[0]?.parsedJson);
     const events = digest.events?.[0]?.parsedJson as any;
     const ln_implied_rate_after_action = events.ln_implied_rate_after_action.value;
     const fixed_point64_ln_implied_rate_after_action = new FixedPoint64(BigInt(ln_implied_rate_after_action));
@@ -256,22 +307,24 @@ async function swapSyForPt() {
 }
 
 async function query() {
-  // const exchangRate = await newKamoTransaction({
-  //   market: "KUSDC",
-  // }).getSyExchangeRate();
-  // console.log(exchangRate);
-
-  // const ptAmount = await kamoClient.getMintAmount({
-  //   stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
-  //   syAmount: BigInt(1000),
-  // });
-  // console.log(ptAmount.toBigNumber().toString());
+  const exchangRate = await newKamoTransaction({
+    market: "KUSDC",
+  }).getSyExchangeRate();
+  const kamoClient = new KamoClient({
+    client: suiClient,
+  });
 
   // const yieldObjects = await kamoClient.getYieldObjects({
   //   stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
   //   owner: kp.toSuiAddress(),
   // });
-  // console.log(exchangRate);
+
+  const balances = await kamoClient.getBalances({
+    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+    owner: kp.toSuiAddress(),
+  });
+
+  console.log(exchangRate, balances);
 }
 
 async function main() {
@@ -312,7 +365,7 @@ async function swapYoForSy() {
   const kamoTx = newKamoTransaction({
     market: "HASUI",
   });
-  console.log(await improvedBinarySearchPtAmount(BigInt(809), await kamoTx.getSyExchangeRate()));
+  console.log(await improvedBinarySearchPtAmount(STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!, BigInt(809), await kamoTx.getSyExchangeRate()));
   const tx = await kamoTx.swapYoForSy({
     yoAmount: BigInt(1000),
     sender: kp.toSuiAddress(),
@@ -338,13 +391,13 @@ async function swapYoForSy() {
 
 // main();
 
-query();
+// query();
 
 // currentTimestamp();
 
 // mint();
 
-// addLiquidity();
+addLiquidity();
 
 // removeLiquidity();
 

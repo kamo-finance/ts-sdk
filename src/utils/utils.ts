@@ -37,9 +37,9 @@ export const binarySearchPtAmount = async (tx: KamoTransaction, syAmount: bigint
     return left;
 }
 
-export const improvedBinarySearchPtAmount = async (syAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
+export const improvedBinarySearchPtAmount = async (marketId: string, syAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
     const yieldMarket = await YieldMarket.GetFromState({
-        stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!,
+        stateId: marketId,
     });
     let left = BigInt(0);
     let right = yieldMarket.market.totalPt;
@@ -50,7 +50,7 @@ export const improvedBinarySearchPtAmount = async (syAmount: bigint, exchangeRat
             const {
                 netSyToMarket,
                 netSyFee
-            } = yieldMarket.executeSellSy({
+            } = yieldMarket.swapSyForExactPt({
                 ptAmount: mid,
                 exchangeRate,
                 now,
@@ -67,7 +67,7 @@ export const improvedBinarySearchPtAmount = async (syAmount: bigint, exchangeRat
     const {
         netSyToMarket,
         netSyFee
-    } = yieldMarket.executeSellSy({
+    } = yieldMarket.swapSyForExactPt({
         ptAmount: left + BigInt(1),
         exchangeRate,
         now,
@@ -75,15 +75,15 @@ export const improvedBinarySearchPtAmount = async (syAmount: bigint, exchangeRat
     return left;
 }
 
-export const getSyAmountNeedForExactPt = async (ptAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
+export const getSyAmountNeedForExactPt = async (marketId: string, ptAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
     const yieldMarket = await YieldMarket.GetFromState({
-        stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!,
+        stateId: marketId,
     });
     const now = Date.now();
     const {
         netSyToMarket,
         netSyFee
-    } = yieldMarket.executeSellSy({
+    } = yieldMarket.swapSyForExactPt({
         ptAmount,
         exchangeRate,
         now,

@@ -1,5 +1,3 @@
-import { N } from "vitest/dist/chunks/reporters.66aFHiyX";
-import { ln } from "../kamo_generated/legato-math/legato-math/functions";
 import BigNumber from "bignumber.js";
 
 const LN2 = BigInt("12786308645202655660");
@@ -101,6 +99,17 @@ export class FixedPoint64 {
     } else {
       return new FixedPoint64(x.value - this.value);
     }
+  }
+
+  mul_bigint(x: bigint): FixedPoint64 {
+    return new FixedPoint64(this.value * x);
+  }
+
+  div_bigint(x: bigint): FixedPoint64 {
+    if (x === BigInt(0)) {
+      throw new Error("Division by zero");
+    }
+    return new FixedPoint64(this.value / x);
   }
 
   mul(x: FixedPoint64): FixedPoint64 {
