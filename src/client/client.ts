@@ -45,6 +45,10 @@ export interface GetLiquidityAmountParams {
     owner: string;
 }
 
+export interface GetPositionsParams {
+    owner: string;
+}
+
 export class KamoClient {    
     private client: SuiClient;
 
@@ -132,6 +136,13 @@ export class KamoClient {
             yoBalance, 
             liquidityBalance,
         };
+    }
+
+    async getPositions(params: GetPositionsParams) {
+        for (const market of Object.values(SUPPORTED_MARKETS)) {
+            console.log(market);
+            
+        }
     }
 
     // async getUnclaimedSyAmount(params: GetUnclaimedSyAmountParams) {

@@ -76,6 +76,12 @@ export interface SwapYoForSyParams {
     tx?: Transaction;
 }
 
+export interface SwapSyForYoParams {
+    syAmount: bigint;
+    sender: string;
+    tx?: Transaction;
+}
+
 export abstract class KamoTransaction {
     abstract mint(params: MintParams): Promise<Transaction>;
     abstract redeemBeforeMaturity(params: RedeemBeforeMaturityParams): Promise<Transaction>;
@@ -86,6 +92,7 @@ export abstract class KamoTransaction {
     abstract swapSyForPt(params: SwapSyForPtParams): Promise<Transaction>;
     abstract swapSyForExactPt(params: SwapSyForExactPtParams): Promise<Transaction>;
     abstract swapYoForSy(params: SwapYoForSyParams): Promise<Transaction>;
+    abstract swapSyForYo(params: SwapSyForYoParams): Promise<Transaction>;
     abstract getSyExchangeRate(): Promise<FixedPoint64>;
     abstract newState(params: NewStateParams): Promise<Transaction>;
 }

@@ -37,7 +37,10 @@ export const binarySearchPtAmount = async (tx: KamoTransaction, syAmount: bigint
     return left;
 }
 
-export const improvedBinarySearchPtAmount = async (marketId: string, syAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
+export const improvedBinarySearchPtAmount = async (marketId: string, syAmount: bigint, exchangeRate: FixedPoint64): Promise<{
+    ptOut: bigint;
+    syUsed: bigint;
+}> => {
     const yieldMarket = await YieldMarket.GetFromState({
         stateId: marketId,
     });
@@ -64,14 +67,53 @@ export const improvedBinarySearchPtAmount = async (marketId: string, syAmount: b
             right = mid;
         }
     }
-    const {
-        netSyToMarket,
-        netSyFee
-    } = yieldMarket.swapSyForExactPt({
-        ptAmount: left + BigInt(1),
-        exchangeRate,
-        now,
+    let syUsed = BigInt(0);
+    try {
+        const {
+            netSyToMarket,
+            netSyFee
+        } = yieldMarket.swapSyForExactPt({
+            ptAmount: left,
+            exchangeRate,
+            now,
+        });
+        syUsed = netSyToMarket + netSyFee;
+        console.log(netSyToMarket, netSyFee);
+    } catch (e) {
+
+    }
+    console.log(left);
+    return {
+        ptOut: left,
+        syUsed,
+    }
+}
+
+export const binarySearchSyAmountToYT = async (marketId: string, syAmount: bigint, exchangeRate: FixedPoint64): Promise<bigint> => {
+    const yieldMarket = await YieldMarket.GetFromState({
+        stateId: marketId,
     });
+    let left = BigInt(0);
+    let right = yieldMarket.market.totalSy;
+    while (right - left > 1) {
+        const mid = (left + right) / BigInt(2);
+        console.log("mid", mid);
+        const totalSy = mid + syAmount;
+        const ptToMint = BigInt(exchangeRate.mul_bigint(totalSy).toBigNumber().toString());   
+        const {
+            netSyToAccount,
+            netSyFee,
+        } = yieldMarket.swapExactPtForSy({
+            ptAmount: ptToMint,
+            exchangeRate,
+            now: Date.now(),
+        });
+        if (mid <= netSyToAccount) {
+            left = mid;
+        } else {
+            right = mid;
+        }
+    }
     return left;
 }
 

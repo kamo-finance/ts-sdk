@@ -1,5 +1,5 @@
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
-import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForPtParams, SwapSyForExactPtParams, SwapYoForSyParams, NewStateParams } from "../transaction";
+import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForPtParams, SwapSyForExactPtParams, SwapYoForSyParams, NewStateParams, SwapSyForYoParams } from "../transaction";
 import { addLiquidity, borrowPt, createNewState, getExchangeRate, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, removeLiquidity, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPtWithHotPotato } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { State } from "../../kamo_generated/hasui_wrapper/wrapper/structs";
 import { FACTORY, STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
@@ -165,12 +165,15 @@ export class HasuiTransaction extends KamoTransaction {
             type: state.market.$typeArgs[1],
             balance: params.syAmount
         });
-        const ptAmount = await improvedBinarySearchPtAmount(DEFAULT_STATE_ID, params.syAmount, await this.getSyExchangeRate());
+        const {
+            ptOut,
+            syUsed,
+        } = await improvedBinarySearchPtAmount(DEFAULT_STATE_ID, params.syAmount, await this.getSyExchangeRate());
         const pt = swapSyForExactPt(tx, {
             state: DEFAULT_STATE_ID,
             syCoin: sy,
             staking: HAEDAL_STAKING,
-            ptAmount,
+            ptAmount: ptOut,
             clock: tx.object.clock()
         });
         tx.transferObjects([pt], params.sender);
@@ -266,6 +269,11 @@ export class HasuiTransaction extends KamoTransaction {
         tx.transferObjects([sy, syRemain], params.sender);
         return tx;
     }
+
+    async swapSyForYo(params: SwapSyForYoParams) {
+        return new Transaction();
+    }
+    
 
     async newState(params: NewStateParams) {
         const tx = new Transaction();

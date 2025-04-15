@@ -126,7 +126,7 @@ export class YieldMarket {
 
   getRateAnchor(params: GetRateAnchorParams): FixedPoint64 {
     const exchangeRate = this.getExchangeRateFromImpliedRate(new FixedPoint64(this.market.lastLnImpliedRate.value), params.timeToExpiry);
-    if (exchangeRate.value < BigInt(1)) {
+    if (exchangeRate.value < FixedPoint64.CreateFromU128(BigInt(1)).value) {
       throw new Error(`Market exchange rate below one`);
     }
     const proportion = FixedPoint64.CreateFromRational(params.totalPt, params.totalPt + params.totalAsset);
@@ -178,7 +178,7 @@ export class YieldMarket {
     } else {
         exchangeRate = params.preCompute.rateAnchor.addDivFixed64(lnProportion, params.preCompute.rateScalar);
     }
-    if (exchangeRate.value < BigInt(1)) {
+    if (exchangeRate.value < FixedPoint64.CreateFromU128(BigInt(1)).value) {
       throw new Error(`Market exchange rate below one`);
     }
     return exchangeRate;
@@ -225,11 +225,8 @@ export class YieldMarket {
     if (params.syAmount === BigInt(0)) {
       throw new Error(`Market zero amounts input`);
     }
-    const ptToAccount = await improvedBinarySearchPtAmount(this.stateId, params.syAmount, params.exchangeRate);
-    return { 
-      ptToAccount,
-
-    } 
+    const amount = await improvedBinarySearchPtAmount(this.stateId, params.syAmount, params.exchangeRate);
+    return amount;
   }
 
   swapExactPtForSy(params: SimulateSwapExactPtForSyParams) {
@@ -272,6 +269,7 @@ export class YieldMarket {
     let lpToReserve = BigInt(0);
     let syUsed = BigInt(0);
     let ptUsed = BigInt(0);
+    let isBootstrapped = false;
 
     if (currentLp === BigInt(0)) {
       // First liquidity provider
@@ -279,6 +277,7 @@ export class YieldMarket {
       lpToReserve = BigInt(1000);
       syUsed = syAmount;
       ptUsed = ptAmount;
+      isBootstrapped = true;
     } else {
       const netLpByPt = (ptAmount * currentLp) / totalPt;
       const netLpBySy = (syAmount * currentLp) / totalSy;
@@ -336,7 +335,6 @@ export class YieldMarket {
         ptAmount,
         syAmount: mid,
       });
-      console.log(mid, left, right, ptUsed, syUsed);
       if (ptUsed >= ptAmount) {
         right = mid;
       } else {
@@ -373,15 +371,19 @@ export class YieldMarket {
     let right = BigInt(2) ** BigInt(32);
     while (right - left > BigInt(1)) {
       const mid = (left + right) / BigInt(2);
-      const {
-        syUsed,
-      } = this.addLiquidity({
-        ptAmount: mid,
-        syAmount,
-      });
-      if (syUsed >= syAmount) {
-        right = mid;
-      } else {
+      try {
+        const {
+          syUsed,
+        } = this.addLiquidity({
+          ptAmount: mid,
+          syAmount,
+        });
+        if (syUsed >= syAmount) {
+          right = mid;
+        } else {
+          left = mid;
+        }
+      } catch (e) {
         left = mid;
       }
     }

@@ -1,4 +1,4 @@
-import { Transaction } from "@mysten/sui/transactions";
+import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
 import { expFixedPoint64, KamoTransaction, newKamoTransaction, nthRootFixedPoint64 } from "./transaction";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { KamoClient, suiClient } from "./client/client";
@@ -42,8 +42,8 @@ async function mint() {
     amount: 1000000,
     sender: kp.toSuiAddress(),
   });
+  // tx.transferObjects([coin], kp.toSuiAddress());
   // await kamoTx.mint({
-  //   sy_amount_in: BigInt(5000),
   //   sender: kp.toSuiAddress(),
   //   tx,
   //   coin,
@@ -56,15 +56,15 @@ async function mint() {
   const result = await suiClient.dryRunTransactionBlock({
     transactionBlock: builtTx,
   });
-  if (result.effects.status.status === "success") {
+  // if (result.effects.status.status === "success") {
     const digest = await suiClient.signAndExecuteTransaction({
       transaction: tx,
       signer: kp,
     });
     console.log(digest);
-  } else {
-    console.log(result);
-  }
+  // } else {
+  //   console.log(result);
+  // }
 }
 
 async function newState() {
@@ -142,7 +142,7 @@ async function addLiquidity() {
   // });
   // console.log(syNeeded, lpToAccount);
   // const tx = await kamoTx.addLiquidity({
-  //   amountPT: Number(2000),
+//   amountPT: Number(2000),
   //   amountSY: Number(syNeeded),
   //   sender: kp.toSuiAddress(),
   // });
@@ -168,16 +168,15 @@ async function addLiquidity() {
   const result = await suiClient.dryRunTransactionBlock({
     transactionBlock: builtTx,
   });
-  console.log(result);
-  // if (result.effects.status.status === "success") {
-  //   const digest = await suiClient.signAndExecuteTransaction({
-  //     transaction: tx,
-  //     signer: kp,
-  //   });
-  //   console.log(digest);
-  // } else {
-  //   console.log(result);
-  // }
+  if (result.effects.status.status === "success") {
+    const digest = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer: kp,
+    });
+    console.log(digest);
+  } else {
+    console.log(result);
+  }
 }
 
 async function removeLiquidity() {
@@ -223,8 +222,6 @@ async function swapPtForSy() {
     exchangeRate,
     now: Date.now(),
   });
-  console.log("netSyToAccount", netSyToAccount);
-  console.log("netSyFee", netSyFee);
   const tx = await kamoTx.swapPtForSy({
     ptAmount: BigInt(100),
     sender: kp.toSuiAddress(),
@@ -267,13 +264,13 @@ async function swapSyForPt() {
     stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
   });
   const a = await market.swapExactSyForPt({
-    syAmount: BigInt(100),
+    syAmount: BigInt(200.1 * 10 ** 6),
     exchangeRate,
     now: Date.now(),
   });
   console.log(a);
   const tx = await kamoTx.swapSyForPt({
-    syAmount: BigInt(100),
+    syAmount: BigInt(200.1 * 10 ** 6),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -328,20 +325,15 @@ async function query() {
 }
 
 async function main() {
-  // const kamoTx = newKamoTransaction({
-  //   market: "HASUI",
-  // });
-  // const exchangeRate = await kamoTx.getCurrentExchangeRate();
-  // const ptAmount = await improvedBinarySearchPtAmount(BigInt(1000), exchangeRate);
-  // console.log(ptAmount);
-  // const ptAmount2 = await binarySearchPtAmount(kamoTx, BigInt(1000));
-  // console.log(ptAmount2);
-  const kamoTx = newKamoTransaction({
-    market: "KUSDC",
+  const tx = new Transaction();
+  const coin = coinWithBalance({
+    balance: BigInt(1),
   });
-  const tx = await (kamoTx as KUSDCTransaction).firstPutUsdc({
-    amount: 100,
+  const coin2 = coinWithBalance({
+    balance: BigInt(1),
   });
+  tx.mergeCoins(coin, [coin2]);
+  tx.transferObjects([coin], kp.toSuiAddress());
   tx.setSender(kp.toSuiAddress());
   tx.setGasBudget(100000000);
   const builtTx = await tx.build({
@@ -389,6 +381,30 @@ async function swapYoForSy() {
   // }
 }
 
+async function swapSyForYo() {
+  const kamoTx = newKamoTransaction({
+    market: "KUSDC",
+  });
+  const tx = await (kamoTx as KUSDCTransaction).swapSyForYo({
+    syAmount: BigInt(100),
+    sender: kp.toSuiAddress(),
+  });
+  tx.setSender(kp.toSuiAddress());
+  tx.setGasBudget(100000000);
+  const builtTx = await tx.build({
+    client: suiClient,
+  });
+  // const result = await suiClient.dryRunTransactionBlock({
+  //   transactionBlock: builtTx,
+  // });
+  // console.log(result);
+  const digest = await suiClient.signAndExecuteTransaction({
+    transaction: tx,
+    signer: kp,
+  });
+  console.log(digest);
+} 
+
 // main();
 
 // query();
@@ -397,7 +413,7 @@ async function swapYoForSy() {
 
 // mint();
 
-addLiquidity();
+// addLiquidity();
 
 // removeLiquidity();
 
@@ -406,6 +422,8 @@ addLiquidity();
 // swapSyForPt();
 
 // swapYoForSy();
+
+swapSyForYo();
 
 // async function loop() {
 //   while (1) {
