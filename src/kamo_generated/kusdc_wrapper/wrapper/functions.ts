@@ -12,6 +12,10 @@ export function mint( tx: Transaction, args: MintArgs ) { return tx.moveCall({ t
 
 export function getExchangeRate( tx: Transaction, system: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, system) ], }) }
 
+export interface MergeArgs { state: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; system: TransactionObjectInput }
+
+export function merge( tx: Transaction, args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::merge`, arguments: [ obj(tx, args.state), obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.system) ], }) }
+
 export interface AddLiquidityArgs { state: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; system: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function addLiquidity( tx: Transaction, args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::add_liquidity`, arguments: [ obj(tx, args.state), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.system), obj(tx, args.clock) ], }) }
@@ -54,10 +58,6 @@ export interface SwapSyForExactPtWithHotPotatoArgs { state: TransactionObjectInp
 
 export function swapSyForExactPtWithHotPotato( tx: Transaction, args: SwapSyForExactPtWithHotPotatoArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_sy_for_exact_pt_with_hot_potato`, arguments: [ obj(tx, args.state), obj(tx, args.hotPotato), obj(tx, args.syCoin), obj(tx, args.system), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
 
-export interface MergeArgs { state: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; system: TransactionObjectInput }
-
-export function merge( tx: Transaction, args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::merge`, arguments: [ obj(tx, args.state), obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.system) ], }) }
-
 export interface ClaimInterestArgs { state: TransactionObjectInput; yieldObject: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function claimInterest( tx: Transaction, args: ClaimInterestArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::claim_interest`, arguments: [ obj(tx, args.state), obj(tx, args.yieldObject), obj(tx, args.clock) ], }) }
@@ -77,3 +77,19 @@ export function redeemBeforeMaturity( tx: Transaction, args: RedeemBeforeMaturit
 export interface CreateNewStateArgs { factory: TransactionObjectInput; treasury: TransactionObjectInput; expiry: bigint | TransactionArgument; scalarRoot: TransactionObjectInput; initialAnchor: TransactionObjectInput; lnFeeRateRoot: TransactionObjectInput; clock: TransactionObjectInput }
 
 export function createNewState( tx: Transaction, args: CreateNewStateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::create_new_state`, arguments: [ obj(tx, args.factory), obj(tx, args.treasury), pure(tx, args.expiry, `u64`), obj(tx, args.scalarRoot), obj(tx, args.initialAnchor), obj(tx, args.lnFeeRateRoot), obj(tx, args.clock) ], }) }
+
+export interface RouterSwapExactPtForSyArgs { state: TransactionObjectInput; system: TransactionObjectInput; exactPtInCoin: TransactionObjectInput; clock: TransactionObjectInput }
+
+export function routerSwapExactPtForSy( tx: Transaction, args: RouterSwapExactPtForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::router_swap_exact_pt_for_sy`, arguments: [ obj(tx, args.state), obj(tx, args.system), obj(tx, args.exactPtInCoin), obj(tx, args.clock) ], }) }
+
+export interface RouterSwapExactSyForPtArgs { state: TransactionObjectInput; system: TransactionObjectInput; syInCoin: TransactionObjectInput; maxPtAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
+
+export function routerSwapExactSyForPt( tx: Transaction, args: RouterSwapExactSyForPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::router_swap_exact_sy_for_pt`, arguments: [ obj(tx, args.state), obj(tx, args.system), obj(tx, args.syInCoin), pure(tx, args.maxPtAmount, `u64`), obj(tx, args.clock) ], }) }
+
+export interface RouterSwapExactSyForYoArgs { state: TransactionObjectInput; system: TransactionObjectInput; exactSyInCoin: TransactionObjectInput; maxSyBorrow: bigint | TransactionArgument; clock: TransactionObjectInput }
+
+export function routerSwapExactSyForYo( tx: Transaction, args: RouterSwapExactSyForYoArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::router_swap_exact_sy_for_yo`, arguments: [ obj(tx, args.state), obj(tx, args.system), obj(tx, args.exactSyInCoin), pure(tx, args.maxSyBorrow, `u64`), obj(tx, args.clock) ], }) }
+
+export interface RouterSwapExactYoForSyArgs { state: TransactionObjectInput; system: TransactionObjectInput; yo: TransactionObjectInput; clock: TransactionObjectInput }
+
+export function routerSwapExactYoForSy( tx: Transaction, args: RouterSwapExactYoForSyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::router_swap_exact_yo_for_sy`, arguments: [ obj(tx, args.state), obj(tx, args.system), obj(tx, args.yo), obj(tx, args.clock) ], }) }

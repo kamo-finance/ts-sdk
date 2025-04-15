@@ -33,6 +33,7 @@ loader.register(validatorSet.ValidatorEpochInfoEventV2);
 loader.register(validatorSet.ValidatorJoinEvent);
 loader.register(validatorSet.ValidatorLeaveEvent);
 loader.register(validatorSet.ValidatorSet);
+loader.register(validatorSet.VotingPowerAdmissionStartEpochKey);
 loader.register(storageFund.StorageFund);
 loader.register(stakeSubsidy.StakeSubsidy);
 loader.register(suiSystemStateInner.SuiSystemStateInner);

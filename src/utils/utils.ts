@@ -97,7 +97,6 @@ export const binarySearchSyAmountToYT = async (marketId: string, syAmount: bigin
     let right = yieldMarket.market.totalSy;
     while (right - left > 1) {
         const mid = (left + right) / BigInt(2);
-        console.log("mid", mid);
         const totalSy = mid + syAmount;
         const ptToMint = BigInt(exchangeRate.mul_bigint(totalSy).toBigNumber().toString());   
         const {

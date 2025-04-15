@@ -22,6 +22,8 @@ export function earn( tx: Transaction, typeArgs: [string, string], args: EarnArg
 
 export function getAmount( tx: Transaction, typeArgs: [string, string], yieldObject: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::yield_object::get_amount`, typeArguments: typeArgs, arguments: [ obj(tx, yieldObject) ], }) }
 
+export function getYoAmount( tx: Transaction, typeArgs: [string, string], yieldObject: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::yield_object::get_yo_amount`, typeArguments: typeArgs, arguments: [ obj(tx, yieldObject) ], }) }
+
 export interface MergeArgs { self: TransactionObjectInput; yieldObject: TransactionObjectInput; exchangeRate: TransactionObjectInput }
 
 export function merge( tx: Transaction, typeArgs: [string, string], args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::yield_object::merge`, typeArguments: typeArgs, arguments: [ obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.exchangeRate) ], }) }

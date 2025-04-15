@@ -6,7 +6,7 @@ import { State as KusdcState } from "../kamo_generated/kusdc_wrapper/wrapper/str
 import { Market } from "../kamo_generated/kamo/amm/structs";
 import { RemoveLiquidityParams, SwapSyForExactPtParams } from "../transaction";
 import { SUPPORTED_MARKETS } from "../const";
-import { improvedBinarySearchPtAmount, mappingState } from "../utils";
+import { binarySearchPtAmount, binarySearchSyAmountToYT, improvedBinarySearchPtAmount, mappingState } from "../utils";
 import { BigIntMath } from "../utils/bigint_math";
 import { FixedPoint64 } from "../utils/fixedpoint64";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
@@ -69,6 +69,18 @@ export interface SimulateAddLiquidityParams {
 
 export interface SimulateRemoveLiquidityParams {
     lpAmount: bigint;
+}
+
+export interface SimulateSwapExactYoForSyParams {
+  yoAmount: bigint;
+  syExchangeRate: FixedPoint64;
+  now: number;
+}
+
+export interface SimulateSwapExactSyForYoParams {
+  syAmount: bigint;
+  syExchangeRate: FixedPoint64;
+  now: number;
 }
 
 const IMPLIED_RATE_TIME = BigInt(1000 * 60 * 60 * 24 * 365);
@@ -166,6 +178,9 @@ export class YieldMarket {
 
   getExchangeRatePtToAsset(params: GetExchangeRatePtToAssetParams): FixedPoint64 {
     const newPtAmount = params.sell ? params.totalPt + params.ptAmount : params.totalPt - params.ptAmount;
+    if (newPtAmount <= BigInt(0)) {
+      throw new Error(`Market zero total PT`);
+    }
     const proportion = FixedPoint64.CreateFromRational(newPtAmount, params.totalPt + params.preCompute.totalAsset);
     if (proportion.value > FixedPoint64.CreateFromRational(BigInt(96), BigInt(100)).value) {
       throw new Error(`Market proportion too high`);
@@ -245,6 +260,32 @@ export class YieldMarket {
         netSyToAccount,
         netSyFee
     }
+  }
+
+  swapExactYoForSy(params: SimulateSwapExactYoForSyParams) {
+    if (params.yoAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input`);
+    }
+    const syRedeem = BigInt(FixedPoint64.CreateFromU128(params.yoAmount).div(params.syExchangeRate).toBigNumber().toString());
+    const preComputeValue = this.preComputeValue(params.syExchangeRate, params.now);
+    const {
+      syAmount: netSyToMarket,
+      syFee: netSyFee,
+    } = this.calcTrade(preComputeValue, params.syExchangeRate, params.yoAmount, false);
+    if (netSyToMarket === BigInt(0)) {
+      throw new Error(`Market insufficient liquidity`);
+    }
+    return (syRedeem - (netSyToMarket + netSyFee));
+  }
+
+  async swapExactSyForYo(params: SimulateSwapExactSyForYoParams) {
+    if (params.syAmount === BigInt(0)) {
+      throw new Error(`Market zero amounts input`);
+    }
+    const syAmountToBorrow = await binarySearchSyAmountToYT(this.stateId, params.syAmount, params.syExchangeRate);
+    const totalSyAfterBorrow = syAmountToBorrow + params.syAmount;
+    const ptAmountToMint = BigInt(params.syExchangeRate.mul_bigint(totalSyAfterBorrow).toBigNumber().toString());
+    return ptAmountToMint;
   }
 
   addLiquidity(params: SimulateAddLiquidityParams): {

@@ -8,7 +8,7 @@ import { FixedPoint64 } from "../../utils/fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
 import { PUBLISHED_AT as KUSDC_WRAPPER_PACKAGE_ID } from "../../kamo_generated/kusdc_wrapper";
 import { AddLiquidityParams, KamoTransaction, MintParams, NewStateParams, RedeemBeforeMaturityParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForExactPtParams, SwapSyForPtParams, SwapSyForYoParams, SwapYoForSyParams } from "../transaction";
-import { addLiquidity, borrowPt, borrowSy, createNewState, getExchangeRate, merge, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, refundSy, removeLiquidity, split, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPt, swapSyForExactPtWithHotPotato } from '../../kamo_generated/kusdc_wrapper/wrapper/functions';
+import { addLiquidity, borrowPt, borrowSy, createNewState, getExchangeRate, merge, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, refundSy, removeLiquidity, routerSwapExactSyForPt, split, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPt, swapSyForExactPtWithHotPotato, routerSwapExactYoForSy, routerSwapExactSyForYo } from '../../kamo_generated/kusdc_wrapper/wrapper/functions';
 import { State } from "../../kamo_generated/kusdc_wrapper/wrapper/structs";
 import { createFromRawValue } from "../../kamo_generated/legato-math/fixed-point64/functions";
 import { faucet, firstPutUsdc } from "../../kamo_generated/kusdc/system/functions";
@@ -171,15 +171,14 @@ export class KUSDCTransaction extends KamoTransaction {
             ptOut,
             syUsed
         } = await improvedBinarySearchPtAmount(DEFAULT_STATE_ID, params.syAmount, await this.getSyExchangeRate());
-        const [syRemain, pt] = swapSyForExactPt(tx, {
+        const pt = routerSwapExactSyForPt(tx, {
             state: DEFAULT_STATE_ID,
-            syCoin: sy,
+            syInCoin: sy,
             system: KUSDC_SYSTEM,
-            // TODO: remove this
-            ptAmount: ptOut - BigInt(20),
+            maxPtAmount: ptOut,
             clock: tx.object.clock()
-        });
-        tx.transferObjects([pt, syRemain], params.sender);
+        })
+        tx.transferObjects([pt], params.sender);
         return tx;
     }
 
@@ -242,34 +241,13 @@ export class KUSDCTransaction extends KamoTransaction {
                 });
             }
         });
-        const [hotPotato, ptCoin] = borrowPt(tx, {
+        const sy = routerSwapExactYoForSy(tx, {
             state: DEFAULT_STATE_ID,
-            ptAmount: params.yoAmount,
-            clock: tx.object.clock()
-        });
-        const sy = redeemBeforeMaturity(tx, {
-            state: DEFAULT_STATE_ID,
-            ptCoinIn: ptCoin,
-            yieldObject: yo instanceof YieldObject ? yo.id : yo,
+            yo: yo instanceof YieldObject ? yo.id : yo,
             system: KUSDC_SYSTEM,
             clock: tx.object.clock()
         });
-        const syAmount = await getSyAmountNeedForExactPt(DEFAULT_STATE_ID, BigInt(params.yoAmount), await this.getSyExchangeRate());
-        const syCoinIn = tx.splitCoins(sy, [syAmount]);
-        const [syRemain, pt, hotPotato2] = swapSyForExactPtWithHotPotato(tx, {
-            state: DEFAULT_STATE_ID,
-            hotPotato,
-            syCoin: syCoinIn,
-            system: KUSDC_SYSTEM,
-            ptAmount: BigInt(params.yoAmount),
-            clock: tx.object.clock()
-        });
-        refundPt(tx, {
-            state: DEFAULT_STATE_ID,
-            hotPotato: hotPotato2,
-            ptCoin: pt,
-        });
-        tx.transferObjects([sy, syRemain], params.sender);
+        tx.transferObjects([sy], params.sender);
         return tx;
     }
 
@@ -277,36 +255,18 @@ export class KUSDCTransaction extends KamoTransaction {
         const tx = params.tx || new Transaction();
         const state = await State.fetch(suiClient, DEFAULT_STATE_ID);
         const syExchangeRate = await this.getSyExchangeRate();
-        const syBorrowAmount = await binarySearchSyAmountToYT(DEFAULT_STATE_ID, params.syAmount, syExchangeRate);
-        const sy = coinWithBalance({
-            type: state.market.$typeArgs[1],
-            balance: params.syAmount
-        });
-        const [hotPotato, syBorrowed] = borrowSy(tx, {
+        let syBorrowAmount = await binarySearchSyAmountToYT(DEFAULT_STATE_ID, params.syAmount, syExchangeRate);
+        const [syRemain, yo] = routerSwapExactSyForYo(tx, {
             state: DEFAULT_STATE_ID,
-            syAmount: syBorrowAmount,
-            clock: tx.object.clock()
-        });
-        tx.mergeCoins(syBorrowed, [sy]);
-        const [pt, yo] = mint(tx, {
-            state: DEFAULT_STATE_ID,
-            kusdcCoinIn: syBorrowed,
+            exactSyInCoin: coinWithBalance({
+                type: state.market.$typeArgs[1],
+                balance: params.syAmount
+            }),
+            maxSyBorrow: syBorrowAmount,
             system: KUSDC_SYSTEM,
             clock: tx.object.clock()
         });
-        tx.transferObjects([yo], params.sender);
-        const [swapSy, hotPotato2] = swapExactPtForSyWithHotPotato(tx, {
-            state: DEFAULT_STATE_ID,
-            hotPotato,
-            ptCoin: pt,
-            system: KUSDC_SYSTEM,
-            clock: tx.object.clock()
-        });
-        refundSy(tx, {
-            state: DEFAULT_STATE_ID,
-            hotPotato: hotPotato2,
-            syCoin: swapSy,
-        });
+        tx.transferObjects([yo, syRemain], params.sender);
         return tx;
     }
 

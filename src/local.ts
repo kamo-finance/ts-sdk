@@ -10,6 +10,8 @@ import { firstPutUsdc } from "./kamo_generated/kusdc/system/functions";
 import { KUSDCTransaction } from "./transaction/wrapper/kusdc"; 
 import { value } from './kamo_generated/sui/nitro-attestation/functions';
 import { YieldMarket } from "./market";
+import { SuiGraphQLClient } from "@mysten/sui/graphql";
+import { graphql } from '@mysten/sui/graphql/schemas/latest';
 dotenv.config();
 
 const pk = process.env.SUI_PRIVATE_KEY ?? "";
@@ -32,22 +34,13 @@ async function currentTimestamp() {
   console.log(val);
 }
 
-async function mint() {
+async function faucet() {
   const kamoTx = newKamoTransaction({
     market: "KUSDC",
   });
-  const {
-    tx, coin
-  } = (kamoTx as KUSDCTransaction).mint_kusdc({
-    amount: 1000000,
+  const tx = (kamoTx as KUSDCTransaction).faucet_kusdc({
     sender: kp.toSuiAddress(),
   });
-  // tx.transferObjects([coin], kp.toSuiAddress());
-  // await kamoTx.mint({
-  //   sender: kp.toSuiAddress(),
-  //   tx,
-  //   coin,
-  // });
   tx.setSender(kp.toSuiAddress());
   tx.setGasBudget(100000000);
   const builtTx = await tx.build({
@@ -56,15 +49,49 @@ async function mint() {
   const result = await suiClient.dryRunTransactionBlock({
     transactionBlock: builtTx,
   });
-  // if (result.effects.status.status === "success") {
+  if (result.effects.status.status === "success") {
     const digest = await suiClient.signAndExecuteTransaction({
       transaction: tx,
       signer: kp,
     });
     console.log(digest);
-  // } else {
-  //   console.log(result);
-  // }
+  }
+}
+
+async function mint() {
+  const kamoTx = newKamoTransaction({
+    market: "KUSDC",
+  });
+  // const {
+  //   tx, coin
+  // } = (kamoTx as KUSDCTransaction).mint_kusdc({
+  //   amount: 1000000,
+  //   sender: kp.toSuiAddress(),
+  // });
+  // tx.transferObjects([coin], kp.toSuiAddress());
+  const tx = await kamoTx.mint({
+    sender: kp.toSuiAddress(),
+    sy_amount_in: BigInt(50 * 10 ** 6),
+    // tx,
+    // coin,
+  });
+  tx.setSender(kp.toSuiAddress());
+  tx.setGasBudget(100000000);
+  const builtTx = await tx.build({
+    client: suiClient,
+  });
+  const result = await suiClient.dryRunTransactionBlock({
+    transactionBlock: builtTx,
+  });
+  if (result.effects.status.status === "success") {
+    const digest = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer: kp,
+    });
+    console.log(digest);
+  } else {
+    console.log(result);
+  }
 }
 
 async function newState() {
@@ -151,12 +178,12 @@ async function addLiquidity() {
     ptNeeded,
     lpToAccount: lpToAccount,
   } = market.addLiquidityExactSy({
-    syAmount: BigInt(2000),
+    syAmount: BigInt(1000),
   });
   console.log(ptNeeded, lpToAccount);
   const tx = await kamoTx.addLiquidity({
     amountPT: Number(ptNeeded),
-    amountSY: Number(2000),
+    amountSY: Number(1000),
     sender: kp.toSuiAddress(),
   });
 
@@ -264,13 +291,13 @@ async function swapSyForPt() {
     stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
   });
   const a = await market.swapExactSyForPt({
-    syAmount: BigInt(200.1 * 10 ** 6),
+    syAmount: BigInt(100),
     exchangeRate,
     now: Date.now(),
   });
   console.log(a);
   const tx = await kamoTx.swapSyForPt({
-    syAmount: BigInt(200.1 * 10 ** 6),
+    syAmount: BigInt(100),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -282,14 +309,15 @@ async function swapSyForPt() {
     transactionBlock: builtTx,
   });
   if (result.effects.status.status === "success") {
-    // const digest = await suiClient.signAndExecuteTransaction({
-    //   transaction: tx,
-    //   signer: kp,
-    //   options: {
-    //     showEvents: true,
-    //   }
-    // });
-    const digest = result;
+    const digest = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer: kp,
+      options: {
+        showEvents: true,
+      }
+    });
+    console.log(digest);
+    // const digest = result;
     console.log(digest.events?.[0]?.parsedJson);
     const events = digest.events?.[0]?.parsedJson as any;
     const ln_implied_rate_after_action = events.ln_implied_rate_after_action.value;
@@ -304,24 +332,48 @@ async function swapSyForPt() {
 }
 
 async function query() {
-  const exchangRate = await newKamoTransaction({
-    market: "KUSDC",
-  }).getSyExchangeRate();
-  const kamoClient = new KamoClient({
-    client: suiClient,
-  });
+  // const exchangRate = await newKamoTransaction({
+  //   market: "KUSDC",
+  // }).getSyExchangeRate();
+  // const kamoClient = new KamoClient({
+  //   client: suiClient,
+  // });
 
   // const yieldObjects = await kamoClient.getYieldObjects({
   //   stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
   //   owner: kp.toSuiAddress(),
   // });
 
-  const balances = await kamoClient.getBalances({
-    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
-    owner: kp.toSuiAddress(),
-  });
+  // const balances = await kamoClient.getBalances({
+  //   stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+  //   owner: kp.toSuiAddress(),
+  // });
 
-  console.log(exchangRate, balances);
+  // console.log(exchangRate, balances);
+  const gqlClient = new SuiGraphQLClient({
+    url: 'https://sui-testnet.mystenlabs.com/graphql',
+  });
+  const stateQuery = graphql(`
+    query Object($type: SuiAddress!) {
+      objects(
+        filter: {
+          type: $type
+        }
+      ) {
+        nodes {
+          address
+        }
+      }
+    }
+  `);
+
+  const result = await gqlClient.query({  
+    query: stateQuery,
+    variables: {
+      type: "0xf92b375b7c9fbfd6f01ba80e9904addc495976b1d774f6f72146423e8376bea8::wrapper::State",
+    },
+  });
+  console.log(result.data?.objects.nodes[0].address);
 }
 
 async function main() {
@@ -354,12 +406,21 @@ async function main() {
 }
 
 async function swapYoForSy() {
-  const kamoTx = newKamoTransaction({
-    market: "HASUI",
+  const market = await YieldMarket.GetFromState({
+    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
   });
-  console.log(await improvedBinarySearchPtAmount(STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.HASUI)!, BigInt(809), await kamoTx.getSyExchangeRate()));
+  const kamoTx = newKamoTransaction({
+    market: "KUSDC",
+  });
+  const syExchangeRate = await kamoTx.getSyExchangeRate();
+  console.log(market.swapExactYoForSy({
+    yoAmount: BigInt(558.90 * 10 ** 6),
+    syExchangeRate,
+    now: Date.now(),
+  }));
+
   const tx = await kamoTx.swapYoForSy({
-    yoAmount: BigInt(1000),
+    yoAmount: BigInt(558.90 * 10 ** 6),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -371,13 +432,13 @@ async function swapYoForSy() {
     transactionBlock: builtTx,
   });
   // if (result.effects.status.status === "success") {
-    const digest = await suiClient.signAndExecuteTransaction({
-      transaction: tx,
-      signer: kp,
-    });
-    console.log(digest);
+  //   const digest = await suiClient.signAndExecuteTransaction({
+  //     transaction: tx,
+  //     signer: kp,
+  //   });
+  //   console.log(digest);
   // } else {
-  //   console.log(result);
+    console.log(result);
   // }
 }
 
@@ -385,8 +446,18 @@ async function swapSyForYo() {
   const kamoTx = newKamoTransaction({
     market: "KUSDC",
   });
+  const market = await YieldMarket.GetFromState({
+    stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
+  });
+  const syExchangeRate = await kamoTx.getSyExchangeRate();
+  console.log(await market.swapExactSyForYo({
+    syAmount: BigInt(14),
+    syExchangeRate,
+    now: Date.now(),
+  }));
+
   const tx = await (kamoTx as KUSDCTransaction).swapSyForYo({
-    syAmount: BigInt(100),
+    syAmount: BigInt(14),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -394,10 +465,11 @@ async function swapSyForYo() {
   const builtTx = await tx.build({
     client: suiClient,
   });
-  // const result = await suiClient.dryRunTransactionBlock({
-  //   transactionBlock: builtTx,
-  // });
-  // console.log(result);
+  await new Promise(resolve => setTimeout(resolve, 5000));
+  const result = await suiClient.dryRunTransactionBlock({
+    transactionBlock: builtTx,
+  });
+  console.log(result);
   const digest = await suiClient.signAndExecuteTransaction({
     transaction: tx,
     signer: kp,
@@ -419,11 +491,13 @@ async function swapSyForYo() {
 
 // swapPtForSy();
 
+// faucet();
+
 // swapSyForPt();
 
-// swapYoForSy();
+swapYoForSy();
 
-swapSyForYo();
+// swapSyForYo();
 
 // async function loop() {
 //   while (1) {
