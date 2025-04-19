@@ -78,11 +78,9 @@ export const improvedBinarySearchPtAmount = async (marketId: string, syAmount: b
             now,
         });
         syUsed = netSyToMarket + netSyFee;
-        console.log(netSyToMarket, netSyFee);
     } catch (e) {
 
     }
-    console.log(left);
     return {
         ptOut: left,
         syUsed,
@@ -97,19 +95,23 @@ export const binarySearchSyAmountToYT = async (marketId: string, syAmount: bigin
     let right = yieldMarket.market.totalSy;
     while (right - left > 1) {
         const mid = (left + right) / BigInt(2);
-        const totalSy = mid + syAmount;
-        const ptToMint = BigInt(exchangeRate.mul_bigint(totalSy).toBigNumber().toString());   
-        const {
-            netSyToAccount,
-            netSyFee,
-        } = yieldMarket.swapExactPtForSy({
-            ptAmount: ptToMint,
-            exchangeRate,
-            now: Date.now(),
-        });
-        if (mid <= netSyToAccount) {
-            left = mid;
-        } else {
+        try {
+            const totalSy = mid + syAmount;
+            const ptToMint = BigInt(exchangeRate.mul_bigint(totalSy).toBigNumber().toFixed(0));   
+            const {
+                netSyToAccount,
+                netSyFee,
+            } = yieldMarket.swapExactPtForSy({
+                ptAmount: ptToMint,
+                exchangeRate,
+                now: Date.now(),
+            });
+            if (mid <= netSyToAccount) {
+                left = mid;
+            } else {
+                right = mid;
+            }
+        } catch (e) {
             right = mid;
         }
     }

@@ -8,15 +8,15 @@ import { FixedPoint64 } from "../../utils/fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
 import { PUBLISHED_AT as KUSDC_WRAPPER_PACKAGE_ID } from "../../kamo_generated/kusdc_wrapper";
 import { AddLiquidityParams, KamoTransaction, MintParams, NewStateParams, RedeemBeforeMaturityParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForExactPtParams, SwapSyForPtParams, SwapSyForYoParams, SwapYoForSyParams } from "../transaction";
-import { addLiquidity, borrowPt, borrowSy, createNewState, getExchangeRate, merge, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, refundSy, removeLiquidity, routerSwapExactSyForPt, split, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPt, swapSyForExactPtWithHotPotato, routerSwapExactYoForSy, routerSwapExactSyForYo } from '../../kamo_generated/kusdc_wrapper/wrapper/functions';
+import { addLiquidity, borrowPt, borrowSy, createNewState, getKusdcToUsdcExchangeRate, merge, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, refundSy, removeLiquidity, routerSwapExactSyForPt, split, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPt, swapSyForExactPtWithHotPotato, routerSwapExactYoForSy, routerSwapExactSyForYo } from '../../kamo_generated/kusdc_wrapper/wrapper/functions';
 import { State } from "../../kamo_generated/kusdc_wrapper/wrapper/structs";
 import { createFromRawValue } from "../../kamo_generated/legato-math/fixed-point64/functions";
-import { faucet, firstPutUsdc } from "../../kamo_generated/kusdc/system/functions";
+import { faucet, firstPutUsdc, putUsdc } from "../../kamo_generated/kusdc/system/functions";
 import { USDC } from "../../kamo_generated/_dependencies/source/0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29/usdc/structs";
 import { mint as mintKusdc } from "../../kamo_generated/kusdc/system/functions";
 
-const KUSDC_SYSTEM = "0x4ed1d4b07dab46aeb7203bde60d292f4b0538d78c2f3870482c4e2b811614c5e";
-const KUSDC_TREASURY_CAP = "0xa40fff8830dc6caa3fd758dad9b416e463a6df4aa727686515dfa4a287b42817";
+const KUSDC_SYSTEM = "0x336e27425bd6ce6b163b3904d33682d5c923fdcd2264cf91d80407dab9acc0fc";
+const KUSDC_TREASURY_CAP = "0x8fb1cd112e1b93d8c99500e1d328feebdcfdb4592c3b2014d291911475c9a172";
 const DEFAULT_STATE_ID = STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!;
 
 export class KUSDCTransaction extends KamoTransaction {
@@ -202,7 +202,7 @@ export class KUSDCTransaction extends KamoTransaction {
 
     async getSyExchangeRate(): Promise<FixedPoint64> {
         const tx = new Transaction();
-        getExchangeRate(tx, KUSDC_SYSTEM);
+        getKusdcToUsdcExchangeRate(tx, KUSDC_SYSTEM);
         const result = await suiClient.devInspectTransactionBlock({
             transactionBlock: tx,
             sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
@@ -295,15 +295,17 @@ export class KUSDCTransaction extends KamoTransaction {
             clock: tx.object.clock()
         });
         await this.firstPutUsdc({
-            amount: 100
+            amount: 100,
+            tx
         });
         return tx;  
     }
 
     async firstPutUsdc(params: {
         amount: string | number;
+        tx?: Transaction;
     }) {
-        const tx = new Transaction();
+        const tx = params.tx || new Transaction();
         const coin = coinWithBalance({
             type: USDC.$typeName,
             balance: BigInt(params.amount)
@@ -340,8 +342,27 @@ export class KUSDCTransaction extends KamoTransaction {
         sender: string;
     }) {
         const tx = params.tx || new Transaction();
-        const coin = faucet(tx, KUSDC_TREASURY_CAP);
+        const coin = faucet(tx, {
+            cap: KUSDC_TREASURY_CAP,
+            amount: BigInt(1000 * 10 ** 6)
+        });
         tx.transferObjects([coin], params.sender);
+        return tx;
+    }
+
+    addRewardsKusdc(params: {
+        tx?: Transaction,
+        amountUsdcAdded: bigint
+    }) {
+        const tx = params.tx || new Transaction();
+        const coin = coinWithBalance({
+            type: USDC.$typeName,
+            balance: params.amountUsdcAdded
+        });
+        putUsdc(tx, {
+            system: KUSDC_SYSTEM,
+            coin
+        });
         return tx;
     }
 }

@@ -4,14 +4,14 @@ import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_fra
 import {Bag} from "../../0x2/bag/structs";
 import {Balance} from "../../0x2/balance/structs";
 import {SUI} from "../../0x2/sui/structs";
-import {PKG_V16} from "../index";
+import {PKG_V17} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== StakeSubsidy =============================== */
 
-export function isStakeSubsidy(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V16}::stake_subsidy::StakeSubsidy`; }
+export function isStakeSubsidy(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::stake_subsidy::StakeSubsidy`; }
 
 export interface StakeSubsidyFields { balance: ToField<Balance<ToPhantom<SUI>>>; distributionCounter: ToField<"u64">; currentDistributionAmount: ToField<"u64">; stakeSubsidyPeriodLength: ToField<"u64">; stakeSubsidyDecreaseRate: ToField<"u16">; extraFields: ToField<Bag> }
 
@@ -19,17 +19,17 @@ export type StakeSubsidyReified = Reified< StakeSubsidy, StakeSubsidyFields >;
 
 export class StakeSubsidy implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V16}::stake_subsidy::StakeSubsidy`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V17}::stake_subsidy::StakeSubsidy`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = StakeSubsidy.$typeName; readonly $fullTypeName: `${typeof PKG_V16}::stake_subsidy::StakeSubsidy`; readonly $typeArgs: []; readonly $isPhantom = StakeSubsidy.$isPhantom;
+ readonly $typeName = StakeSubsidy.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::stake_subsidy::StakeSubsidy`; readonly $typeArgs: []; readonly $isPhantom = StakeSubsidy.$isPhantom;
 
  readonly balance: ToField<Balance<ToPhantom<SUI>>>; readonly distributionCounter: ToField<"u64">; readonly currentDistributionAmount: ToField<"u64">; readonly stakeSubsidyPeriodLength: ToField<"u64">; readonly stakeSubsidyDecreaseRate: ToField<"u16">; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: StakeSubsidyFields, ) { this.$fullTypeName = composeSuiType( StakeSubsidy.$typeName, ...typeArgs ) as `${typeof PKG_V16}::stake_subsidy::StakeSubsidy`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: StakeSubsidyFields, ) { this.$fullTypeName = composeSuiType( StakeSubsidy.$typeName, ...typeArgs ) as `${typeof PKG_V17}::stake_subsidy::StakeSubsidy`; this.$typeArgs = typeArgs;
 
  this.balance = fields.balance;; this.distributionCounter = fields.distributionCounter;; this.currentDistributionAmount = fields.currentDistributionAmount;; this.stakeSubsidyPeriodLength = fields.stakeSubsidyPeriodLength;; this.stakeSubsidyDecreaseRate = fields.stakeSubsidyDecreaseRate;; this.extraFields = fields.extraFields; }
 
- static reified( ): StakeSubsidyReified { return { typeName: StakeSubsidy.$typeName, fullTypeName: composeSuiType( StakeSubsidy.$typeName, ...[] ) as `${typeof PKG_V16}::stake_subsidy::StakeSubsidy`, typeArgs: [ ] as [], isPhantom: StakeSubsidy.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakeSubsidy.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakeSubsidy.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakeSubsidy.fromBcs( data, ), bcs: StakeSubsidy.bcs, fromJSONField: (field: any) => StakeSubsidy.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakeSubsidy.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakeSubsidy.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakeSubsidy.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakeSubsidy.fetch( client, id, ), new: ( fields: StakeSubsidyFields, ) => { return new StakeSubsidy( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): StakeSubsidyReified { return { typeName: StakeSubsidy.$typeName, fullTypeName: composeSuiType( StakeSubsidy.$typeName, ...[] ) as `${typeof PKG_V17}::stake_subsidy::StakeSubsidy`, typeArgs: [ ] as [], isPhantom: StakeSubsidy.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => StakeSubsidy.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => StakeSubsidy.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => StakeSubsidy.fromBcs( data, ), bcs: StakeSubsidy.bcs, fromJSONField: (field: any) => StakeSubsidy.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => StakeSubsidy.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => StakeSubsidy.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => StakeSubsidy.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => StakeSubsidy.fetch( client, id, ), new: ( fields: StakeSubsidyFields, ) => { return new StakeSubsidy( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return StakeSubsidy.reified() }
 

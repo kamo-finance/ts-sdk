@@ -266,7 +266,9 @@ export class YieldMarket {
     if (params.yoAmount === BigInt(0)) {
       throw new Error(`Market zero amounts input`);
     }
-    const syRedeem = BigInt(FixedPoint64.CreateFromU128(params.yoAmount).div(params.syExchangeRate).toBigNumber().toString());
+    const syRedeem = BigInt(FixedPoint64.CreateFromU128(params.yoAmount).div(params.syExchangeRate).toBigNumber().toFixed(0));
+    console.log("borrow amount", params.yoAmount);
+    console.log(syRedeem);
     const preComputeValue = this.preComputeValue(params.syExchangeRate, params.now);
     const {
       syAmount: netSyToMarket,
@@ -284,7 +286,7 @@ export class YieldMarket {
     }
     const syAmountToBorrow = await binarySearchSyAmountToYT(this.stateId, params.syAmount, params.syExchangeRate);
     const totalSyAfterBorrow = syAmountToBorrow + params.syAmount;
-    const ptAmountToMint = BigInt(params.syExchangeRate.mul_bigint(totalSyAfterBorrow).toBigNumber().toString());
+    const ptAmountToMint = BigInt(params.syExchangeRate.mul_bigint(totalSyAfterBorrow).toBigNumber().toFixed(0));
     return ptAmountToMint;
   }
 
@@ -369,16 +371,20 @@ export class YieldMarket {
     let right = BigInt(2) ** BigInt(32);
     while (right - left > BigInt(1)) {
       const mid = (left + right) / BigInt(2);
-      const {
-        ptUsed,
-        syUsed,
-      } = this.addLiquidity({
-        ptAmount,
-        syAmount: mid,
-      });
-      if (ptUsed >= ptAmount) {
-        right = mid;
-      } else {
+      try {
+        const {
+          ptUsed,
+          syUsed,
+        } = this.addLiquidity({
+          ptAmount,
+          syAmount: mid,
+        });
+        if (ptUsed >= ptAmount) {
+          right = mid;
+        } else {
+          left = mid;
+        }
+      } catch (e) {
         left = mid;
       }
     }

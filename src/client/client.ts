@@ -140,8 +140,18 @@ export class KamoClient {
 
     async getPositions(params: GetPositionsParams) {
         for (const market of Object.values(SUPPORTED_MARKETS)) {
-            console.log(market);
-            
+            try {
+                const balances = await this.getBalances({
+                    stateId: STATE_ADDRESS_MAP.get(market)!,
+                    owner: params.owner,
+                });
+                return {
+                    balances,
+                    market,
+                }
+            } catch (error) {
+                // console.log(error);
+            }
         }
     }
 

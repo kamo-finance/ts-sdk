@@ -161,31 +161,31 @@ async function addLiquidity() {
   const market = await YieldMarket.GetFromState({
     stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
   });
-  // const {
-  //   syNeeded,
-  //   lpToAccount
-  // } = market.addLiquidityExactPt({
-  //   ptAmount: BigInt(2000),
-  // });
-  // console.log(syNeeded, lpToAccount);
-  // const tx = await kamoTx.addLiquidity({
-//   amountPT: Number(2000),
-  //   amountSY: Number(syNeeded),
-  //   sender: kp.toSuiAddress(),
-  // });
-
   const {
-    ptNeeded,
-    lpToAccount: lpToAccount,
-  } = market.addLiquidityExactSy({
-    syAmount: BigInt(1000),
+    syNeeded,
+    lpToAccount
+  } = market.addLiquidityExactPt({
+    ptAmount: BigInt(2000),
   });
-  console.log(ptNeeded, lpToAccount);
+  console.log(syNeeded, lpToAccount);
   const tx = await kamoTx.addLiquidity({
-    amountPT: Number(ptNeeded),
-    amountSY: Number(1000),
+  amountPT: Number(2000),
+    amountSY: Number(syNeeded),
     sender: kp.toSuiAddress(),
   });
+
+  // const {
+  //   ptNeeded,
+  //   lpToAccount: lpToAccount,
+  // } = market.addLiquidityExactSy({
+  //   syAmount: BigInt(3523.56 * 10 ** 6),
+  // });
+  // console.log(ptNeeded, lpToAccount);
+  // const tx = await kamoTx.addLiquidity({
+  //   amountPT: Number(ptNeeded),
+  //   amountSY: Number(3523.56 * 10 ** 6),
+  //   sender: kp.toSuiAddress(),
+  // });
 
   tx.setSender(kp.toSuiAddress());
   tx.setGasBudget(100000000);
@@ -291,13 +291,13 @@ async function swapSyForPt() {
     stateId: STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!,
   });
   const a = await market.swapExactSyForPt({
-    syAmount: BigInt(100),
+    syAmount: BigInt(7047.13 * 10 ** 6),
     exchangeRate,
     now: Date.now(),
   });
   console.log(a);
   const tx = await kamoTx.swapSyForPt({
-    syAmount: BigInt(100),
+    syAmount: BigInt(7047.13 * 10 ** 6),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -350,42 +350,47 @@ async function query() {
   // });
 
   // console.log(exchangRate, balances);
-  const gqlClient = new SuiGraphQLClient({
-    url: 'https://sui-testnet.mystenlabs.com/graphql',
-  });
-  const stateQuery = graphql(`
-    query Object($type: SuiAddress!) {
-      objects(
-        filter: {
-          type: $type
-        }
-      ) {
-        nodes {
-          address
-        }
-      }
-    }
-  `);
+  // const gqlClient = new SuiGraphQLClient({
+  //   url: 'https://sui-testnet.mystenlabs.com/graphql',
+  // });
+  // const stateQuery = graphql(`
+  //   query Object($type: SuiAddress!) {
+  //     objects(
+  //       filter: {
+  //         type: $type
+  //       }
+  //     ) {
+  //       nodes {
+  //         address
+  //       }
+  //     }
+  //   }
+  // `);
 
-  const result = await gqlClient.query({  
-    query: stateQuery,
-    variables: {
-      type: "0xf92b375b7c9fbfd6f01ba80e9904addc495976b1d774f6f72146423e8376bea8::wrapper::State",
-    },
+  // const result = await gqlClient.query({  
+  //   query: stateQuery,
+  //   variables: {
+  //     type: "0x2::coin::TreasuryCap<0xa2fce748e9e273deb05a5166694c992170d6e4eff42966ea0f88a66a749f65e4::PT::PT>",
+  //   },
+  // });
+  // console.log(result.data?.objects.nodes);
+
+  const kamoClient = new KamoClient({
+    client: suiClient,
   });
-  console.log(result.data?.objects.nodes[0].address);
+  const positions = await kamoClient.getPositions({
+    owner: kp.toSuiAddress(),
+  });
+  console.log(positions);
 }
 
 async function main() {
-  const tx = new Transaction();
-  const coin = coinWithBalance({
-    balance: BigInt(1),
+  const kamoTx = newKamoTransaction({
+    market: "KUSDC"
   });
-  const coin2 = coinWithBalance({
-    balance: BigInt(1),
+  const tx = (kamoTx as KUSDCTransaction).addRewardsKusdc({
+    amountUsdcAdded: BigInt(10),
   });
-  tx.mergeCoins(coin, [coin2]);
-  tx.transferObjects([coin], kp.toSuiAddress());
   tx.setSender(kp.toSuiAddress());
   tx.setGasBudget(100000000);
   const builtTx = await tx.build({
@@ -414,13 +419,13 @@ async function swapYoForSy() {
   });
   const syExchangeRate = await kamoTx.getSyExchangeRate();
   console.log(market.swapExactYoForSy({
-    yoAmount: BigInt(558.90 * 10 ** 6),
+    yoAmount: BigInt(344.90 * 10 ** 6),
     syExchangeRate,
     now: Date.now(),
   }));
 
   const tx = await kamoTx.swapYoForSy({
-    yoAmount: BigInt(558.90 * 10 ** 6),
+    yoAmount: BigInt(344.90 * 10 ** 6),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());
@@ -431,15 +436,15 @@ async function swapYoForSy() {
   const result = await suiClient.dryRunTransactionBlock({
     transactionBlock: builtTx,
   });
-  // if (result.effects.status.status === "success") {
-  //   const digest = await suiClient.signAndExecuteTransaction({
-  //     transaction: tx,
-  //     signer: kp,
-  //   });
-  //   console.log(digest);
-  // } else {
+  if (result.effects.status.status === "success") {
+    const digest = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer: kp,
+    });
+    console.log(digest);
+  } else {
     console.log(result);
-  // }
+  }
 }
 
 async function swapSyForYo() {
@@ -451,13 +456,13 @@ async function swapSyForYo() {
   });
   const syExchangeRate = await kamoTx.getSyExchangeRate();
   console.log(await market.swapExactSyForYo({
-    syAmount: BigInt(14),
+    syAmount: BigInt(1 * 10 ** 6),
     syExchangeRate,
     now: Date.now(),
   }));
 
   const tx = await (kamoTx as KUSDCTransaction).swapSyForYo({
-    syAmount: BigInt(14),
+    syAmount: BigInt(1 * 10 ** 6),
     sender: kp.toSuiAddress(),
   });
   tx.setSender(kp.toSuiAddress());

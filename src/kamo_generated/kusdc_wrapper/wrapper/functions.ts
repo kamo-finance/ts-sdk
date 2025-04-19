@@ -10,11 +10,9 @@ export interface MintArgs { state: TransactionObjectInput; kusdcCoinIn: Transact
 
 export function mint( tx: Transaction, args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::mint`, arguments: [ obj(tx, args.state), obj(tx, args.kusdcCoinIn), obj(tx, args.system), obj(tx, args.clock) ], }) }
 
-export function getExchangeRate( tx: Transaction, system: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_exchange_rate`, arguments: [ obj(tx, system) ], }) }
+export function getKusdcToUsdcExchangeRate( tx: Transaction, system: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_kusdc_to_usdc_exchange_rate`, arguments: [ obj(tx, system) ], }) }
 
-export interface MergeArgs { state: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; system: TransactionObjectInput }
-
-export function merge( tx: Transaction, args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::merge`, arguments: [ obj(tx, args.state), obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.system) ], }) }
+export function getUsdcToKusdcExchangeRate( tx: Transaction, system: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::get_usdc_to_kusdc_exchange_rate`, arguments: [ obj(tx, system) ], }) }
 
 export interface AddLiquidityArgs { state: TransactionObjectInput; ptCoin: TransactionObjectInput; syCoin: TransactionObjectInput; system: TransactionObjectInput; clock: TransactionObjectInput }
 
@@ -57,6 +55,10 @@ export function swapSyForExactPt( tx: Transaction, args: SwapSyForExactPtArgs ) 
 export interface SwapSyForExactPtWithHotPotatoArgs { state: TransactionObjectInput; hotPotato: TransactionObjectInput; syCoin: TransactionObjectInput; system: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
 
 export function swapSyForExactPtWithHotPotato( tx: Transaction, args: SwapSyForExactPtWithHotPotatoArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::swap_sy_for_exact_pt_with_hot_potato`, arguments: [ obj(tx, args.state), obj(tx, args.hotPotato), obj(tx, args.syCoin), obj(tx, args.system), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
+
+export interface MergeArgs { state: TransactionObjectInput; self: TransactionObjectInput; yieldObject: TransactionObjectInput; system: TransactionObjectInput }
+
+export function merge( tx: Transaction, args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::wrapper::merge`, arguments: [ obj(tx, args.state), obj(tx, args.self), obj(tx, args.yieldObject), obj(tx, args.system) ], }) }
 
 export interface ClaimInterestArgs { state: TransactionObjectInput; yieldObject: TransactionObjectInput; clock: TransactionObjectInput }
 
