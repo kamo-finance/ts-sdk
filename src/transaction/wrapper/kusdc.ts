@@ -1,22 +1,22 @@
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
 import { FACTORY, STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
-import { kamoClient, suiClient } from "../../client/client";
+import { KamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
-import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../../utils";
+import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects, binarySearchSyAmountToYT } from "../../utils";
 import { FixedPoint64 as MoveFixedPoint64 } from "../../kamo_generated/legato-math/fixed-point64/structs";
 import { FixedPoint64 } from "../../utils/fixedpoint64";
 import { YieldObject } from "../../kamo_generated/kamo/yield-object/structs";
 import { PUBLISHED_AT as KUSDC_WRAPPER_PACKAGE_ID } from "../../kamo_generated/kusdc_wrapper";
-import { AddLiquidityParams, KamoTransaction, MintParams, NewStateParams, RedeemBeforeMaturityParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForExactPtParams, SwapSyForPtParams, SwapYoForSyParams } from "../transaction";
-import { addLiquidity, borrowPt, createNewState, getExchangeRate, merge, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, removeLiquidity, split, swapExactPtForSy, swapSyForExactPt, swapSyForExactPtWithHotPotato } from "../../kamo_generated/kusdc_wrapper/wrapper/functions";
+import { AddLiquidityParams, KamoTransaction, MintParams, NewStateParams, RedeemBeforeMaturityParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForExactPtParams, SwapSyForPtParams, SwapSyForYoParams, SwapYoForSyParams } from "../transaction";
+import { addLiquidity, borrowPt, borrowSy, createNewState, getKusdcToUsdcExchangeRate, merge, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, refundSy, removeLiquidity, routerSwapExactSyForPt, split, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPt, swapSyForExactPtWithHotPotato, routerSwapExactYoForSy, routerSwapExactSyForYo } from '../../kamo_generated/kusdc_wrapper/wrapper/functions';
 import { State } from "../../kamo_generated/kusdc_wrapper/wrapper/structs";
 import { createFromRawValue } from "../../kamo_generated/legato-math/fixed-point64/functions";
-import { firstPutUsdc } from "../../kamo_generated/kusdc/system/functions";
+import { faucet, firstPutUsdc, putUsdc } from "../../kamo_generated/kusdc/system/functions";
 import { USDC } from "../../kamo_generated/_dependencies/source/0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29/usdc/structs";
 import { mint as mintKusdc } from "../../kamo_generated/kusdc/system/functions";
 
-const KUSDC_SYSTEM = "0x4c572e9850fb9bbf65caca8920d4b43d3d0e11d9173d0068e68f2d799cdaeb8d";
-const KUSDC_TREASURY_CAP = "0x5619c7304f17460cb81359fe2bf2085b43c77e360b94b4bb24fbee1fdffc0806";
+const KUSDC_SYSTEM = "0x336e27425bd6ce6b163b3904d33682d5c923fdcd2264cf91d80407dab9acc0fc";
+const KUSDC_TREASURY_CAP = "0x8fb1cd112e1b93d8c99500e1d328feebdcfdb4592c3b2014d291911475c9a172";
 const DEFAULT_STATE_ID = STATE_ADDRESS_MAP.get(SUPPORTED_MARKETS.KUSDC)!;
 
 export class KUSDCTransaction extends KamoTransaction {
@@ -49,6 +49,9 @@ export class KUSDCTransaction extends KamoTransaction {
             type: state.market.$typeArgs[0],
             balance: params.ptAmountBurned
         }); 
+        const kamoClient = new KamoClient({
+            client: suiClient
+        });
         const yieldObjects = await kamoClient.getYieldObjects({
             stateId: DEFAULT_STATE_ID,
             owner: params.sender
@@ -164,15 +167,18 @@ export class KUSDCTransaction extends KamoTransaction {
             type: state.market.$typeArgs[1],
             balance: params.syAmount
         });
-        const ptAmount = await improvedBinarySearchPtAmount(params.syAmount, await this.getSyExchangeRate());
-        const [syRemain, pt] = swapSyForExactPt(tx, {
+        const {
+            ptOut,
+            syUsed
+        } = await improvedBinarySearchPtAmount(DEFAULT_STATE_ID, params.syAmount, await this.getSyExchangeRate());
+        const pt = routerSwapExactSyForPt(tx, {
             state: DEFAULT_STATE_ID,
-            syCoin: sy,
+            syInCoin: sy,
             system: KUSDC_SYSTEM,
-            ptAmount,
+            maxPtAmount: ptOut,
             clock: tx.object.clock()
-        });
-        tx.transferObjects([pt, syRemain], params.sender);
+        })
+        tx.transferObjects([pt], params.sender);
         return tx;
     }
 
@@ -196,7 +202,7 @@ export class KUSDCTransaction extends KamoTransaction {
 
     async getSyExchangeRate(): Promise<FixedPoint64> {
         const tx = new Transaction();
-        getExchangeRate(tx, KUSDC_SYSTEM);
+        getKusdcToUsdcExchangeRate(tx, KUSDC_SYSTEM);
         const result = await suiClient.devInspectTransactionBlock({
             transactionBlock: tx,
             sender: "0xda64a21e23f5943e7774d47d1b15eb60e4a8dee1d55be0487dad2292e2b51eae"
@@ -207,6 +213,9 @@ export class KUSDCTransaction extends KamoTransaction {
     }
 
     async swapYoForSy(params: SwapYoForSyParams) {
+        const kamoClient = new KamoClient({
+            client: suiClient
+        });
         const yieldObjects = await kamoClient.getYieldObjects({
             stateId: DEFAULT_STATE_ID,
             owner: params.sender
@@ -232,34 +241,32 @@ export class KUSDCTransaction extends KamoTransaction {
                 });
             }
         });
-        const [hotPotato, ptCoin] = borrowPt(tx, {
+        const sy = routerSwapExactYoForSy(tx, {
             state: DEFAULT_STATE_ID,
-            ptAmount: params.yoAmount,
-            clock: tx.object.clock()
-        });
-        const sy = redeemBeforeMaturity(tx, {
-            state: DEFAULT_STATE_ID,
-            ptCoinIn: ptCoin,
-            yieldObject: yo instanceof YieldObject ? yo.id : yo,
+            yo: yo instanceof YieldObject ? yo.id : yo,
             system: KUSDC_SYSTEM,
             clock: tx.object.clock()
         });
-        const syAmount = await getSyAmountNeedForExactPt(params.yoAmount, await this.getSyExchangeRate());
-        const syCoinIn = tx.splitCoins(sy, [syAmount]);
-        const [syRemain, pt, hotPotato2] = swapSyForExactPtWithHotPotato(tx, {
+        tx.transferObjects([sy], params.sender);
+        return tx;
+    }
+
+    async swapSyForYo(params: SwapSyForYoParams) {
+        const tx = params.tx || new Transaction();
+        const state = await State.fetch(suiClient, DEFAULT_STATE_ID);
+        const syExchangeRate = await this.getSyExchangeRate();
+        let syBorrowAmount = await binarySearchSyAmountToYT(DEFAULT_STATE_ID, params.syAmount, syExchangeRate);
+        const [syRemain, yo] = routerSwapExactSyForYo(tx, {
             state: DEFAULT_STATE_ID,
-            hotPotato,
-            syCoin: syCoinIn,
+            exactSyInCoin: coinWithBalance({
+                type: state.market.$typeArgs[1],
+                balance: params.syAmount
+            }),
+            maxSyBorrow: syBorrowAmount,
             system: KUSDC_SYSTEM,
-            ptAmount: BigInt(params.yoAmount),
             clock: tx.object.clock()
         });
-        refundPt(tx, {
-            state: DEFAULT_STATE_ID,
-            hotPotato: hotPotato2,
-            ptCoin: pt,
-        });
-        tx.transferObjects([sy, syRemain], params.sender);
+        tx.transferObjects([yo, syRemain], params.sender);
         return tx;
     }
 
@@ -288,15 +295,17 @@ export class KUSDCTransaction extends KamoTransaction {
             clock: tx.object.clock()
         });
         await this.firstPutUsdc({
-            amount: 100
+            amount: 100,
+            tx
         });
         return tx;  
     }
 
     async firstPutUsdc(params: {
         amount: string | number;
+        tx?: Transaction;
     }) {
-        const tx = new Transaction();
+        const tx = params.tx || new Transaction();
         const coin = coinWithBalance({
             type: USDC.$typeName,
             balance: BigInt(params.amount)
@@ -326,5 +335,34 @@ export class KUSDCTransaction extends KamoTransaction {
             tx,
             coin: kusdc
         };
+    }
+
+    faucet_kusdc(params: {
+        tx?: Transaction;
+        sender: string;
+    }) {
+        const tx = params.tx || new Transaction();
+        const coin = faucet(tx, {
+            cap: KUSDC_TREASURY_CAP,
+            amount: BigInt(1000 * 10 ** 6)
+        });
+        tx.transferObjects([coin], params.sender);
+        return tx;
+    }
+
+    addRewardsKusdc(params: {
+        tx?: Transaction,
+        amountUsdcAdded: bigint
+    }) {
+        const tx = params.tx || new Transaction();
+        const coin = coinWithBalance({
+            type: USDC.$typeName,
+            balance: params.amountUsdcAdded
+        });
+        putUsdc(tx, {
+            system: KUSDC_SYSTEM,
+            coin
+        });
+        return tx;
     }
 }

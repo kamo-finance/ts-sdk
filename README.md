@@ -1,4 +1,4 @@
-# Kama Finance Typescript SDK
+# Kamo Finance Typescript SDK
 
 ## Installation
 

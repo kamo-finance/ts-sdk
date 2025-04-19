@@ -1,9 +1,9 @@
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
-import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForPtParams, SwapSyForExactPtParams, SwapYoForSyParams, NewStateParams } from "../transaction";
+import { AddLiquidityParams, RedeemBeforeMaturityParams, KamoTransaction, MintParams, RemoveLiquidityParams, SwapPtForSyParams, SwapSyForPtParams, SwapSyForExactPtParams, SwapYoForSyParams, NewStateParams, SwapSyForYoParams } from "../transaction";
 import { addLiquidity, borrowPt, createNewState, getExchangeRate, mint, redeemAfterMaturity, redeemBeforeMaturity, refundPt, removeLiquidity, swapExactPtForSy, swapExactPtForSyWithHotPotato, swapSyForExactPtWithHotPotato } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { State } from "../../kamo_generated/hasui_wrapper/wrapper/structs";
 import { FACTORY, STATE_ADDRESS_MAP, SUPPORTED_MARKETS } from "../../const";
-import { kamoClient, suiClient } from "../../client/client";
+import { KamoClient, suiClient } from "../../client/client";
 import { PUBLISHED_AT as KAMO_PACKAGE } from "../../kamo_generated/kamo";
 import { merge, split, swapSyForExactPt } from "../../kamo_generated/hasui_wrapper/wrapper/functions";
 import { binarySearchPtAmount, getSyAmountNeedForExactPt, improvedBinarySearchPtAmount, mergeYieldObjects } from "../../utils";
@@ -47,6 +47,9 @@ export class HasuiTransaction extends KamoTransaction {
             type: state.market.$typeArgs[0],
             balance: params.ptAmountBurned
         }); 
+        const kamoClient = new KamoClient({
+            client: suiClient
+        });
         const yieldObjects = await kamoClient.getYieldObjects({
             stateId: DEFAULT_STATE_ID,
             owner: params.sender
@@ -162,12 +165,15 @@ export class HasuiTransaction extends KamoTransaction {
             type: state.market.$typeArgs[1],
             balance: params.syAmount
         });
-        const ptAmount = await improvedBinarySearchPtAmount(params.syAmount, await this.getSyExchangeRate());
+        const {
+            ptOut,
+            syUsed,
+        } = await improvedBinarySearchPtAmount(DEFAULT_STATE_ID, params.syAmount, await this.getSyExchangeRate());
         const pt = swapSyForExactPt(tx, {
             state: DEFAULT_STATE_ID,
             syCoin: sy,
             staking: HAEDAL_STAKING,
-            ptAmount,
+            ptAmount: ptOut,
             clock: tx.object.clock()
         });
         tx.transferObjects([pt], params.sender);
@@ -205,6 +211,9 @@ export class HasuiTransaction extends KamoTransaction {
     }
 
     async swapYoForSy(params: SwapYoForSyParams) {
+        const kamoClient = new KamoClient({
+            client: suiClient
+        });
         const yieldObjects = await kamoClient.getYieldObjects({
             stateId: DEFAULT_STATE_ID,
             owner: params.sender
@@ -242,7 +251,7 @@ export class HasuiTransaction extends KamoTransaction {
             staking: HAEDAL_STAKING,
             clock: tx.object.clock()
         });
-        const syAmount = await getSyAmountNeedForExactPt(params.yoAmount, await this.getSyExchangeRate());
+        const syAmount = await getSyAmountNeedForExactPt(DEFAULT_STATE_ID, BigInt(params.yoAmount), await this.getSyExchangeRate());
         const syCoinIn = tx.splitCoins(sy, [syAmount]);
         const [syRemain, pt, hotPotato2] = swapSyForExactPtWithHotPotato(tx, {
             state: DEFAULT_STATE_ID,
@@ -260,6 +269,11 @@ export class HasuiTransaction extends KamoTransaction {
         tx.transferObjects([sy, syRemain], params.sender);
         return tx;
     }
+
+    async swapSyForYo(params: SwapSyForYoParams) {
+        return new Transaction();
+    }
+    
 
     async newState(params: NewStateParams) {
         const tx = new Transaction();

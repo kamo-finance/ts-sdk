@@ -1,12 +1,12 @@
 import * as reified from "../../../../_framework/reified";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom, ToTypeStr as ToPhantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
-import {Market} from "../../../../kamo/amm/structs";
-import {Registry} from "../../../../kamo/sy-tokenization/structs";
+import {KUSDC} from "../../../../kusdc/kusdc/structs";
 import {UID} from "../../0x2/object/structs";
-import {KUSDC} from "../../0x8c0f4b69ea08bf5c5f4d5f3951215060374a83660794ed60a5581a719ea3121f/kusdc/structs";
+import {Market} from "../amm/structs";
 import {PKG_V1} from "../index";
 import {PT} from "../pt/structs";
+import {Registry} from "../sy-tokenization/structs";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";

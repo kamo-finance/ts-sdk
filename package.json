@@ -1,6 +1,6 @@
 {
   "name": "@kamo-finance/ts-sdk",
-  "version": "1.0.7",
+  "version": "1.0.31",
   "main": "index.js",
   "scripts": {
     "test": "vitest",
@@ -15,7 +15,7 @@
     "vitest": "^3.0.8"
   },
   "dependencies": {
-    "@mysten/sui": "^1.21.2",
+    "@mysten/sui": "^1.27.0",
     "bignumber.js": "^9.1.2",
     "dotenv": "^16.4.7"
   },
@@ -25,7 +25,9 @@
   "exports": {
     ".": "./dist/index.js",
     "./client": "./dist/client/index.js",
-    "./transaction": "./dist/transaction/index.js"
+    "./transaction": "./dist/transaction/index.js",
+    "./utils": "./dist/utils/index.js",
+    "./market": "./dist/market/index.js"
   },
   "repository": {
     "type": "git",

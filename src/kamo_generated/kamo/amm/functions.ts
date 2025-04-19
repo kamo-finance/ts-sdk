@@ -6,6 +6,8 @@ export interface AddLiquidityArgs { market: TransactionObjectInput; ptCoin: Tran
 
 export function addLiquidity( tx: Transaction, typeArgs: [string, string], args: AddLiquidityArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::add_liquidity`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), obj(tx, args.ptCoin), obj(tx, args.syCoin), obj(tx, args.syExchangeRate), obj(tx, args.clock) ], }) }
 
+export function amountSyRepay( tx: Transaction, typeArgs: [string, string], hotPotato: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::amount_sy_repay`, typeArguments: typeArgs, arguments: [ obj(tx, hotPotato) ], }) }
+
 export interface BorrowPtArgs { market: TransactionObjectInput; ptAmount: bigint | TransactionArgument; clock: TransactionObjectInput }
 
 export function borrowPt( tx: Transaction, typeArgs: [string, string], args: BorrowPtArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::borrow_pt`, typeArguments: typeArgs, arguments: [ obj(tx, args.market), pure(tx, args.ptAmount, `u64`), obj(tx, args.clock) ], }) }
@@ -45,6 +47,10 @@ export function getRateAnchor( tx: Transaction, args: GetRateAnchorArgs ) { retu
 export interface GetRateScalarArgs { scalarRoot: TransactionObjectInput; timeToExpiry: bigint | TransactionArgument }
 
 export function getRateScalar( tx: Transaction, args: GetRateScalarArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_rate_scalar`, arguments: [ obj(tx, args.scalarRoot), pure(tx, args.timeToExpiry, `u64`) ], }) }
+
+export function getTotalPt( tx: Transaction, typeArgs: [string, string], market: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_total_pt`, typeArguments: typeArgs, arguments: [ obj(tx, market) ], }) }
+
+export function getTotalSy( tx: Transaction, typeArgs: [string, string], market: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::amm::get_total_sy`, typeArguments: typeArgs, arguments: [ obj(tx, market) ], }) }
 
 export interface IsExpiredArgs { market: TransactionObjectInput; clock: TransactionObjectInput }
 

@@ -7,7 +7,7 @@ import {ID} from "../../0x2/object/structs";
 import {TableVec} from "../../0x2/table-vec/structs";
 import {Table} from "../../0x2/table/structs";
 import {VecMap} from "../../0x2/vec-map/structs";
-import {PKG_V16} from "../index";
+import {PKG_V17} from "../index";
 import {PoolTokenExchangeRate} from "../staking-pool/structs";
 import {ValidatorWrapper} from "../validator-wrapper/structs";
 import {Validator} from "../validator/structs";
@@ -17,7 +17,7 @@ import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 /* ============================== ValidatorEpochInfoEvent =============================== */
 
-export function isValidatorEpochInfoEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V16}::validator_set::ValidatorEpochInfoEvent`; }
+export function isValidatorEpochInfoEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::validator_set::ValidatorEpochInfoEvent`; }
 
 export interface ValidatorEpochInfoEventFields { epoch: ToField<"u64">; validatorAddress: ToField<"address">; referenceGasSurveyQuote: ToField<"u64">; stake: ToField<"u64">; commissionRate: ToField<"u64">; poolStakingReward: ToField<"u64">; storageFundStakingReward: ToField<"u64">; poolTokenExchangeRate: ToField<PoolTokenExchangeRate>; tallyingRuleReporters: ToField<Vector<"address">>; tallyingRuleGlobalScore: ToField<"u64"> }
 
@@ -25,17 +25,17 @@ export type ValidatorEpochInfoEventReified = Reified< ValidatorEpochInfoEvent, V
 
 export class ValidatorEpochInfoEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V16}::validator_set::ValidatorEpochInfoEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V17}::validator_set::ValidatorEpochInfoEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ValidatorEpochInfoEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V16}::validator_set::ValidatorEpochInfoEvent`; readonly $typeArgs: []; readonly $isPhantom = ValidatorEpochInfoEvent.$isPhantom;
+ readonly $typeName = ValidatorEpochInfoEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::validator_set::ValidatorEpochInfoEvent`; readonly $typeArgs: []; readonly $isPhantom = ValidatorEpochInfoEvent.$isPhantom;
 
  readonly epoch: ToField<"u64">; readonly validatorAddress: ToField<"address">; readonly referenceGasSurveyQuote: ToField<"u64">; readonly stake: ToField<"u64">; readonly commissionRate: ToField<"u64">; readonly poolStakingReward: ToField<"u64">; readonly storageFundStakingReward: ToField<"u64">; readonly poolTokenExchangeRate: ToField<PoolTokenExchangeRate>; readonly tallyingRuleReporters: ToField<Vector<"address">>; readonly tallyingRuleGlobalScore: ToField<"u64">
 
- private constructor(typeArgs: [], fields: ValidatorEpochInfoEventFields, ) { this.$fullTypeName = composeSuiType( ValidatorEpochInfoEvent.$typeName, ...typeArgs ) as `${typeof PKG_V16}::validator_set::ValidatorEpochInfoEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorEpochInfoEventFields, ) { this.$fullTypeName = composeSuiType( ValidatorEpochInfoEvent.$typeName, ...typeArgs ) as `${typeof PKG_V17}::validator_set::ValidatorEpochInfoEvent`; this.$typeArgs = typeArgs;
 
  this.epoch = fields.epoch;; this.validatorAddress = fields.validatorAddress;; this.referenceGasSurveyQuote = fields.referenceGasSurveyQuote;; this.stake = fields.stake;; this.commissionRate = fields.commissionRate;; this.poolStakingReward = fields.poolStakingReward;; this.storageFundStakingReward = fields.storageFundStakingReward;; this.poolTokenExchangeRate = fields.poolTokenExchangeRate;; this.tallyingRuleReporters = fields.tallyingRuleReporters;; this.tallyingRuleGlobalScore = fields.tallyingRuleGlobalScore; }
 
- static reified( ): ValidatorEpochInfoEventReified { return { typeName: ValidatorEpochInfoEvent.$typeName, fullTypeName: composeSuiType( ValidatorEpochInfoEvent.$typeName, ...[] ) as `${typeof PKG_V16}::validator_set::ValidatorEpochInfoEvent`, typeArgs: [ ] as [], isPhantom: ValidatorEpochInfoEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorEpochInfoEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorEpochInfoEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorEpochInfoEvent.fromBcs( data, ), bcs: ValidatorEpochInfoEvent.bcs, fromJSONField: (field: any) => ValidatorEpochInfoEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorEpochInfoEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorEpochInfoEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorEpochInfoEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorEpochInfoEvent.fetch( client, id, ), new: ( fields: ValidatorEpochInfoEventFields, ) => { return new ValidatorEpochInfoEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorEpochInfoEventReified { return { typeName: ValidatorEpochInfoEvent.$typeName, fullTypeName: composeSuiType( ValidatorEpochInfoEvent.$typeName, ...[] ) as `${typeof PKG_V17}::validator_set::ValidatorEpochInfoEvent`, typeArgs: [ ] as [], isPhantom: ValidatorEpochInfoEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorEpochInfoEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorEpochInfoEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorEpochInfoEvent.fromBcs( data, ), bcs: ValidatorEpochInfoEvent.bcs, fromJSONField: (field: any) => ValidatorEpochInfoEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorEpochInfoEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorEpochInfoEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorEpochInfoEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorEpochInfoEvent.fetch( client, id, ), new: ( fields: ValidatorEpochInfoEventFields, ) => { return new ValidatorEpochInfoEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ValidatorEpochInfoEvent.reified() }
 
@@ -85,7 +85,7 @@ export class ValidatorEpochInfoEvent implements StructClass { __StructClass = tr
 
 /* ============================== ValidatorEpochInfoEventV2 =============================== */
 
-export function isValidatorEpochInfoEventV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V16}::validator_set::ValidatorEpochInfoEventV2`; }
+export function isValidatorEpochInfoEventV2(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::validator_set::ValidatorEpochInfoEventV2`; }
 
 export interface ValidatorEpochInfoEventV2Fields { epoch: ToField<"u64">; validatorAddress: ToField<"address">; referenceGasSurveyQuote: ToField<"u64">; stake: ToField<"u64">; votingPower: ToField<"u64">; commissionRate: ToField<"u64">; poolStakingReward: ToField<"u64">; storageFundStakingReward: ToField<"u64">; poolTokenExchangeRate: ToField<PoolTokenExchangeRate>; tallyingRuleReporters: ToField<Vector<"address">>; tallyingRuleGlobalScore: ToField<"u64"> }
 
@@ -93,17 +93,17 @@ export type ValidatorEpochInfoEventV2Reified = Reified< ValidatorEpochInfoEventV
 
 export class ValidatorEpochInfoEventV2 implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V16}::validator_set::ValidatorEpochInfoEventV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V17}::validator_set::ValidatorEpochInfoEventV2`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ValidatorEpochInfoEventV2.$typeName; readonly $fullTypeName: `${typeof PKG_V16}::validator_set::ValidatorEpochInfoEventV2`; readonly $typeArgs: []; readonly $isPhantom = ValidatorEpochInfoEventV2.$isPhantom;
+ readonly $typeName = ValidatorEpochInfoEventV2.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::validator_set::ValidatorEpochInfoEventV2`; readonly $typeArgs: []; readonly $isPhantom = ValidatorEpochInfoEventV2.$isPhantom;
 
  readonly epoch: ToField<"u64">; readonly validatorAddress: ToField<"address">; readonly referenceGasSurveyQuote: ToField<"u64">; readonly stake: ToField<"u64">; readonly votingPower: ToField<"u64">; readonly commissionRate: ToField<"u64">; readonly poolStakingReward: ToField<"u64">; readonly storageFundStakingReward: ToField<"u64">; readonly poolTokenExchangeRate: ToField<PoolTokenExchangeRate>; readonly tallyingRuleReporters: ToField<Vector<"address">>; readonly tallyingRuleGlobalScore: ToField<"u64">
 
- private constructor(typeArgs: [], fields: ValidatorEpochInfoEventV2Fields, ) { this.$fullTypeName = composeSuiType( ValidatorEpochInfoEventV2.$typeName, ...typeArgs ) as `${typeof PKG_V16}::validator_set::ValidatorEpochInfoEventV2`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorEpochInfoEventV2Fields, ) { this.$fullTypeName = composeSuiType( ValidatorEpochInfoEventV2.$typeName, ...typeArgs ) as `${typeof PKG_V17}::validator_set::ValidatorEpochInfoEventV2`; this.$typeArgs = typeArgs;
 
  this.epoch = fields.epoch;; this.validatorAddress = fields.validatorAddress;; this.referenceGasSurveyQuote = fields.referenceGasSurveyQuote;; this.stake = fields.stake;; this.votingPower = fields.votingPower;; this.commissionRate = fields.commissionRate;; this.poolStakingReward = fields.poolStakingReward;; this.storageFundStakingReward = fields.storageFundStakingReward;; this.poolTokenExchangeRate = fields.poolTokenExchangeRate;; this.tallyingRuleReporters = fields.tallyingRuleReporters;; this.tallyingRuleGlobalScore = fields.tallyingRuleGlobalScore; }
 
- static reified( ): ValidatorEpochInfoEventV2Reified { return { typeName: ValidatorEpochInfoEventV2.$typeName, fullTypeName: composeSuiType( ValidatorEpochInfoEventV2.$typeName, ...[] ) as `${typeof PKG_V16}::validator_set::ValidatorEpochInfoEventV2`, typeArgs: [ ] as [], isPhantom: ValidatorEpochInfoEventV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorEpochInfoEventV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorEpochInfoEventV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorEpochInfoEventV2.fromBcs( data, ), bcs: ValidatorEpochInfoEventV2.bcs, fromJSONField: (field: any) => ValidatorEpochInfoEventV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorEpochInfoEventV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorEpochInfoEventV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorEpochInfoEventV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorEpochInfoEventV2.fetch( client, id, ), new: ( fields: ValidatorEpochInfoEventV2Fields, ) => { return new ValidatorEpochInfoEventV2( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorEpochInfoEventV2Reified { return { typeName: ValidatorEpochInfoEventV2.$typeName, fullTypeName: composeSuiType( ValidatorEpochInfoEventV2.$typeName, ...[] ) as `${typeof PKG_V17}::validator_set::ValidatorEpochInfoEventV2`, typeArgs: [ ] as [], isPhantom: ValidatorEpochInfoEventV2.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorEpochInfoEventV2.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorEpochInfoEventV2.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorEpochInfoEventV2.fromBcs( data, ), bcs: ValidatorEpochInfoEventV2.bcs, fromJSONField: (field: any) => ValidatorEpochInfoEventV2.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorEpochInfoEventV2.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorEpochInfoEventV2.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorEpochInfoEventV2.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorEpochInfoEventV2.fetch( client, id, ), new: ( fields: ValidatorEpochInfoEventV2Fields, ) => { return new ValidatorEpochInfoEventV2( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ValidatorEpochInfoEventV2.reified() }
 
@@ -153,7 +153,7 @@ export class ValidatorEpochInfoEventV2 implements StructClass { __StructClass = 
 
 /* ============================== ValidatorJoinEvent =============================== */
 
-export function isValidatorJoinEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V16}::validator_set::ValidatorJoinEvent`; }
+export function isValidatorJoinEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::validator_set::ValidatorJoinEvent`; }
 
 export interface ValidatorJoinEventFields { epoch: ToField<"u64">; validatorAddress: ToField<"address">; stakingPoolId: ToField<ID> }
 
@@ -161,17 +161,17 @@ export type ValidatorJoinEventReified = Reified< ValidatorJoinEvent, ValidatorJo
 
 export class ValidatorJoinEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V16}::validator_set::ValidatorJoinEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V17}::validator_set::ValidatorJoinEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ValidatorJoinEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V16}::validator_set::ValidatorJoinEvent`; readonly $typeArgs: []; readonly $isPhantom = ValidatorJoinEvent.$isPhantom;
+ readonly $typeName = ValidatorJoinEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::validator_set::ValidatorJoinEvent`; readonly $typeArgs: []; readonly $isPhantom = ValidatorJoinEvent.$isPhantom;
 
  readonly epoch: ToField<"u64">; readonly validatorAddress: ToField<"address">; readonly stakingPoolId: ToField<ID>
 
- private constructor(typeArgs: [], fields: ValidatorJoinEventFields, ) { this.$fullTypeName = composeSuiType( ValidatorJoinEvent.$typeName, ...typeArgs ) as `${typeof PKG_V16}::validator_set::ValidatorJoinEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorJoinEventFields, ) { this.$fullTypeName = composeSuiType( ValidatorJoinEvent.$typeName, ...typeArgs ) as `${typeof PKG_V17}::validator_set::ValidatorJoinEvent`; this.$typeArgs = typeArgs;
 
  this.epoch = fields.epoch;; this.validatorAddress = fields.validatorAddress;; this.stakingPoolId = fields.stakingPoolId; }
 
- static reified( ): ValidatorJoinEventReified { return { typeName: ValidatorJoinEvent.$typeName, fullTypeName: composeSuiType( ValidatorJoinEvent.$typeName, ...[] ) as `${typeof PKG_V16}::validator_set::ValidatorJoinEvent`, typeArgs: [ ] as [], isPhantom: ValidatorJoinEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorJoinEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorJoinEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorJoinEvent.fromBcs( data, ), bcs: ValidatorJoinEvent.bcs, fromJSONField: (field: any) => ValidatorJoinEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorJoinEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorJoinEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorJoinEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorJoinEvent.fetch( client, id, ), new: ( fields: ValidatorJoinEventFields, ) => { return new ValidatorJoinEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorJoinEventReified { return { typeName: ValidatorJoinEvent.$typeName, fullTypeName: composeSuiType( ValidatorJoinEvent.$typeName, ...[] ) as `${typeof PKG_V17}::validator_set::ValidatorJoinEvent`, typeArgs: [ ] as [], isPhantom: ValidatorJoinEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorJoinEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorJoinEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorJoinEvent.fromBcs( data, ), bcs: ValidatorJoinEvent.bcs, fromJSONField: (field: any) => ValidatorJoinEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorJoinEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorJoinEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorJoinEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorJoinEvent.fetch( client, id, ), new: ( fields: ValidatorJoinEventFields, ) => { return new ValidatorJoinEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ValidatorJoinEvent.reified() }
 
@@ -221,7 +221,7 @@ export class ValidatorJoinEvent implements StructClass { __StructClass = true as
 
 /* ============================== ValidatorLeaveEvent =============================== */
 
-export function isValidatorLeaveEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V16}::validator_set::ValidatorLeaveEvent`; }
+export function isValidatorLeaveEvent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::validator_set::ValidatorLeaveEvent`; }
 
 export interface ValidatorLeaveEventFields { epoch: ToField<"u64">; validatorAddress: ToField<"address">; stakingPoolId: ToField<ID>; isVoluntary: ToField<"bool"> }
 
@@ -229,17 +229,17 @@ export type ValidatorLeaveEventReified = Reified< ValidatorLeaveEvent, Validator
 
 export class ValidatorLeaveEvent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V16}::validator_set::ValidatorLeaveEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V17}::validator_set::ValidatorLeaveEvent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ValidatorLeaveEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V16}::validator_set::ValidatorLeaveEvent`; readonly $typeArgs: []; readonly $isPhantom = ValidatorLeaveEvent.$isPhantom;
+ readonly $typeName = ValidatorLeaveEvent.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::validator_set::ValidatorLeaveEvent`; readonly $typeArgs: []; readonly $isPhantom = ValidatorLeaveEvent.$isPhantom;
 
  readonly epoch: ToField<"u64">; readonly validatorAddress: ToField<"address">; readonly stakingPoolId: ToField<ID>; readonly isVoluntary: ToField<"bool">
 
- private constructor(typeArgs: [], fields: ValidatorLeaveEventFields, ) { this.$fullTypeName = composeSuiType( ValidatorLeaveEvent.$typeName, ...typeArgs ) as `${typeof PKG_V16}::validator_set::ValidatorLeaveEvent`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorLeaveEventFields, ) { this.$fullTypeName = composeSuiType( ValidatorLeaveEvent.$typeName, ...typeArgs ) as `${typeof PKG_V17}::validator_set::ValidatorLeaveEvent`; this.$typeArgs = typeArgs;
 
  this.epoch = fields.epoch;; this.validatorAddress = fields.validatorAddress;; this.stakingPoolId = fields.stakingPoolId;; this.isVoluntary = fields.isVoluntary; }
 
- static reified( ): ValidatorLeaveEventReified { return { typeName: ValidatorLeaveEvent.$typeName, fullTypeName: composeSuiType( ValidatorLeaveEvent.$typeName, ...[] ) as `${typeof PKG_V16}::validator_set::ValidatorLeaveEvent`, typeArgs: [ ] as [], isPhantom: ValidatorLeaveEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorLeaveEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorLeaveEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorLeaveEvent.fromBcs( data, ), bcs: ValidatorLeaveEvent.bcs, fromJSONField: (field: any) => ValidatorLeaveEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorLeaveEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorLeaveEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorLeaveEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorLeaveEvent.fetch( client, id, ), new: ( fields: ValidatorLeaveEventFields, ) => { return new ValidatorLeaveEvent( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorLeaveEventReified { return { typeName: ValidatorLeaveEvent.$typeName, fullTypeName: composeSuiType( ValidatorLeaveEvent.$typeName, ...[] ) as `${typeof PKG_V17}::validator_set::ValidatorLeaveEvent`, typeArgs: [ ] as [], isPhantom: ValidatorLeaveEvent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorLeaveEvent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorLeaveEvent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorLeaveEvent.fromBcs( data, ), bcs: ValidatorLeaveEvent.bcs, fromJSONField: (field: any) => ValidatorLeaveEvent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorLeaveEvent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorLeaveEvent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorLeaveEvent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorLeaveEvent.fetch( client, id, ), new: ( fields: ValidatorLeaveEventFields, ) => { return new ValidatorLeaveEvent( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ValidatorLeaveEvent.reified() }
 
@@ -289,7 +289,7 @@ export class ValidatorLeaveEvent implements StructClass { __StructClass = true a
 
 /* ============================== ValidatorSet =============================== */
 
-export function isValidatorSet(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V16}::validator_set::ValidatorSet`; }
+export function isValidatorSet(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::validator_set::ValidatorSet`; }
 
 export interface ValidatorSetFields { totalStake: ToField<"u64">; activeValidators: ToField<Vector<Validator>>; pendingActiveValidators: ToField<TableVec<ToPhantom<Validator>>>; pendingRemovals: ToField<Vector<"u64">>; stakingPoolMappings: ToField<Table<ToPhantom<ID>, "address">>; inactiveValidators: ToField<Table<ToPhantom<ID>, ToPhantom<ValidatorWrapper>>>; validatorCandidates: ToField<Table<"address", ToPhantom<ValidatorWrapper>>>; atRiskValidators: ToField<VecMap<"address", "u64">>; extraFields: ToField<Bag> }
 
@@ -297,17 +297,17 @@ export type ValidatorSetReified = Reified< ValidatorSet, ValidatorSetFields >;
 
 export class ValidatorSet implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V16}::validator_set::ValidatorSet`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V17}::validator_set::ValidatorSet`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ValidatorSet.$typeName; readonly $fullTypeName: `${typeof PKG_V16}::validator_set::ValidatorSet`; readonly $typeArgs: []; readonly $isPhantom = ValidatorSet.$isPhantom;
+ readonly $typeName = ValidatorSet.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::validator_set::ValidatorSet`; readonly $typeArgs: []; readonly $isPhantom = ValidatorSet.$isPhantom;
 
  readonly totalStake: ToField<"u64">; readonly activeValidators: ToField<Vector<Validator>>; readonly pendingActiveValidators: ToField<TableVec<ToPhantom<Validator>>>; readonly pendingRemovals: ToField<Vector<"u64">>; readonly stakingPoolMappings: ToField<Table<ToPhantom<ID>, "address">>; readonly inactiveValidators: ToField<Table<ToPhantom<ID>, ToPhantom<ValidatorWrapper>>>; readonly validatorCandidates: ToField<Table<"address", ToPhantom<ValidatorWrapper>>>; readonly atRiskValidators: ToField<VecMap<"address", "u64">>; readonly extraFields: ToField<Bag>
 
- private constructor(typeArgs: [], fields: ValidatorSetFields, ) { this.$fullTypeName = composeSuiType( ValidatorSet.$typeName, ...typeArgs ) as `${typeof PKG_V16}::validator_set::ValidatorSet`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ValidatorSetFields, ) { this.$fullTypeName = composeSuiType( ValidatorSet.$typeName, ...typeArgs ) as `${typeof PKG_V17}::validator_set::ValidatorSet`; this.$typeArgs = typeArgs;
 
  this.totalStake = fields.totalStake;; this.activeValidators = fields.activeValidators;; this.pendingActiveValidators = fields.pendingActiveValidators;; this.pendingRemovals = fields.pendingRemovals;; this.stakingPoolMappings = fields.stakingPoolMappings;; this.inactiveValidators = fields.inactiveValidators;; this.validatorCandidates = fields.validatorCandidates;; this.atRiskValidators = fields.atRiskValidators;; this.extraFields = fields.extraFields; }
 
- static reified( ): ValidatorSetReified { return { typeName: ValidatorSet.$typeName, fullTypeName: composeSuiType( ValidatorSet.$typeName, ...[] ) as `${typeof PKG_V16}::validator_set::ValidatorSet`, typeArgs: [ ] as [], isPhantom: ValidatorSet.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorSet.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorSet.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorSet.fromBcs( data, ), bcs: ValidatorSet.bcs, fromJSONField: (field: any) => ValidatorSet.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorSet.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorSet.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorSet.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorSet.fetch( client, id, ), new: ( fields: ValidatorSetFields, ) => { return new ValidatorSet( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ValidatorSetReified { return { typeName: ValidatorSet.$typeName, fullTypeName: composeSuiType( ValidatorSet.$typeName, ...[] ) as `${typeof PKG_V17}::validator_set::ValidatorSet`, typeArgs: [ ] as [], isPhantom: ValidatorSet.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ValidatorSet.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ValidatorSet.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ValidatorSet.fromBcs( data, ), bcs: ValidatorSet.bcs, fromJSONField: (field: any) => ValidatorSet.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ValidatorSet.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ValidatorSet.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ValidatorSet.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ValidatorSet.fetch( client, id, ), new: ( fields: ValidatorSetFields, ) => { return new ValidatorSet( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return ValidatorSet.reified() }
 
@@ -352,5 +352,73 @@ export class ValidatorSet implements StructClass { __StructClass = true as const
  static async fetch( client: SuiClient, id: string ): Promise<ValidatorSet> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ValidatorSet object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isValidatorSet(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ValidatorSet object`); }
 
  return ValidatorSet.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== VotingPowerAdmissionStartEpochKey =============================== */
+
+export function isVotingPowerAdmissionStartEpochKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::validator_set::VotingPowerAdmissionStartEpochKey`; }
+
+export interface VotingPowerAdmissionStartEpochKeyFields { dummyField: ToField<"bool"> }
+
+export type VotingPowerAdmissionStartEpochKeyReified = Reified< VotingPowerAdmissionStartEpochKey, VotingPowerAdmissionStartEpochKeyFields >;
+
+export class VotingPowerAdmissionStartEpochKey implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V17}::validator_set::VotingPowerAdmissionStartEpochKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = VotingPowerAdmissionStartEpochKey.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::validator_set::VotingPowerAdmissionStartEpochKey`; readonly $typeArgs: []; readonly $isPhantom = VotingPowerAdmissionStartEpochKey.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: VotingPowerAdmissionStartEpochKeyFields, ) { this.$fullTypeName = composeSuiType( VotingPowerAdmissionStartEpochKey.$typeName, ...typeArgs ) as `${typeof PKG_V17}::validator_set::VotingPowerAdmissionStartEpochKey`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): VotingPowerAdmissionStartEpochKeyReified { return { typeName: VotingPowerAdmissionStartEpochKey.$typeName, fullTypeName: composeSuiType( VotingPowerAdmissionStartEpochKey.$typeName, ...[] ) as `${typeof PKG_V17}::validator_set::VotingPowerAdmissionStartEpochKey`, typeArgs: [ ] as [], isPhantom: VotingPowerAdmissionStartEpochKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VotingPowerAdmissionStartEpochKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VotingPowerAdmissionStartEpochKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VotingPowerAdmissionStartEpochKey.fromBcs( data, ), bcs: VotingPowerAdmissionStartEpochKey.bcs, fromJSONField: (field: any) => VotingPowerAdmissionStartEpochKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VotingPowerAdmissionStartEpochKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VotingPowerAdmissionStartEpochKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VotingPowerAdmissionStartEpochKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VotingPowerAdmissionStartEpochKey.fetch( client, id, ), new: ( fields: VotingPowerAdmissionStartEpochKeyFields, ) => { return new VotingPowerAdmissionStartEpochKey( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return VotingPowerAdmissionStartEpochKey.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<VotingPowerAdmissionStartEpochKey>> { return phantom(VotingPowerAdmissionStartEpochKey.reified( )); } static get p() { return VotingPowerAdmissionStartEpochKey.phantom() }
+
+ static get bcs() { return bcs.struct("VotingPowerAdmissionStartEpochKey", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): VotingPowerAdmissionStartEpochKey { return VotingPowerAdmissionStartEpochKey.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): VotingPowerAdmissionStartEpochKey { if (!isVotingPowerAdmissionStartEpochKey(item.type)) { throw new Error("not a VotingPowerAdmissionStartEpochKey type");
+
+ }
+
+ return VotingPowerAdmissionStartEpochKey.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): VotingPowerAdmissionStartEpochKey { return VotingPowerAdmissionStartEpochKey.fromFields( VotingPowerAdmissionStartEpochKey.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): VotingPowerAdmissionStartEpochKey { return VotingPowerAdmissionStartEpochKey.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): VotingPowerAdmissionStartEpochKey { if (json.$typeName !== VotingPowerAdmissionStartEpochKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return VotingPowerAdmissionStartEpochKey.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): VotingPowerAdmissionStartEpochKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isVotingPowerAdmissionStartEpochKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a VotingPowerAdmissionStartEpochKey object`); } return VotingPowerAdmissionStartEpochKey.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): VotingPowerAdmissionStartEpochKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isVotingPowerAdmissionStartEpochKey(data.bcs.type)) { throw new Error(`object at is not a VotingPowerAdmissionStartEpochKey object`); }
+
+ return VotingPowerAdmissionStartEpochKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return VotingPowerAdmissionStartEpochKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<VotingPowerAdmissionStartEpochKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching VotingPowerAdmissionStartEpochKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isVotingPowerAdmissionStartEpochKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a VotingPowerAdmissionStartEpochKey object`); }
+
+ return VotingPowerAdmissionStartEpochKey.fromSuiObjectData( res.data ); }
 
  }

@@ -1,14 +1,14 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
 import {UID} from "../../0x2/object/structs";
-import {PKG_V16} from "../index";
+import {PKG_V17} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== SuiSystemState =============================== */
 
-export function isSuiSystemState(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V16}::sui_system::SuiSystemState`; }
+export function isSuiSystemState(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V17}::sui_system::SuiSystemState`; }
 
 export interface SuiSystemStateFields { id: ToField<UID>; version: ToField<"u64"> }
 
@@ -16,17 +16,17 @@ export type SuiSystemStateReified = Reified< SuiSystemState, SuiSystemStateField
 
 export class SuiSystemState implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V16}::sui_system::SuiSystemState`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V17}::sui_system::SuiSystemState`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = SuiSystemState.$typeName; readonly $fullTypeName: `${typeof PKG_V16}::sui_system::SuiSystemState`; readonly $typeArgs: []; readonly $isPhantom = SuiSystemState.$isPhantom;
+ readonly $typeName = SuiSystemState.$typeName; readonly $fullTypeName: `${typeof PKG_V17}::sui_system::SuiSystemState`; readonly $typeArgs: []; readonly $isPhantom = SuiSystemState.$isPhantom;
 
  readonly id: ToField<UID>; readonly version: ToField<"u64">
 
- private constructor(typeArgs: [], fields: SuiSystemStateFields, ) { this.$fullTypeName = composeSuiType( SuiSystemState.$typeName, ...typeArgs ) as `${typeof PKG_V16}::sui_system::SuiSystemState`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: SuiSystemStateFields, ) { this.$fullTypeName = composeSuiType( SuiSystemState.$typeName, ...typeArgs ) as `${typeof PKG_V17}::sui_system::SuiSystemState`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.version = fields.version; }
 
- static reified( ): SuiSystemStateReified { return { typeName: SuiSystemState.$typeName, fullTypeName: composeSuiType( SuiSystemState.$typeName, ...[] ) as `${typeof PKG_V16}::sui_system::SuiSystemState`, typeArgs: [ ] as [], isPhantom: SuiSystemState.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SuiSystemState.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SuiSystemState.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SuiSystemState.fromBcs( data, ), bcs: SuiSystemState.bcs, fromJSONField: (field: any) => SuiSystemState.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SuiSystemState.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SuiSystemState.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SuiSystemState.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SuiSystemState.fetch( client, id, ), new: ( fields: SuiSystemStateFields, ) => { return new SuiSystemState( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): SuiSystemStateReified { return { typeName: SuiSystemState.$typeName, fullTypeName: composeSuiType( SuiSystemState.$typeName, ...[] ) as `${typeof PKG_V17}::sui_system::SuiSystemState`, typeArgs: [ ] as [], isPhantom: SuiSystemState.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => SuiSystemState.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SuiSystemState.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => SuiSystemState.fromBcs( data, ), bcs: SuiSystemState.bcs, fromJSONField: (field: any) => SuiSystemState.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => SuiSystemState.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => SuiSystemState.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => SuiSystemState.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => SuiSystemState.fetch( client, id, ), new: ( fields: SuiSystemStateFields, ) => { return new SuiSystemState( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return SuiSystemState.reified() }
 
